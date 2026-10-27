@@ -57,7 +57,7 @@ def tr(text):
         text=text.replace('Pad config / keyboard True / ','PAD CONFIG / KEYBOARD / Seite ')
 
     # Case-converted headers/footers are drawn directly onto the canvas.
-    if text=='User Manual  |  0.1.0-beta.9  |  English':return 'Bedienungsanleitung  |  0.1.0-beta.9  |  Deutsch'
+    if text=='User Manual  |  0.1.0-beta.10  |  English':return 'Bedienungsanleitung  |  0.1.0-beta.10  |  Deutsch'
     for english,german in WORDS.items():
         if text==english.upper():return german.upper()
     if text.startswith('Screen atlas / '):return text.replace('Screen atlas / ','Displayübersicht / ',1)
@@ -81,7 +81,7 @@ class GermanManual(base.Manual):
         self.path=base.OUT/f'Machinista_{"Mikro_MK1" if device=="mikro" else device.upper()}_User_Manual_DE.pdf'
         self.c=base.canvas.Canvas(str(self.path),pagesize=(base.W,base.H),pageCompression=1)
         self.c.setTitle('Machinista - '+self.name+' Bedienungsanleitung')
-        self.c.setAuthor('Machinista');self.c.setSubject('Deutsche Bedienungsanleitung und Displayübersicht | 0.1.0-beta.9')
+        self.c.setAuthor('Machinista');self.c.setSubject('Deutsche Bedienungsanleitung und Displayübersicht | 0.1.0-beta.10')
         from reportlab.pdfbase.pdfdoc import PDFString
         self.c._doc.Catalog.Lang=PDFString('de-DE')
         self.c=LocalizedCanvas(self.c)

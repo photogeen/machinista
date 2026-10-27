@@ -1,4 +1,4 @@
-import copy,json,tempfile,time,unittest
+import copy,json,tempfile,time,unittest,os
 from pathlib import Path
 from types import SimpleNamespace
 from threading import Event
@@ -16,7 +16,13 @@ class LiveBankTests(unittest.TestCase):
         with patch.object(profiles,'profiles',return_value=(self.p,)):
             self.live=LiveBanks(self.root)
         self.addCleanup(self.live.close);self.app=SimpleNamespace(playing=False,recording=False)
-    def write(self):self.file.write_text(json.dumps(self.bank))
+    def write(self):
+        # ext4 can reuse a clock tick for same-size fixture writes. Ensure this
+        # test advertises a changed file before testing metadata invalidation.
+        previous=self.file.stat().st_mtime_ns if self.file.exists() else 0
+        self.file.write_text(json.dumps(self.bank))
+        stamp=max(time.time_ns(),previous+10_000_000)
+        os.utime(self.file,ns=(stamp,stamp))
     def wait(self):
         deadline=time.monotonic()+3
         while not self.live.future.done() and time.monotonic()<deadline:time.sleep(.005)

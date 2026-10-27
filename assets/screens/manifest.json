@@ -1,0 +1,65 @@
+[
+  {
+    "feature": "events",
+    "state": "Tutorial / Events range",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  },
+  {
+    "feature": "slicing",
+    "state": "Tutorial / Slice zoom",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  },
+  {
+    "feature": "mixer",
+    "state": "Mixer / scope 1 / field 0",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  },
+  {
+    "feature": "live-fx",
+    "state": "Performance / LIVE FX",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  },
+  {
+    "feature": "chords",
+    "state": "Tutorial / Custom chords",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  },
+  {
+    "feature": "synth",
+    "state": "Native Synth / Presets",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  },
+  {
+    "feature": "synth-filter",
+    "state": "Native Synth / Filter",
+    "devices": [
+      "mikro",
+      "mk2",
+      "mk3"
+    ]
+  }
+]

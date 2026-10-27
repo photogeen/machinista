@@ -40,7 +40,11 @@ so sound data is never silently discarded.
 
 Clean image payloads include 32 independently authored CC0-1.0 parameter patches:
 **Machinista Bass**, **Machinista Keys**, **Machinista Leads** and **Machinista Pads**,
-eight patches each. They are data only; OB-Xd itself remains an optional separate
+eight patches each. Revision 2 focuses on classic two-VCO brass, PWM strings,
+polyphonic comping, basses, hard-sync and unison leads. Envelope time and detune
+values use the original port's real curves; output levels were checked with
+single notes and eight-note chords at 44.1/48 kHz. These are original
+Oberheim-style programs, not exact factory-preset copies. They are data only; OB-Xd itself remains an optional separate
 installation. Once OB-Xd is installed, its banks appear on the controller and in
 Sounds grouped by instrument and bank. Init remains last. No downloaded third-party
 bank is included. Existing user banks are preserved.
@@ -48,3 +52,19 @@ bank is included. Existing user banks are preserved.
 For an existing installation, download `Machinista-OBXd-Patches.zip` from the
 OB-Xd repository's Releases and import its four JSON files via WebUI > Patch banks,
 with OB-Xd selected. Each bank may also be imported individually.
+
+
+The patch design references the manufacturer's public description of the classic
+OB-X / OB-Xa / OB-8 architecture and sound families:
+https://oberheim.com/products/ob-x8/ and the OB-X8 User's Guide at
+https://oberheim.com/wp-content/uploads/2022/08/OB-X8-Users-Guide-1.0.pdf .
+The older 2DaT port's own DSP, not modern commercial OB-Xd parameters, determines
+our oscillator, filter, envelope and detune values. There is no claim of exact
+hardware or factory-preset reproduction.
+
+| Bank | Revision 2 programs |
+| --- | --- |
+| Machinista Keys | Jumpstart Brass, Purple Poly, Grand Horns, Slow Brass Choir, OB Comp Clav, Poly Tines, Octave Chimes, Soft Pulse Comp |
+| Machinista Pads | Eight Voice Strings, Silk PWM Ensemble, Cinema Octaves, Hollow Two Pole, Warm Filter Bloom, Glassy Fifths, Highpass Halo, Sustained Horizons |
+| Machinista Bass | Sawyer Sweep, Two Pole Punch, Four Pole Rubber, Octave Weight, OB Pulse Round, Unison Machine, PWM Low Motion, Resonant Stepper |
+| Machinista Leads | Eight Voice Solo, Silky Pulse Solo, Sync Torque, Fifth Avenue, Narrow Neon, Brass Call, Notch Voyager, Poly Glide Anthem |

@@ -65,7 +65,7 @@ def verify():
         sources={}
         for pattern in ('tools/*manual*.py','app/mk3*.py','app/pattern_editor.py','app/mk2_surface.py'):
             for source in ROOT.glob(pattern):sources[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
-        manifest=dict(edition='2026-10-27',software='Machinista 0.1.0-beta.9 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
+        manifest=dict(edition='2026-10-27',software='Machinista 0.1.0-beta.10 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
         (OUT/('manuals-manifest.json' if lang=='EN' else 'manuals-manifest-de.json')).write_text(json.dumps(manifest,indent=2)+'\n')
     with zipfile.ZipFile(OUT/'Machinista-Manuals-EN-DE.zip','w',zipfile.ZIP_DEFLATED) as archive:
         for row in results:archive.write(OUT/row['file'],row['file'])

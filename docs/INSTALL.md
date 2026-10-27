@@ -1,7 +1,6 @@
 # Installation and first boot
 
-Use an explicitly published, checksummed Machinista Pi4/Pi5 image. No image or
-release-download URL is embedded in this source preparation before publication.
+Download the [Pi 4/Pi 5 beta image](https://github.com/photogeen/machinista/releases/tag/v0.1.0-beta.10) and its SHA256SUMS from the same release. Verify the downloaded `.img.xz` before flashing.
 
 1. Back up existing work and use a spare SD card of 8 GB or larger.
 2. Select the supplied .img.xz as a custom image in Raspberry Pi Imager. Retain

@@ -32,7 +32,7 @@ def prepare(source,destination):
             if path.is_file() and '__pycache__' not in path.parts and path.suffix!='.pyc':add(path)
     for path in (source/'tools').rglob('*'):
         if path.is_file() and path.suffix in ('.py','.cpp','.cjs') and '__pycache__' not in path.parts and path.name not in EXCLUDED_TOOLS:add(path)
-    for folder in ('branding','fonts','instrument-art','manual-web'):
+    for folder in ('branding','fonts','instrument-art','manual-web','screens'):
         for path in (source/'assets'/folder).rglob('*'):
             if path.is_file():add(path)
     for path in factory_files(source):add(path)

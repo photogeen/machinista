@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220" role="img" aria-label="Machinista">
+ <defs><mask id="cuts"><rect width="180" height="166" fill="white"/>
+ <g fill="black"><rect x="15" y="15" width="65" height="12"/><rect x="95" y="15" width="65" height="12"/>
+ <circle cx="65" cy="42" r="4"/><circle cx="92" cy="42" r="4"/><circle cx="119" cy="42" r="4"/><circle cx="146" cy="42" r="4"/>
+ <circle cx="27" cy="78" r="18"/><rect x="15" y="114" width="21" height="7"/><rect x="15" y="131" width="21" height="7"/><rect x="15" y="148" width="21" height="7"/>
+ <path d="M58 58h20v20H58z M85 58h20v20H85z M112 58h20v20h-20z M139 58h20v20h-20z M58 85h20v20H58z M85 85h20v20H85z M112 85h20v20h-20z M139 85h20v20h-20z M58 112h20v20H58z M85 112h20v20H85z M112 112h20v20h-20z M139 112h20v20h-20z M58 139h20v20H58z M85 139h20v20H85z M112 139h20v20h-20z M139 139h20v20h-20z"/></g>
+ <circle cx="27" cy="78" r="13" fill="white"/><circle cx="27" cy="78" r="8" fill="black"/></mask></defs>
+ <g transform="translate(16 26)"><rect width="180" height="166" rx="12" fill="#ff982f" mask="url(#cuts)"/></g>
+ <text x="226" y="173" fill="#ff982f" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="158" letter-spacing="-5">Machinista</text>
+</svg>

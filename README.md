@@ -1,5 +1,7 @@
 # Machinista
 
+![Machinista logo](assets/branding/machinista-github.svg)
+
 [![Source and workflow checks](https://github.com/photogeen/machinista/actions/workflows/ci.yml/badge.svg?branch=beta)](https://github.com/photogeen/machinista/actions/workflows/ci.yml)
 
 [Repository](https://github.com/photogeen/machinista) · [Issues](https://github.com/photogeen/machinista/issues)
@@ -36,6 +38,34 @@ See [licensing status](LICENSING.md) before reusing or redistributing the code.
 
 Controller mode requires a host Pi; this project does not replace Maschine+
 standalone firmware. Device-specific hardware tests remain necessary.
+
+## Install the beta
+
+[Download the Pi 4 / Pi 5 beta image](https://github.com/photogeen/machinista/releases/tag/v0.1.0-beta.10)
+for first installation. Use the `.img.xz` and verify `SHA256SUMS`, then write it to
+a spare SD card with Raspberry Pi Imager. Writing erases that card. First boot,
+hotspot and account instructions are in [Installation](docs/INSTALL.md).
+
+Existing installations use System / WebUI > Updates. A new SD image is needed
+for first installation, not every application update. Beta images still need
+real controller/audio and Pi-model testing.
+
+## Screens
+
+Actual application renderers with illustrative project data, not hardware photos.
+Mikro images also represent Mikro MK2; MK2 screens represent MK1/MK2;
+MK3 color screens also apply to Maschine+ in controller mode.
+
+| Feature | Mikro | MK1 / MK2 | MK3 / Maschine+ |
+| --- | --- | --- | --- |
+| Synth and patch banks | ![Mikro synth](assets/screens/synth-mikro.png) | ![MK2 synth](assets/screens/synth-mk2.png) | ![MK3 synth](assets/screens/synth-mk3.png) |
+| Slice editing | ![Mikro slices](assets/screens/slicing-mikro.png) | ![MK2 slices](assets/screens/slicing-mk2.png) | ![MK3 slices](assets/screens/slicing-mk3.png) |
+| Events / note editing | ![Mikro events](assets/screens/events-mikro.png) | ![MK2 events](assets/screens/events-mk2.png) | ![MK3 events](assets/screens/events-mk3.png) |
+| Mixer | ![Mikro mixer](assets/screens/mixer-mikro.png) | ![MK2 mixer](assets/screens/mixer-mk2.png) | ![MK3 mixer](assets/screens/mixer-mk3.png) |
+| Custom chords | ![Mikro chords](assets/screens/chords-mikro.png) | ![MK2 chords](assets/screens/chords-mk2.png) | ![MK3 chords](assets/screens/chords-mk3.png) |
+| Live effects | ![Mikro live effects](assets/screens/live-fx-mikro.png) | ![MK2 live effects](assets/screens/live-fx-mk2.png) | ![MK3 live effects](assets/screens/live-fx-mk3.png) |
+
+[Full-size screen gallery](assets/screens/README.md).
 
 ## Start here
 
@@ -75,4 +105,4 @@ identify compatibility; no manufacturer sponsorship or endorsement is implied.
 
 Third-party LV2 bundles are available from the separate [plug-in port repositories](docs/PLUGIN_PORTS.md). They retain their upstream licenses and are installed through the WebUI. Machinista Synth and its original factory patches are included.
 
-One image includes the updater for everyone, with Beta and Release channels. Signed-feed setup and a real SD-card update test are required before application updates can be offered.
+One image includes the updater for everyone, with signed Beta and Release channels. Beta currently supplies application updates; Release becomes available when a stable version is published. Projects, samples and installed plug-ins are retained. Hardware update/recovery testing remains part of beta qualification.

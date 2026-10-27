@@ -99,3 +99,12 @@ native color display typography. Their complete upstream copyright and
 redistribution terms are retained in `assets/fonts/LICENSE-DejaVu.txt`.
 Pillow is provided by the distribution's `python3-pil` package; its notices
 remain in `/usr/share/doc/python3-pil/copyright` in the image.
+
+## Original Machinista OB-Xd parameter banks
+
+The four `presets/plugin-banks/obxd/machinista-*.json` banks are independently
+authored original parameter data, dedicated under CC0-1.0:
+https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+This dedication applies to these bank files only. They contain no manufacturer
+presets, sample audio or OB-Xd implementation. The optional OB-Xd plug-in keeps
+its separate upstream GPL license and is not part of the public image.

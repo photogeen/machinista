@@ -1,6 +1,6 @@
 # Controller user manuals
 
-Edition: 27 October 2026, Machinista 0.1.0-beta.9 / Fokus V2.
+Edition: 27 October 2026, Machinista 0.1.0-beta.10 / Fokus V2.
 
 `output/pdf/` contains separate illustrated English and German manuals for
 Mikro MK1, full-size MK1, MK2 and MK3. Screens and menu names stay English in both
@@ -8,8 +8,8 @@ languages. Each guide has 40 workflow/reference chapters, linked contents,
 workspace index, current screen atlas and shortcut/troubleshooting reference.
 Topic-local illustrated continuation pages document WebUI operations and
 Keyboard/CUSTOM chords; TOC page numbers and links include these pages.
-The manuals contain 110 pages (Mikro), 102 pages (MK1/MK2),
-and 159 pages per language (MK3).
+The manuals contain 111 pages (Mikro), 103 pages (MK1/MK2),
+and 160 pages per language (MK3).
 
 This edition includes Live FX/recording, restored mode actions and pinning,
 Scene Options/banks/Quantize, current Tap Tempo, custom chord imports/variations,
