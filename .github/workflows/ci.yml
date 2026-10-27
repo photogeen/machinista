@@ -1,10 +1,10 @@
 name: Source and workflow checks
-on:
+'on':
   push:
     branches: [beta, release]
   pull_request:
     branches: [beta, release]
-  workflow_dispatch:
+  workflow_dispatch: {}
 permissions:
   contents: read
 concurrency:
