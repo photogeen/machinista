@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "9289f5c07a1f3a6fc55c4cc965ff51d1",
+  "name": "Clav Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "clav"
+  ],
+  "frames": 8,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

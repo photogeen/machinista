@@ -1,0 +1,21 @@
+[Unit]
+Description=Machinista local power controls
+Before=machinista.service machinista-web.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/local/lib/machinista/power_service.py --user machinista
+RuntimeDirectory=machinista-power
+RuntimeDirectoryMode=0770
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+RestrictAddressFamilies=AF_UNIX
+UMask=0007
+
+[Install]
+WantedBy=multi-user.target

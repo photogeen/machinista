@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "4429427f61ddc1ed6129f5e54bdfe440",
+  "name": "Hammer Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "hammer"
+  ],
+  "frames": 8,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

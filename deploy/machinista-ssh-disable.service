@@ -1,0 +1,13 @@
+[Unit]
+Description=Disable SSH access for Machinista
+
+[Service]
+Type=oneshot
+Environment=SYSTEMCTL_SKIP_SYSV=1
+ExecStart=/usr/bin/systemctl disable --now ssh.service ssh.socket
+User=root
+ProtectSystem=strict
+ReadWritePaths=/etc/systemd/system
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true

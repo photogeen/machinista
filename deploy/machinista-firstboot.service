@@ -1,0 +1,14 @@
+[Unit]
+Description=Machinista beta first boot preparation
+After=local-fs.target
+Before=machinista.service machinista-web.service machinista-network.service smbd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/machinista/Machinista/tools/firstboot.py
+RemainAfterExit=yes
+TimeoutStartSec=180
+
+[Install]
+WantedBy=multi-user.target
+Alias=machinist-firstboot.service

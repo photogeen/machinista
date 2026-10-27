@@ -1,0 +1,556 @@
+{
+  "schema": 1,
+  "id": "calf-vinyl",
+  "uri": "http://calf.sourceforge.net/plugins/Vinyl",
+  "title": "Calf Vinyl",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "BYPASS",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "drone",
+      "name": "WOW",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 16,
+      "symbol": "speed",
+      "name": "SPEED",
+      "default": 33,
+      "min": 33,
+      "max": 78,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          33,
+          "33 RPM"
+        ],
+        [
+          45,
+          "45 RPM"
+        ],
+        [
+          78,
+          "78 RPM"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 17,
+      "symbol": "aging",
+      "name": "AGING",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 18,
+      "symbol": "freq",
+      "name": "COLOR FREQ",
+      "default": 1000,
+      "min": 600,
+      "max": 1800,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "unit": "hz"
+    },
+    {
+      "index": 19,
+      "symbol": "gain0",
+      "name": "HUM LEVEL",
+      "default": 0.0078125,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 20,
+      "symbol": "pitch0",
+      "name": "HUM TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 21,
+      "symbol": "active0",
+      "name": "HUM ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 22,
+      "symbol": "gain1",
+      "name": "MOTOR LEVEL",
+      "default": 0.0078125,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 23,
+      "symbol": "pitch1",
+      "name": "MOTOR TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 24,
+      "symbol": "active1",
+      "name": "MOTOR ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 25,
+      "symbol": "gain2",
+      "name": "STATIC LEVEL",
+      "default": 0.015625,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 26,
+      "symbol": "pitch2",
+      "name": "STATIC TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 27,
+      "symbol": "active2",
+      "name": "STATIC ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 28,
+      "symbol": "gain3",
+      "name": "HISS LEVEL",
+      "default": 0.0078125,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 29,
+      "symbol": "pitch3",
+      "name": "HISS TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 30,
+      "symbol": "active3",
+      "name": "HISS ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 31,
+      "symbol": "gain4",
+      "name": "RUMBLE LEVEL",
+      "default": 0.03125,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 32,
+      "symbol": "pitch4",
+      "name": "RUMBLE TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 33,
+      "symbol": "active4",
+      "name": "RUMBLE ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 34,
+      "symbol": "gain5",
+      "name": "CRACKLE LEVEL",
+      "default": 0.0625,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 35,
+      "symbol": "pitch5",
+      "name": "CRACKLE TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 36,
+      "symbol": "active5",
+      "name": "CRACKLE ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 37,
+      "symbol": "gain6",
+      "name": "CRINKLE LEVEL",
+      "default": 0.0625,
+      "min": 1.5849e-05,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 38,
+      "symbol": "pitch6",
+      "name": "CRINKLE TUNE",
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    {
+      "index": 39,
+      "symbol": "active6",
+      "name": "CRINKLE ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    }
+  ],
+  "pages": [
+    {
+      "title": "VINYL",
+      "controls": [
+        "@bank",
+        "@patch",
+        "drone",
+        "aging",
+        "freq",
+        "speed",
+        "level_in",
+        "level_out"
+      ]
+    },
+    {
+      "title": "NOISE BED",
+      "controls": [
+        "active0",
+        "gain0",
+        "active1",
+        "gain1",
+        "active2",
+        "gain2",
+        "active3",
+        "gain3"
+      ]
+    },
+    {
+      "title": "SURFACE",
+      "controls": [
+        "active4",
+        "gain4",
+        "active5",
+        "gain5",
+        "active6",
+        "gain6",
+        "bypass",
+        "aging"
+      ]
+    },
+    {
+      "title": "NOISE TUNE",
+      "controls": [
+        "pitch0",
+        "pitch1",
+        "pitch2",
+        "pitch3",
+        "pitch4",
+        "pitch5",
+        "pitch6",
+        "bypass"
+      ]
+    }
+  ],
+  "overrides": {
+    "bypass": {
+      "name": "BYPASS"
+    },
+    "level_in": {
+      "name": "INPUT",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "level_out": {
+      "name": "OUTPUT",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "drone": {
+      "name": "WOW",
+      "unit": "percent"
+    },
+    "speed": {
+      "name": "SPEED",
+      "choices": [
+        [
+          33,
+          "33 RPM"
+        ],
+        [
+          45,
+          "45 RPM"
+        ],
+        [
+          78,
+          "78 RPM"
+        ]
+      ],
+      "choice": true
+    },
+    "aging": {
+      "name": "AGING",
+      "unit": "percent"
+    },
+    "freq": {
+      "name": "COLOR FREQ",
+      "unit": "hz"
+    },
+    "gain0": {
+      "name": "HUM LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch0": {
+      "name": "HUM TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active0": {
+      "name": "HUM ON"
+    },
+    "gain1": {
+      "name": "MOTOR LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch1": {
+      "name": "MOTOR TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active1": {
+      "name": "MOTOR ON"
+    },
+    "gain2": {
+      "name": "STATIC LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch2": {
+      "name": "STATIC TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active2": {
+      "name": "STATIC ON"
+    },
+    "gain3": {
+      "name": "HISS LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch3": {
+      "name": "HISS TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active3": {
+      "name": "HISS ON"
+    },
+    "gain4": {
+      "name": "RUMBLE LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch4": {
+      "name": "RUMBLE TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active4": {
+      "name": "RUMBLE ON"
+    },
+    "gain5": {
+      "name": "CRACKLE LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch5": {
+      "name": "CRACKLE TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active5": {
+      "name": "CRACKLE ON"
+    },
+    "gain6": {
+      "name": "CRINKLE LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "pitch6": {
+      "name": "CRINKLE TUNE",
+      "unit": "cents",
+      "display_scale": 1200
+    },
+    "active6": {
+      "name": "CRINKLE ON"
+    }
+  },
+  "quirks": [
+    "Calf Color optional ARM64 bundle. Original LV2 values retained.",
+    "Vinyl includes original Calf noise SoundFonts; no audio driver or external synth required."
+  ]
+}

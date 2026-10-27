@@ -1,0 +1,763 @@
+{
+  "device": {
+    "vendor": "17cc",
+    "product": "1140",
+    "name": "Maschine Controller MK2"
+  },
+  "date": "2026-10-10",
+  "input_verified": true,
+  "led_positions_verified": true,
+  "rgb_color_confirmation": "confirmed by user",
+  "displays": {
+    "count": 2,
+    "width": 256,
+    "height": 64,
+    "packing": "row-major MSB first",
+    "report_ids": [
+      224,
+      225
+    ],
+    "chunks_per_display": 8,
+    "report_length": 265,
+    "readability_confirmed": true
+  },
+  "buttons": {
+    "DISPLAY 1": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 0
+    },
+    "DISPLAY 2": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 1
+    },
+    "DISPLAY 3": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 2
+    },
+    "DISPLAY 4": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 3
+    },
+    "DISPLAY 5": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 4
+    },
+    "DISPLAY 6": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 5
+    },
+    "DISPLAY 7": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 6
+    },
+    "DISPLAY 8": {
+      "report_id": 1,
+      "byte": 1,
+      "bit": 7
+    },
+    "CONTROL": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 0
+    },
+    "STEP": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 1
+    },
+    "BROWSE": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 2
+    },
+    "SAMPLING": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 3
+    },
+    "PAGE LEFT": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 4
+    },
+    "PAGE RIGHT": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 5
+    },
+    "ALL": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 6
+    },
+    "AUTO": {
+      "report_id": 1,
+      "byte": 2,
+      "bit": 7
+    },
+    "VOLUME": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 0
+    },
+    "SWING": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 1
+    },
+    "TEMPO": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 2
+    },
+    "MASTER LEFT": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 3
+    },
+    "MASTER RIGHT": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 4
+    },
+    "ENTER": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 5
+    },
+    "NOTE REPEAT": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 6
+    },
+    "MASTER PUSH": {
+      "report_id": 1,
+      "byte": 3,
+      "bit": 7
+    },
+    "GROUP A": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 0
+    },
+    "GROUP B": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 1
+    },
+    "GROUP C": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 2
+    },
+    "GROUP D": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 3
+    },
+    "GROUP E": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 4
+    },
+    "GROUP F": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 5
+    },
+    "GROUP G": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 6
+    },
+    "GROUP H": {
+      "report_id": 1,
+      "byte": 4,
+      "bit": 7
+    },
+    "RESTART": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 0
+    },
+    "TRANSPORT LEFT": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 1
+    },
+    "TRANSPORT RIGHT": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 2
+    },
+    "GRID": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 3
+    },
+    "PLAY": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 4
+    },
+    "REC": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 5
+    },
+    "ERASE": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 6
+    },
+    "SHIFT": {
+      "report_id": 1,
+      "byte": 5,
+      "bit": 7
+    },
+    "SCENE": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 0
+    },
+    "PATTERN": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 1
+    },
+    "PAD MODE": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 2
+    },
+    "NAVIGATE": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 3
+    },
+    "DUPLICATE": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 4
+    },
+    "SELECT": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 5
+    },
+    "SOLO": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 6
+    },
+    "MUTE": {
+      "report_id": 1,
+      "byte": 6,
+      "bit": 7
+    }
+  },
+  "encoders": {
+    "MASTER": {
+      "report_id": 1,
+      "byte": 8,
+      "mask": 15,
+      "modulus": 16
+    },
+    "KNOB 1": {
+      "report_id": 1,
+      "byte": 9,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 2": {
+      "report_id": 1,
+      "byte": 11,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 3": {
+      "report_id": 1,
+      "byte": 13,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 4": {
+      "report_id": 1,
+      "byte": 15,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 5": {
+      "report_id": 1,
+      "byte": 17,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 6": {
+      "report_id": 1,
+      "byte": 19,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 7": {
+      "report_id": 1,
+      "byte": 21,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    },
+    "KNOB 8": {
+      "report_id": 1,
+      "byte": 23,
+      "bytes": 2,
+      "byteorder": "little",
+      "modulus": 1000
+    }
+  },
+  "button_leds": {
+    "CONTROL": {
+      "report_id": 130,
+      "byte": 1
+    },
+    "STEP": {
+      "report_id": 130,
+      "byte": 2
+    },
+    "BROWSE": {
+      "report_id": 130,
+      "byte": 3
+    },
+    "SAMPLING": {
+      "report_id": 130,
+      "byte": 4
+    },
+    "PAGE LEFT": {
+      "report_id": 130,
+      "byte": 5
+    },
+    "PAGE RIGHT": {
+      "report_id": 130,
+      "byte": 6
+    },
+    "ALL": {
+      "report_id": 130,
+      "byte": 7
+    },
+    "AUTO": {
+      "report_id": 130,
+      "byte": 8
+    },
+    "DISPLAY 1": {
+      "report_id": 130,
+      "byte": 9
+    },
+    "DISPLAY 2": {
+      "report_id": 130,
+      "byte": 10
+    },
+    "DISPLAY 3": {
+      "report_id": 130,
+      "byte": 11
+    },
+    "DISPLAY 4": {
+      "report_id": 130,
+      "byte": 12
+    },
+    "DISPLAY 5": {
+      "report_id": 130,
+      "byte": 13
+    },
+    "DISPLAY 6": {
+      "report_id": 130,
+      "byte": 14
+    },
+    "DISPLAY 7": {
+      "report_id": 130,
+      "byte": 15
+    },
+    "DISPLAY 8": {
+      "report_id": 130,
+      "byte": 16
+    },
+    "SCENE": {
+      "report_id": 130,
+      "byte": 17
+    },
+    "PATTERN": {
+      "report_id": 130,
+      "byte": 18
+    },
+    "PAD MODE": {
+      "report_id": 130,
+      "byte": 19
+    },
+    "NAVIGATE": {
+      "report_id": 130,
+      "byte": 20
+    },
+    "DUPLICATE": {
+      "report_id": 130,
+      "byte": 21
+    },
+    "SELECT": {
+      "report_id": 130,
+      "byte": 22
+    },
+    "SOLO": {
+      "report_id": 130,
+      "byte": 23
+    },
+    "MUTE": {
+      "report_id": 130,
+      "byte": 24
+    },
+    "VOLUME": {
+      "report_id": 130,
+      "byte": 25
+    },
+    "SWING": {
+      "report_id": 130,
+      "byte": 26
+    },
+    "TEMPO": {
+      "report_id": 130,
+      "byte": 27
+    },
+    "MASTER LEFT": {
+      "report_id": 130,
+      "byte": 28
+    },
+    "MASTER RIGHT": {
+      "report_id": 130,
+      "byte": 29
+    },
+    "ENTER": {
+      "report_id": 130,
+      "byte": 30
+    },
+    "NOTE REPEAT": {
+      "report_id": 130,
+      "byte": 31
+    },
+    "RESTART": {
+      "report_id": 129,
+      "byte": 49
+    },
+    "TRANSPORT LEFT": {
+      "report_id": 129,
+      "byte": 50
+    },
+    "TRANSPORT RIGHT": {
+      "report_id": 129,
+      "byte": 51
+    },
+    "GRID": {
+      "report_id": 129,
+      "byte": 52
+    },
+    "PLAY": {
+      "report_id": 129,
+      "byte": 53
+    },
+    "REC": {
+      "report_id": 129,
+      "byte": 54
+    },
+    "ERASE": {
+      "report_id": 129,
+      "byte": 55
+    },
+    "SHIFT": {
+      "report_id": 129,
+      "byte": 56
+    }
+  },
+  "group_leds": {
+    "A": {
+      "report_id": 129,
+      "rgb1": [
+        1,
+        2,
+        3
+      ],
+      "rgb2": [
+        4,
+        5,
+        6
+      ]
+    },
+    "B": {
+      "report_id": 129,
+      "rgb1": [
+        7,
+        8,
+        9
+      ],
+      "rgb2": [
+        10,
+        11,
+        12
+      ]
+    },
+    "C": {
+      "report_id": 129,
+      "rgb1": [
+        13,
+        14,
+        15
+      ],
+      "rgb2": [
+        16,
+        17,
+        18
+      ]
+    },
+    "D": {
+      "report_id": 129,
+      "rgb1": [
+        19,
+        20,
+        21
+      ],
+      "rgb2": [
+        22,
+        23,
+        24
+      ]
+    },
+    "E": {
+      "report_id": 129,
+      "rgb1": [
+        25,
+        26,
+        27
+      ],
+      "rgb2": [
+        28,
+        29,
+        30
+      ]
+    },
+    "F": {
+      "report_id": 129,
+      "rgb1": [
+        31,
+        32,
+        33
+      ],
+      "rgb2": [
+        34,
+        35,
+        36
+      ]
+    },
+    "G": {
+      "report_id": 129,
+      "rgb1": [
+        37,
+        38,
+        39
+      ],
+      "rgb2": [
+        40,
+        41,
+        42
+      ]
+    },
+    "H": {
+      "report_id": 129,
+      "rgb1": [
+        43,
+        44,
+        45
+      ],
+      "rgb2": [
+        46,
+        47,
+        48
+      ]
+    }
+  },
+  "pads": {
+    "13": {
+      "raw_channel": 0,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        1,
+        2,
+        3
+      ]
+    },
+    "14": {
+      "raw_channel": 1,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        4,
+        5,
+        6
+      ]
+    },
+    "15": {
+      "raw_channel": 2,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        7,
+        8,
+        9
+      ]
+    },
+    "16": {
+      "raw_channel": 3,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        10,
+        11,
+        12
+      ]
+    },
+    "9": {
+      "raw_channel": 4,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        13,
+        14,
+        15
+      ]
+    },
+    "10": {
+      "raw_channel": 5,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        16,
+        17,
+        18
+      ]
+    },
+    "11": {
+      "raw_channel": 6,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        19,
+        20,
+        21
+      ]
+    },
+    "12": {
+      "raw_channel": 7,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        22,
+        23,
+        24
+      ]
+    },
+    "5": {
+      "raw_channel": 8,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        25,
+        26,
+        27
+      ]
+    },
+    "6": {
+      "raw_channel": 9,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        28,
+        29,
+        30
+      ]
+    },
+    "7": {
+      "raw_channel": 10,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        31,
+        32,
+        33
+      ]
+    },
+    "8": {
+      "raw_channel": 11,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        34,
+        35,
+        36
+      ]
+    },
+    "1": {
+      "raw_channel": 12,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        37,
+        38,
+        39
+      ]
+    },
+    "2": {
+      "raw_channel": 13,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        40,
+        41,
+        42
+      ]
+    },
+    "3": {
+      "raw_channel": 14,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        43,
+        44,
+        45
+      ]
+    },
+    "4": {
+      "raw_channel": 15,
+      "report_id": 32,
+      "led_report_id": 128,
+      "rgb": [
+        46,
+        47,
+        48
+      ]
+    }
+  },
+  "pad_replay": {
+    "reports": 13091,
+    "rejected": 0,
+    "pad_on": 16,
+    "pad_off": 16,
+    "decoder": "existing MikroMk1Decoder pressure report shared format, offline only"
+  }
+}

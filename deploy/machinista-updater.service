@@ -1,0 +1,25 @@
+[Unit]
+Description=Machinista trusted application and OS updater
+Before=machinista.service machinista-web.service
+After=network.target
+ConditionPathExists=/etc/machinista/updater.json
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/local/lib/machinista/update_service.py
+RuntimeDirectory=machinista-updater
+RuntimeDirectoryMode=0755
+StateDirectory=machinista-updater
+StateDirectoryMode=0700
+Restart=on-failure
+RestartSec=5
+Nice=19
+IOSchedulingClass=idle
+CPUWeight=1
+IOWeight=1
+NoNewPrivileges=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

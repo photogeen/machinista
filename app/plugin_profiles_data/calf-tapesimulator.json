@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "id": "calf-tapesimulator",
+  "uri": "http://calf.sourceforge.net/plugins/TapeSimulator",
+  "title": "Calf Tape Simulator",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "BYPASS",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 0.5,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "mix",
+      "name": "MIX",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 16,
+      "symbol": "lowpass",
+      "name": "FILTER",
+      "default": 12500,
+      "min": 1000,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 17,
+      "symbol": "speed",
+      "name": "SPEED",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0,
+          "SLOW"
+        ],
+        [
+          1,
+          "FAST"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 18,
+      "symbol": "noise",
+      "name": "NOISE",
+      "default": 0.1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 19,
+      "symbol": "mechanical",
+      "name": "MECHANICAL",
+      "default": 0.2,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 20,
+      "symbol": "magnetical",
+      "name": "MAGNETIC",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 21,
+      "symbol": "post",
+      "name": "MUFFLE",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    }
+  ],
+  "pages": [
+    {
+      "title": "TAPE",
+      "controls": [
+        "@bank",
+        "@patch",
+        "mix",
+        "lowpass",
+        "speed",
+        "mechanical",
+        "noise",
+        "level_out"
+      ]
+    },
+    {
+      "title": "TAPE TONE",
+      "controls": [
+        "level_in",
+        "magnetical",
+        "post",
+        "bypass",
+        "mix",
+        "lowpass",
+        "speed",
+        "level_out"
+      ]
+    }
+  ],
+  "overrides": {
+    "bypass": {
+      "name": "BYPASS"
+    },
+    "level_in": {
+      "name": "INPUT",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "level_out": {
+      "name": "OUTPUT",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "mix": {
+      "name": "MIX",
+      "unit": "percent"
+    },
+    "lowpass": {
+      "name": "FILTER",
+      "unit": "hz"
+    },
+    "speed": {
+      "name": "SPEED",
+      "choices": [
+        [
+          0,
+          "SLOW"
+        ],
+        [
+          1,
+          "FAST"
+        ]
+      ],
+      "choice": true
+    },
+    "noise": {
+      "name": "NOISE",
+      "unit": "percent"
+    },
+    "mechanical": {
+      "name": "MECHANICAL",
+      "unit": "percent"
+    },
+    "magnetical": {
+      "name": "MAGNETIC"
+    },
+    "post": {
+      "name": "MUFFLE"
+    }
+  },
+  "quirks": [
+    "Calf Color optional ARM64 bundle. Original LV2 values retained.",
+    "Vinyl includes original Calf noise SoundFonts; no audio driver or external synth required."
+  ]
+}

@@ -1,0 +1,15 @@
+[Unit]
+Description=Machinista USB sample media
+After=local-fs.target
+Before=machinista.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/machinista/Machinista/tools/mount_usb.py
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target
+Alias=machinist-media.service maschineos-media.service

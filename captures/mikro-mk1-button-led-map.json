@@ -1,0 +1,175 @@
+{
+  "buttons": {
+    "MAIN": 36,
+    "RESTART": 0,
+    "NOTE REPEAT": 1,
+    "SAMPLING": 2,
+    "BROWSE": 3,
+    "TRANSPORT LEFT": 4,
+    "TRANSPORT RIGHT": 5,
+    "GRID": 6,
+    "ERASE": 7,
+    "GROUP": 8,
+    "REC": 9,
+    "PLAY": 10,
+    "SHIFT": 11,
+    "VIEW": 12,
+    "PAD MODE": 13,
+    "PATTERN": 14,
+    "SCENE": 15,
+    "DUPLICATE": 16,
+    "SELECT": 17,
+    "SOLO": 18,
+    "MUTE": 19,
+    "F3": 37,
+    "F2": 38,
+    "F1": 39,
+    "NAV": 40,
+    "NAV LEFT": 41,
+    "NAV RIGHT": 42,
+    "ENTER": 43
+  },
+  "observations": [
+    {
+      "payload_index": 0,
+      "button": "RESTART"
+    },
+    {
+      "payload_index": 1,
+      "button": "NOTE REPEAT"
+    },
+    {
+      "payload_index": 2,
+      "button": "SAMPLING"
+    },
+    {
+      "payload_index": 3,
+      "button": "BROWSE"
+    },
+    {
+      "payload_index": 4,
+      "button": "TRANSPORT LEFT"
+    },
+    {
+      "payload_index": 5,
+      "button": "TRANSPORT RIGHT"
+    },
+    {
+      "payload_index": 6,
+      "button": "GRID"
+    },
+    {
+      "payload_index": 7,
+      "button": "ERASE"
+    },
+    {
+      "payload_index": 8,
+      "button": "GROUP"
+    },
+    {
+      "payload_index": 9,
+      "button": "REC"
+    },
+    {
+      "payload_index": 10,
+      "button": "PLAY"
+    },
+    {
+      "payload_index": 11,
+      "button": "SHIFT"
+    },
+    {
+      "payload_index": 12,
+      "button": "VIEW"
+    },
+    {
+      "payload_index": 13,
+      "button": "PAD MODE"
+    },
+    {
+      "payload_index": 14,
+      "button": "PATTERN"
+    },
+    {
+      "payload_index": 15,
+      "button": "SCENE"
+    },
+    {
+      "payload_index": 16,
+      "button": "DUPLICATE"
+    },
+    {
+      "payload_index": 17,
+      "button": "SELECT"
+    },
+    {
+      "payload_index": 18,
+      "button": "SOLO"
+    },
+    {
+      "payload_index": 19,
+      "button": "MUTE"
+    },
+    {
+      "payload_index": 37,
+      "button": "F3"
+    },
+    {
+      "payload_index": 38,
+      "button": "F2"
+    },
+    {
+      "payload_index": 39,
+      "button": "F1"
+    },
+    {
+      "payload_index": 40,
+      "button": "NAV"
+    },
+    {
+      "payload_index": 41,
+      "button": "NAV LEFT"
+    },
+    {
+      "payload_index": 42,
+      "button": "NAV RIGHT"
+    },
+    {
+      "payload_index": 43,
+      "button": "ENTER"
+    },
+    {
+      "payload_index": 52,
+      "button": null
+    },
+    {
+      "payload_index": 53,
+      "button": null
+    },
+    {
+      "payload_index": 54,
+      "button": null
+    },
+    {
+      "payload_index": 55,
+      "button": null
+    },
+    {
+      "payload_index": 56,
+      "button": null
+    },
+    {
+      "payload_index": 57,
+      "button": null
+    },
+    {
+      "payload_index": 58,
+      "button": null
+    },
+    {
+      "payload_index": 59,
+      "button": null
+    }
+  ],
+  "hardware": "17cc:1110 MK1"
+}

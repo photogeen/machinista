@@ -1,0 +1,248 @@
+{
+  "schema": 1,
+  "id": "calf-compressor",
+  "uri": "http://calf.sourceforge.net/plugins/Compressor",
+  "title": "Calf Compressor",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "Bypass",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 10,
+      "symbol": "threshold",
+      "name": "THRESHOLD",
+      "default": 0.125,
+      "min": 0.000976563,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 11,
+      "symbol": "ratio",
+      "name": "RATIO",
+      "default": 2,
+      "min": 1,
+      "max": 20,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 12,
+      "symbol": "attack",
+      "name": "Attack",
+      "default": 20,
+      "min": 0.01,
+      "max": 2000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "ms"
+    },
+    {
+      "index": 13,
+      "symbol": "release",
+      "name": "Release",
+      "default": 250,
+      "min": 0.01,
+      "max": 2000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "ms"
+    },
+    {
+      "index": 14,
+      "symbol": "makeup",
+      "name": "MAKEUP",
+      "default": 1,
+      "min": 1,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "knee",
+      "name": "Knee",
+      "default": 2.82843,
+      "min": 1,
+      "max": 8,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 16,
+      "symbol": "detection",
+      "name": "Detection",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "RMS"
+        ],
+        [
+          1.0,
+          "PEAK"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 17,
+      "symbol": "stereo_link",
+      "name": "Stereo Link",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "AVERAGE"
+        ],
+        [
+          1.0,
+          "MAXIMUM"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 19,
+      "symbol": "mix",
+      "name": "Mix",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    }
+  ],
+  "pages": [
+    {
+      "title": "DYNAMICS",
+      "controls": [
+        "@bank",
+        "@patch",
+        "threshold",
+        "ratio",
+        "attack",
+        "release",
+        "makeup",
+        "mix"
+      ]
+    },
+    {
+      "title": "DETECTION",
+      "controls": [
+        "detection",
+        "stereo_link",
+        "knee",
+        "level_in",
+        "bypass",
+        "mix",
+        "attack",
+        "release"
+      ]
+    }
+  ],
+  "overrides": {
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "threshold": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "THRESHOLD"
+    },
+    "attack": {
+      "unit": "ms"
+    },
+    "release": {
+      "unit": "ms"
+    },
+    "makeup": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "MAKEUP"
+    },
+    "detection": {
+      "choices": [
+        [
+          0.0,
+          "RMS"
+        ],
+        [
+          1.0,
+          "PEAK"
+        ]
+      ],
+      "choice": true
+    },
+    "stereo_link": {
+      "choices": [
+        [
+          0.0,
+          "AVERAGE"
+        ],
+        [
+          1.0,
+          "MAXIMUM"
+        ]
+      ],
+      "choice": true
+    },
+    "bypass": {},
+    "ratio": {
+      "name": "RATIO"
+    },
+    "knee": {},
+    "mix": {}
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

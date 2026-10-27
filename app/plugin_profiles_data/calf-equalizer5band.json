@@ -1,0 +1,761 @@
+{
+  "schema": 1,
+  "id": "calf-equalizer5band",
+  "uri": "http://calf.sourceforge.net/plugins/Equalizer5Band",
+  "title": "Calf Equalizer 5 Band",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "Bypass",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "ls_active",
+      "name": "LOW MODE",
+      "default": 0,
+      "min": 0,
+      "max": 5,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 16,
+      "symbol": "ls_level",
+      "name": "LOW GAIN",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 17,
+      "symbol": "ls_freq",
+      "name": "LOW FREQ",
+      "default": 100,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 18,
+      "symbol": "ls_q",
+      "name": "LOW Q",
+      "default": 0.707,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 19,
+      "symbol": "hs_active",
+      "name": "HIGH MODE",
+      "default": 0,
+      "min": 0,
+      "max": 5,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 20,
+      "symbol": "hs_level",
+      "name": "HIGH GAIN",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 21,
+      "symbol": "hs_freq",
+      "name": "HIGH FREQ",
+      "default": 5000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 22,
+      "symbol": "hs_q",
+      "name": "HIGH Q",
+      "default": 0.707,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 23,
+      "symbol": "p1_active",
+      "name": "MID 1 MODE",
+      "default": 0,
+      "min": 0,
+      "max": 5,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 24,
+      "symbol": "p1_level",
+      "name": "Level 1",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 25,
+      "symbol": "p1_freq",
+      "name": "Freq 1",
+      "default": 250,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 26,
+      "symbol": "p1_q",
+      "name": "Q 1",
+      "default": 1,
+      "min": 0.1,
+      "max": 100,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 27,
+      "symbol": "p2_active",
+      "name": "MID 2 MODE",
+      "default": 0,
+      "min": 0,
+      "max": 5,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 28,
+      "symbol": "p2_level",
+      "name": "Level 2",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 29,
+      "symbol": "p2_freq",
+      "name": "Freq 2",
+      "default": 1000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 30,
+      "symbol": "p2_q",
+      "name": "Q 2",
+      "default": 1,
+      "min": 0.1,
+      "max": 100,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 31,
+      "symbol": "p3_active",
+      "name": "MID 3 MODE",
+      "default": 0,
+      "min": 0,
+      "max": 5,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 32,
+      "symbol": "p3_level",
+      "name": "Level 3",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 33,
+      "symbol": "p3_freq",
+      "name": "Freq 3",
+      "default": 4000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 34,
+      "symbol": "p3_q",
+      "name": "Q 3",
+      "default": 1,
+      "min": 0.1,
+      "max": 100,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 35,
+      "symbol": "individuals",
+      "name": "Individual Filters",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 36,
+      "symbol": "zoom",
+      "name": "Zoom",
+      "default": 0.25,
+      "min": 0.0625,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 37,
+      "symbol": "analyzer",
+      "name": "Analyzer Active",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 38,
+      "symbol": "analyzer_mode",
+      "name": "Analyzer Mode",
+      "default": 1,
+      "min": 0,
+      "max": 2,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "INPUT"
+        ],
+        [
+          1.0,
+          "OUTPUT"
+        ],
+        [
+          2.0,
+          "DIFFERENCE"
+        ]
+      ],
+      "choice": true
+    }
+  ],
+  "pages": [
+    {
+      "title": "EQ / LOW",
+      "controls": [
+        "@bank",
+        "@patch",
+        "ls_freq",
+        "ls_level",
+        "ls_q",
+        "ls_active",
+        "level_in",
+        "level_out"
+      ]
+    },
+    {
+      "title": "MID 1 / 2",
+      "controls": [
+        "p1_freq",
+        "p1_level",
+        "p1_q",
+        "p1_active",
+        "p2_freq",
+        "p2_level",
+        "p2_q",
+        "p2_active"
+      ]
+    },
+    {
+      "title": "MID 3 / HIGH",
+      "controls": [
+        "p3_freq",
+        "p3_level",
+        "p3_q",
+        "p3_active",
+        "hs_freq",
+        "hs_level",
+        "hs_q",
+        "hs_active"
+      ]
+    },
+    {
+      "title": "MORE",
+      "controls": [
+        "bypass",
+        "individuals",
+        "zoom",
+        "analyzer",
+        "analyzer_mode",
+        "bypass",
+        "bypass",
+        "bypass"
+      ]
+    }
+  ],
+  "overrides": {
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "ls_active": {
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true,
+      "name": "LOW MODE"
+    },
+    "ls_level": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "LOW GAIN"
+    },
+    "ls_freq": {
+      "unit": "hz",
+      "name": "LOW FREQ"
+    },
+    "hs_active": {
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true,
+      "name": "HIGH MODE"
+    },
+    "hs_level": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "HIGH GAIN"
+    },
+    "hs_freq": {
+      "unit": "hz",
+      "name": "HIGH FREQ"
+    },
+    "p1_active": {
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true,
+      "name": "MID 1 MODE"
+    },
+    "p1_level": {
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "p1_freq": {
+      "unit": "hz"
+    },
+    "p2_active": {
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true,
+      "name": "MID 2 MODE"
+    },
+    "p2_level": {
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "p2_freq": {
+      "unit": "hz"
+    },
+    "p3_active": {
+      "choices": [
+        [
+          0.0,
+          "OFF"
+        ],
+        [
+          1.0,
+          "ON"
+        ],
+        [
+          2.0,
+          "LEFT"
+        ],
+        [
+          3.0,
+          "RIGHT"
+        ],
+        [
+          4.0,
+          "MID"
+        ],
+        [
+          5.0,
+          "SIDE"
+        ]
+      ],
+      "choice": true,
+      "name": "MID 3 MODE"
+    },
+    "p3_level": {
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "p3_freq": {
+      "unit": "hz"
+    },
+    "analyzer_mode": {
+      "choices": [
+        [
+          0.0,
+          "INPUT"
+        ],
+        [
+          1.0,
+          "OUTPUT"
+        ],
+        [
+          2.0,
+          "DIFFERENCE"
+        ]
+      ],
+      "choice": true
+    },
+    "bypass": {},
+    "ls_q": {
+      "name": "LOW Q"
+    },
+    "hs_q": {
+      "name": "HIGH Q"
+    },
+    "p1_q": {},
+    "p2_q": {},
+    "p3_q": {},
+    "individuals": {},
+    "zoom": {},
+    "analyzer": {}
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

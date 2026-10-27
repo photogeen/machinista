@@ -1,0 +1,31 @@
+[Unit]
+Description=Machinista sample library web interface
+After=network.target machinista-media.service machinista-lv2.service
+Wants=machinista-lv2.service
+
+Wants=machinista-power.service
+After=machinista-power.service
+
+[Service]
+Type=simple
+User=machinista
+WorkingDirectory=/home/machinista/Machinista
+ExecStart=/usr/bin/python3 /home/machinista/Machinista/tools/web_ui.py --no-auth
+Restart=on-failure
+RestartSec=3
+Nice=15
+IOSchedulingClass=idle
+CPUWeight=10
+IOWeight=10
+MemoryMax=192M
+TasksMax=32
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/run/machinista-power /var/lib/machinista/lv2/incoming /home/machinista/Machinista/samples /home/machinista/Machinista/projects /home/machinista/Machinista/presets -/media -/mnt -/run/media
+PrivateTmp=true
+UMask=0022
+
+[Install]
+WantedBy=multi-user.target
+Alias=machinist-web.service maschineos-web.service

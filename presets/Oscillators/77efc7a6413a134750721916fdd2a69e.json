@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "77efc7a6413a134750721916fdd2a69e",
+  "name": "Plucked Wire",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "wire"
+  ],
+  "frames": 8,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "1ad0d828f77061b66cd4a74c0e628dfb",
+  "name": "Reed Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "reed"
+  ],
+  "frames": 8,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

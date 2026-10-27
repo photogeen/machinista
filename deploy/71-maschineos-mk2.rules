@@ -1,0 +1,2 @@
+# Maschine MK2 only; same dedicated user group as verified Mikro MK1.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1140", GROUP="plugdev", MODE="0660"

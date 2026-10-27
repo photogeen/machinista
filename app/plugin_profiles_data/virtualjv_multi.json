@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "virtualjv_multi",
+  "uri": "urn:machinista:ports:virtualjv-multi",
+  "provider": "virtualjv-multi",
+  "parameters_file": "virtualjv_multi_parameters.json",
+  "quirks": [
+    "One Group instance; seven melodic parts plus rhythm.",
+    "Sound MIDI routing selects the edited part."
+  ]
+}

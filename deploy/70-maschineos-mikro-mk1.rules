@@ -1,0 +1,3 @@
+# Verified on the connected Mikro MK1: USB 17cc:1110.
+# Machinista service account belongs to plugdev.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1110", GROUP="plugdev", MODE="0660"

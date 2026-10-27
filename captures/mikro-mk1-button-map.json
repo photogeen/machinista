@@ -1,0 +1,176 @@
+[
+  {
+    "name": "RESTART",
+    "bit": 7,
+    "byte": 1,
+    "mask": "0x80"
+  },
+  {
+    "name": "TRANSPORT LEFT",
+    "bit": 6,
+    "byte": 1,
+    "mask": "0x40"
+  },
+  {
+    "name": "TRANSPORT RIGHT",
+    "bit": 5,
+    "byte": 1,
+    "mask": "0x20"
+  },
+  {
+    "name": "GRID",
+    "bit": 4,
+    "byte": 1,
+    "mask": "0x10"
+  },
+  {
+    "name": "PLAY",
+    "bit": 3,
+    "byte": 1,
+    "mask": "0x08"
+  },
+  {
+    "name": "REC",
+    "bit": 2,
+    "byte": 1,
+    "mask": "0x04"
+  },
+  {
+    "name": "ERASE",
+    "bit": 1,
+    "byte": 1,
+    "mask": "0x02"
+  },
+  {
+    "name": "SHIFT",
+    "bit": 0,
+    "byte": 1,
+    "mask": "0x01"
+  },
+  {
+    "name": "GROUP",
+    "bit": 13,
+    "byte": 2,
+    "mask": "0x20"
+  },
+  {
+    "name": "BROWSE",
+    "bit": 15,
+    "byte": 2,
+    "mask": "0x80"
+  },
+  {
+    "name": "SAMPLING",
+    "bit": 14,
+    "byte": 2,
+    "mask": "0x40"
+  },
+  {
+    "name": "NOTE REPEAT",
+    "bit": 12,
+    "byte": 2,
+    "mask": "0x10"
+  },
+  {
+    "name": "ENCODER PUSH",
+    "bit": 11,
+    "byte": 2,
+    "mask": "0x08"
+  },
+  {
+    "name": "F1",
+    "bit": 23,
+    "byte": 3,
+    "mask": "0x80"
+  },
+  {
+    "name": "F2",
+    "bit": 22,
+    "byte": 3,
+    "mask": "0x40"
+  },
+  {
+    "name": "F3",
+    "bit": 21,
+    "byte": 3,
+    "mask": "0x20"
+  },
+  {
+    "name": "NAV",
+    "bit": 19,
+    "byte": 3,
+    "mask": "0x08"
+  },
+  {
+    "name": "NAV LEFT",
+    "bit": 18,
+    "byte": 3,
+    "mask": "0x04"
+  },
+  {
+    "name": "NAV RIGHT",
+    "bit": 17,
+    "byte": 3,
+    "mask": "0x02"
+  },
+  {
+    "name": "MAIN",
+    "bit": 20,
+    "byte": 3,
+    "mask": "0x10"
+  },
+  {
+    "name": "SCENE",
+    "bit": 31,
+    "byte": 4,
+    "mask": "0x80"
+  },
+  {
+    "name": "PATTERN",
+    "bit": 30,
+    "byte": 4,
+    "mask": "0x40"
+  },
+  {
+    "name": "PAD MODE",
+    "bit": 29,
+    "byte": 4,
+    "mask": "0x20"
+  },
+  {
+    "name": "VIEW",
+    "bit": 28,
+    "byte": 4,
+    "mask": "0x10"
+  },
+  {
+    "name": "DUPLICATE",
+    "bit": 27,
+    "byte": 4,
+    "mask": "0x08"
+  },
+  {
+    "name": "SELECT",
+    "bit": 26,
+    "byte": 4,
+    "mask": "0x04"
+  },
+  {
+    "name": "SOLO",
+    "bit": 25,
+    "byte": 4,
+    "mask": "0x02"
+  },
+  {
+    "name": "MUTE",
+    "bit": 24,
+    "byte": 4,
+    "mask": "0x01"
+  },
+  {
+    "name": "ENTER",
+    "bit": 16,
+    "byte": 3,
+    "mask": "0x01"
+  }
+]

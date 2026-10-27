@@ -1,0 +1,888 @@
+{
+  "schema": 1,
+  "id": "obxd",
+  "uri": "urn:machinista:ports:obxd-2dat",
+  "title": "OB-Xd",
+  "provider": "parameter-bank",
+  "bank_format": "obxd-legacy",
+  "quirks": [
+    "77 normalized LV2 controls; legacy program files use engine indices, not LV2 port numbers.",
+    "Patch snapshots are saved in the project; source banks are not required for playback.",
+    "Host bank selection does not recreate the synth instance."
+  ],
+  "pages": [
+    {
+      "title": "PATCH / TONE",
+      "controls": [
+        "@bank",
+        "@patch",
+        "volume",
+        "cutoff",
+        "resonance",
+        "envelope_amt",
+        "latk",
+        "lrel"
+      ]
+    },
+    {
+      "title": "ENVELOPES",
+      "controls": [
+        "latk",
+        "ldec",
+        "lsus",
+        "lrel",
+        "fatk",
+        "fdec",
+        "fsus",
+        "frel"
+      ]
+    },
+    {
+      "title": "OSCILLATORS",
+      "controls": [
+        "osc1p",
+        "osc2p",
+        "osc2_det",
+        "pw",
+        "osc1mix",
+        "osc2mix",
+        "noisemix",
+        "xmod"
+      ]
+    },
+    {
+      "title": "OSC SHAPES",
+      "controls": [
+        "osc1saw",
+        "osc1pul",
+        "osc2saw",
+        "osc2pul",
+        "osc2hs",
+        "oscquantize",
+        "brightness",
+        "pw_env"
+      ]
+    },
+    {
+      "title": "FILTER",
+      "controls": [
+        "cutoff",
+        "resonance",
+        "envelope_amt",
+        "flt_kf",
+        "multimode",
+        "fourpole",
+        "bandpass",
+        "fenv_invert"
+      ]
+    },
+    {
+      "title": "LFO",
+      "controls": [
+        "lfofreq",
+        "lfo1amt",
+        "lfo2amt",
+        "lfosinwave",
+        "lfosquarewave",
+        "lfoshwave",
+        "lfo_sync",
+        "bendlforate"
+      ]
+    },
+    {
+      "title": "MODULATION",
+      "controls": [
+        "lfoosc1",
+        "lfoosc2",
+        "lfofilter",
+        "lfopw1",
+        "lfopw2",
+        "pw",
+        "pw_env",
+        "pw_env_both"
+      ]
+    },
+    {
+      "title": "GLOBAL",
+      "controls": [
+        "voice_count",
+        "unison",
+        "udet",
+        "portamento",
+        "legatomode",
+        "octave",
+        "tune",
+        "asplayedallocation"
+      ]
+    },
+    {
+      "title": "PERFORMANCE",
+      "controls": [
+        "bendrange",
+        "bendosc2",
+        "vfltenv",
+        "vampenv",
+        "envpitch",
+        "env_pitch_both",
+        "pw_osc2_ofs",
+        "oscquantize"
+      ]
+    },
+    {
+      "title": "CHARACTER",
+      "controls": [
+        "filter_warm",
+        "envder",
+        "filterder",
+        "portader",
+        "level_dif",
+        "self_osc_push",
+        "brightness",
+        "economy_mode"
+      ]
+    },
+    {
+      "title": "VOICE PAN",
+      "controls": [
+        "pan1",
+        "pan2",
+        "pan3",
+        "pan4",
+        "pan5",
+        "pan6",
+        "pan7",
+        "pan8"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "index": 3,
+      "engineIndex": 2,
+      "symbol": "volume",
+      "default": 0.5
+    },
+    {
+      "index": 4,
+      "engineIndex": 3,
+      "symbol": "voice_count",
+      "default": 1.0
+    },
+    {
+      "index": 5,
+      "engineIndex": 4,
+      "symbol": "tune",
+      "default": 0.5
+    },
+    {
+      "index": 6,
+      "engineIndex": 5,
+      "symbol": "octave",
+      "default": 0.5
+    },
+    {
+      "index": 7,
+      "engineIndex": 6,
+      "symbol": "bendrange",
+      "default": 0.0
+    },
+    {
+      "index": 8,
+      "engineIndex": 7,
+      "symbol": "bendosc2",
+      "default": 0.0
+    },
+    {
+      "index": 9,
+      "engineIndex": 8,
+      "symbol": "legatomode",
+      "default": 0.0
+    },
+    {
+      "index": 10,
+      "engineIndex": 9,
+      "symbol": "bendlforate",
+      "default": 0.6
+    },
+    {
+      "index": 11,
+      "engineIndex": 10,
+      "symbol": "vfltenv",
+      "default": 0.0
+    },
+    {
+      "index": 12,
+      "engineIndex": 11,
+      "symbol": "vampenv",
+      "default": 0.0
+    },
+    {
+      "index": 13,
+      "engineIndex": 12,
+      "symbol": "asplayedallocation",
+      "default": 0.0
+    },
+    {
+      "index": 14,
+      "engineIndex": 13,
+      "symbol": "portamento",
+      "default": 0.0
+    },
+    {
+      "index": 15,
+      "engineIndex": 14,
+      "symbol": "unison",
+      "default": 0.0
+    },
+    {
+      "index": 16,
+      "engineIndex": 15,
+      "symbol": "udet",
+      "default": 0.2
+    },
+    {
+      "index": 17,
+      "engineIndex": 16,
+      "symbol": "osc2_det",
+      "default": 0.4
+    },
+    {
+      "index": 18,
+      "engineIndex": 17,
+      "symbol": "lfofreq",
+      "default": 0.0
+    },
+    {
+      "index": 19,
+      "engineIndex": 18,
+      "symbol": "lfosinwave",
+      "default": 0.0
+    },
+    {
+      "index": 20,
+      "engineIndex": 19,
+      "symbol": "lfosquarewave",
+      "default": 0.0
+    },
+    {
+      "index": 21,
+      "engineIndex": 20,
+      "symbol": "lfoshwave",
+      "default": 0.0
+    },
+    {
+      "index": 22,
+      "engineIndex": 21,
+      "symbol": "lfo1amt",
+      "default": 0.0
+    },
+    {
+      "index": 23,
+      "engineIndex": 22,
+      "symbol": "lfo2amt",
+      "default": 0.0
+    },
+    {
+      "index": 24,
+      "engineIndex": 23,
+      "symbol": "lfoosc1",
+      "default": 0.0
+    },
+    {
+      "index": 25,
+      "engineIndex": 24,
+      "symbol": "lfoosc2",
+      "default": 0.0
+    },
+    {
+      "index": 26,
+      "engineIndex": 25,
+      "symbol": "lfofilter",
+      "default": 0.0
+    },
+    {
+      "index": 27,
+      "engineIndex": 26,
+      "symbol": "lfopw1",
+      "default": 0.0
+    },
+    {
+      "index": 28,
+      "engineIndex": 27,
+      "symbol": "lfopw2",
+      "default": 0.0
+    },
+    {
+      "index": 29,
+      "engineIndex": 28,
+      "symbol": "osc2hs",
+      "default": 0.0
+    },
+    {
+      "index": 30,
+      "engineIndex": 29,
+      "symbol": "xmod",
+      "default": 0.0
+    },
+    {
+      "index": 31,
+      "engineIndex": 30,
+      "symbol": "osc1p",
+      "default": 0.0
+    },
+    {
+      "index": 32,
+      "engineIndex": 31,
+      "symbol": "osc2p",
+      "default": 0.0
+    },
+    {
+      "index": 33,
+      "engineIndex": 32,
+      "symbol": "oscquantize",
+      "default": 0.0
+    },
+    {
+      "index": 34,
+      "engineIndex": 33,
+      "symbol": "osc1saw",
+      "default": 1.0
+    },
+    {
+      "index": 35,
+      "engineIndex": 34,
+      "symbol": "osc1pul",
+      "default": 0.0
+    },
+    {
+      "index": 36,
+      "engineIndex": 35,
+      "symbol": "osc2saw",
+      "default": 1.0
+    },
+    {
+      "index": 37,
+      "engineIndex": 36,
+      "symbol": "osc2pul",
+      "default": 0.0
+    },
+    {
+      "index": 38,
+      "engineIndex": 37,
+      "symbol": "pw",
+      "default": 0.0
+    },
+    {
+      "index": 39,
+      "engineIndex": 38,
+      "symbol": "brightness",
+      "default": 1.0
+    },
+    {
+      "index": 40,
+      "engineIndex": 39,
+      "symbol": "envpitch",
+      "default": 0.0
+    },
+    {
+      "index": 41,
+      "engineIndex": 40,
+      "symbol": "osc1mix",
+      "default": 1.0
+    },
+    {
+      "index": 42,
+      "engineIndex": 41,
+      "symbol": "osc2mix",
+      "default": 1.0
+    },
+    {
+      "index": 43,
+      "engineIndex": 42,
+      "symbol": "noisemix",
+      "default": 0.0
+    },
+    {
+      "index": 44,
+      "engineIndex": 43,
+      "symbol": "flt_kf",
+      "default": 0.0
+    },
+    {
+      "index": 45,
+      "engineIndex": 44,
+      "symbol": "cutoff",
+      "default": 0.5
+    },
+    {
+      "index": 46,
+      "engineIndex": 45,
+      "symbol": "resonance",
+      "default": 0.0
+    },
+    {
+      "index": 47,
+      "engineIndex": 46,
+      "symbol": "multimode",
+      "default": 0.0
+    },
+    {
+      "index": 48,
+      "engineIndex": 47,
+      "symbol": "filter_warm",
+      "default": 0.0
+    },
+    {
+      "index": 49,
+      "engineIndex": 48,
+      "symbol": "bandpass",
+      "default": 0.0
+    },
+    {
+      "index": 50,
+      "engineIndex": 49,
+      "symbol": "fourpole",
+      "default": 0.0
+    },
+    {
+      "index": 51,
+      "engineIndex": 50,
+      "symbol": "envelope_amt",
+      "default": 0.0
+    },
+    {
+      "index": 52,
+      "engineIndex": 51,
+      "symbol": "latk",
+      "default": 0.0
+    },
+    {
+      "index": 53,
+      "engineIndex": 52,
+      "symbol": "ldec",
+      "default": 0.0
+    },
+    {
+      "index": 54,
+      "engineIndex": 53,
+      "symbol": "lsus",
+      "default": 1.0
+    },
+    {
+      "index": 55,
+      "engineIndex": 54,
+      "symbol": "lrel",
+      "default": 0.0
+    },
+    {
+      "index": 56,
+      "engineIndex": 55,
+      "symbol": "fatk",
+      "default": 0.0
+    },
+    {
+      "index": 57,
+      "engineIndex": 56,
+      "symbol": "fdec",
+      "default": 0.0
+    },
+    {
+      "index": 58,
+      "engineIndex": 57,
+      "symbol": "fsus",
+      "default": 0.0
+    },
+    {
+      "index": 59,
+      "engineIndex": 58,
+      "symbol": "frel",
+      "default": 0.0
+    },
+    {
+      "index": 60,
+      "engineIndex": 59,
+      "symbol": "envder",
+      "default": 0.3
+    },
+    {
+      "index": 61,
+      "engineIndex": 60,
+      "symbol": "filterder",
+      "default": 0.3
+    },
+    {
+      "index": 62,
+      "engineIndex": 61,
+      "symbol": "portader",
+      "default": 0.3
+    },
+    {
+      "index": 63,
+      "engineIndex": 62,
+      "symbol": "pan1",
+      "default": 0.5
+    },
+    {
+      "index": 64,
+      "engineIndex": 63,
+      "symbol": "pan2",
+      "default": 0.5
+    },
+    {
+      "index": 65,
+      "engineIndex": 64,
+      "symbol": "pan3",
+      "default": 0.5
+    },
+    {
+      "index": 66,
+      "engineIndex": 65,
+      "symbol": "pan4",
+      "default": 0.5
+    },
+    {
+      "index": 67,
+      "engineIndex": 66,
+      "symbol": "pan5",
+      "default": 0.5
+    },
+    {
+      "index": 68,
+      "engineIndex": 67,
+      "symbol": "pan6",
+      "default": 0.5
+    },
+    {
+      "index": 69,
+      "engineIndex": 68,
+      "symbol": "pan7",
+      "default": 0.5
+    },
+    {
+      "index": 70,
+      "engineIndex": 69,
+      "symbol": "pan8",
+      "default": 0.5
+    },
+    {
+      "index": 71,
+      "engineIndex": 71,
+      "symbol": "economy_mode",
+      "default": 1.0
+    },
+    {
+      "index": 72,
+      "engineIndex": 72,
+      "symbol": "lfo_sync",
+      "default": 0.0
+    },
+    {
+      "index": 73,
+      "engineIndex": 73,
+      "symbol": "pw_env",
+      "default": 0.0
+    },
+    {
+      "index": 74,
+      "engineIndex": 74,
+      "symbol": "pw_env_both",
+      "default": 0.0
+    },
+    {
+      "index": 75,
+      "engineIndex": 75,
+      "symbol": "env_pitch_both",
+      "default": 0.0
+    },
+    {
+      "index": 76,
+      "engineIndex": 76,
+      "symbol": "fenv_invert",
+      "default": 0.0
+    },
+    {
+      "index": 77,
+      "engineIndex": 77,
+      "symbol": "pw_osc2_ofs",
+      "default": 0.0
+    },
+    {
+      "index": 78,
+      "engineIndex": 78,
+      "symbol": "level_dif",
+      "default": 0.3
+    },
+    {
+      "index": 79,
+      "engineIndex": 79,
+      "symbol": "self_osc_push",
+      "default": 0.0
+    }
+  ],
+  "overrides": {
+    "bendosc2": {
+      "toggle": true
+    },
+    "asplayedallocation": {
+      "toggle": true
+    },
+    "unison": {
+      "toggle": true
+    },
+    "lfosinwave": {
+      "toggle": true
+    },
+    "lfosquarewave": {
+      "toggle": true
+    },
+    "lfoshwave": {
+      "toggle": true
+    },
+    "lfoosc1": {
+      "toggle": true
+    },
+    "lfoosc2": {
+      "toggle": true
+    },
+    "lfofilter": {
+      "toggle": true
+    },
+    "lfopw1": {
+      "toggle": true
+    },
+    "lfopw2": {
+      "toggle": true
+    },
+    "osc2hs": {
+      "toggle": true
+    },
+    "oscquantize": {
+      "toggle": true
+    },
+    "osc1saw": {
+      "toggle": true
+    },
+    "osc1pul": {
+      "toggle": true
+    },
+    "osc2saw": {
+      "toggle": true
+    },
+    "osc2pul": {
+      "toggle": true
+    },
+    "envpitch": {
+      "toggle": true
+    },
+    "bandpass": {
+      "toggle": true
+    },
+    "fourpole": {
+      "toggle": true
+    },
+    "economy_mode": {
+      "toggle": true
+    },
+    "lfo_sync": {
+      "toggle": true
+    },
+    "pw_env": {
+      "toggle": true
+    },
+    "pw_env_both": {
+      "toggle": true
+    },
+    "env_pitch_both": {
+      "toggle": true
+    },
+    "fenv_invert": {
+      "toggle": true
+    },
+    "voice_count": {
+      "name": "VOICES",
+      "choices": [
+        [
+          0.0,
+          "1"
+        ],
+        [
+          0.14285714285714285,
+          "2"
+        ],
+        [
+          0.2857142857142857,
+          "3"
+        ],
+        [
+          0.42857142857142855,
+          "4"
+        ],
+        [
+          0.5714285714285714,
+          "5"
+        ],
+        [
+          0.7142857142857143,
+          "6"
+        ],
+        [
+          0.8571428571428571,
+          "7"
+        ],
+        [
+          1.0,
+          "8"
+        ]
+      ],
+      "choice": true
+    },
+    "octave": {
+      "choices": [
+        [
+          0.0,
+          "-2"
+        ],
+        [
+          0.25,
+          "-1"
+        ],
+        [
+          0.5,
+          "0"
+        ],
+        [
+          0.75,
+          "1"
+        ],
+        [
+          1.0,
+          "2"
+        ]
+      ],
+      "choice": true
+    },
+    "bendrange": {
+      "choices": [
+        [
+          0,
+          "2 ST"
+        ],
+        [
+          1,
+          "12 ST"
+        ]
+      ],
+      "choice": true
+    },
+    "legatomode": {
+      "choices": [
+        [
+          0.0,
+          "MODE 1"
+        ],
+        [
+          0.3333333333333333,
+          "MODE 2"
+        ],
+        [
+          0.6666666666666666,
+          "MODE 3"
+        ],
+        [
+          1.0,
+          "MODE 4"
+        ]
+      ],
+      "choice": true
+    },
+    "volume": {
+      "name": "VOLUME"
+    },
+    "cutoff": {
+      "name": "CUTOFF"
+    },
+    "resonance": {
+      "name": "RESONANCE"
+    },
+    "envelope_amt": {
+      "name": "ENV AMT"
+    },
+    "latk": {
+      "name": "AMP ATT"
+    },
+    "ldec": {
+      "name": "AMP DEC"
+    },
+    "lsus": {
+      "name": "AMP SUST"
+    },
+    "lrel": {
+      "name": "AMP REL"
+    },
+    "fatk": {
+      "name": "FLT ATT"
+    },
+    "fdec": {
+      "name": "FLT DEC"
+    },
+    "fsus": {
+      "name": "FLT SUST"
+    },
+    "frel": {
+      "name": "FLT REL"
+    },
+    "osc1p": {
+      "name": "OSC1 TUNE",
+      "unit": "cents",
+      "display_scale": 4800,
+      "display_offset": 0
+    },
+    "osc2p": {
+      "name": "OSC2 TUNE",
+      "unit": "cents",
+      "display_scale": 4800,
+      "display_offset": 0
+    },
+    "osc2_det": {
+      "name": "DETUNE"
+    },
+    "pw": {
+      "name": "P WIDTH"
+    },
+    "osc1mix": {
+      "name": "OSC1 LEVEL"
+    },
+    "osc2mix": {
+      "name": "OSC2 LEVEL"
+    },
+    "noisemix": {
+      "name": "NOISE"
+    },
+    "xmod": {
+      "name": "CROSS MOD"
+    },
+    "flt_kf": {
+      "name": "KEYTRACK"
+    },
+    "portamento": {
+      "name": "GLIDE"
+    },
+    "lfofreq": {
+      "name": "LFO RATE"
+    },
+    "lfo1amt": {
+      "name": "FREQ AMT"
+    },
+    "lfo2amt": {
+      "name": "PW AMT"
+    },
+    "multimode": {
+      "name": "FILTER MIX"
+    },
+    "tune": {
+      "unit": "cents",
+      "display_scale": 200,
+      "display_offset": -100
+    }
+  }
+}

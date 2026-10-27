@@ -1,0 +1,24 @@
+[Unit]
+Description=Machinista Wi-Fi and fallback hotspot
+After=NetworkManager.service
+Requires=NetworkManager.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/machinista/Machinista
+ExecStart=/usr/bin/python3 -m app.network_manager_service
+RuntimeDirectory=machinista-network
+RuntimeDirectoryMode=0755
+Restart=on-failure
+RestartSec=3
+Nice=15
+CPUWeight=10
+NoNewPrivileges=true
+ProtectHome=read-only
+ProtectSystem=full
+ReadWritePaths=/etc/NetworkManager/system-connections /run/machinista-network
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
+Alias=machinist-network.service

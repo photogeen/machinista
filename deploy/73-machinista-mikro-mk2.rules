@@ -1,0 +1,2 @@
+# Mikro MK2 HID control interface; no access to its firmware/DFU interface.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1200", GROUP="plugdev", MODE="0660"

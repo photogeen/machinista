@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "73115651a81527cb1ecb719af5a5c811",
+  "name": "Digital Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "digital"
+  ],
+  "frames": 16,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

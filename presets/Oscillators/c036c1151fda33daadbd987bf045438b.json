@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "c036c1151fda33daadbd987bf045438b",
+  "name": "Tine Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "tine"
+  ],
+  "frames": 8,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

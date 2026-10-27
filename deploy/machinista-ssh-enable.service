@@ -1,0 +1,15 @@
+[Unit]
+Description=Enable SSH access for Machinista
+
+[Service]
+Type=oneshot
+Environment=SYSTEMCTL_SKIP_SYSV=1
+ExecStart=/usr/bin/ssh-keygen -A
+ExecStart=/usr/bin/systemctl unmask ssh.service
+ExecStart=/usr/bin/systemctl enable --now ssh.service
+User=root
+ProtectSystem=strict
+ReadWritePaths=/etc/ssh /etc/systemd/system
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true

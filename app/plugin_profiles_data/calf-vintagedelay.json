@@ -1,0 +1,452 @@
+{
+  "schema": 1,
+  "id": "calf-vintagedelay",
+  "uri": "http://calf.sourceforge.net/plugins/VintageDelay",
+  "title": "Calf Vintage Delay",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "on",
+      "name": "ACTIVE",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "subdiv",
+      "name": "DIVISION",
+      "default": 4,
+      "min": 1,
+      "max": 16,
+      "integer": true,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 16,
+      "symbol": "time_l",
+      "name": "LEFT TIME",
+      "default": 3,
+      "min": 1,
+      "max": 16,
+      "integer": true,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 17,
+      "symbol": "time_r",
+      "name": "RIGHT TIME",
+      "default": 5,
+      "min": 1,
+      "max": 16,
+      "integer": true,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 18,
+      "symbol": "feedback",
+      "name": "Feedback",
+      "default": 0.5,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 19,
+      "symbol": "amount",
+      "name": "WET",
+      "default": 0.25,
+      "min": 0,
+      "max": 4,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 20,
+      "symbol": "mix_mode",
+      "name": "Mix mode",
+      "default": 1,
+      "min": 0,
+      "max": 3,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "STEREO"
+        ],
+        [
+          1.0,
+          "PING-PONG"
+        ],
+        [
+          2.0,
+          "L THEN R"
+        ],
+        [
+          3.0,
+          "R THEN L"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 21,
+      "symbol": "medium",
+      "name": "Medium",
+      "default": 1,
+      "min": 0,
+      "max": 2,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "PLAIN"
+        ],
+        [
+          1.0,
+          "TAPE"
+        ],
+        [
+          2.0,
+          "OLD TAPE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 22,
+      "symbol": "dry",
+      "name": "DRY",
+      "default": 1,
+      "min": 0,
+      "max": 4,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 23,
+      "symbol": "width",
+      "name": "Stereo Width",
+      "default": 1,
+      "min": -1,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 24,
+      "symbol": "fragmentation",
+      "name": "Fragmentation",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "REPEATING"
+        ],
+        [
+          1.0,
+          "PATTERN"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 25,
+      "symbol": "pbeats",
+      "name": "Pattern Beats",
+      "default": 4,
+      "min": 1,
+      "max": 8,
+      "integer": true,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 26,
+      "symbol": "pfrag",
+      "name": "Pattern Fragmentation",
+      "default": 4,
+      "min": 1,
+      "max": 8,
+      "integer": true,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 27,
+      "symbol": "timing",
+      "name": "Timing",
+      "default": 0,
+      "min": 0,
+      "max": 3,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "BPM"
+        ],
+        [
+          1.0,
+          "MS"
+        ],
+        [
+          2.0,
+          "HZ"
+        ],
+        [
+          3.0,
+          "SYNC"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 28,
+      "symbol": "bpm",
+      "name": "BPM",
+      "default": 120,
+      "min": 30,
+      "max": 300,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 29,
+      "symbol": "ms",
+      "name": "ms",
+      "default": 500,
+      "min": 10,
+      "max": 2000,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "unit": "ms"
+    },
+    {
+      "index": 30,
+      "symbol": "hz",
+      "name": "Frequency",
+      "default": 2,
+      "min": 0.01,
+      "max": 100,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    }
+  ],
+  "pages": [
+    {
+      "title": "DELAY",
+      "controls": [
+        "@bank",
+        "@patch",
+        "feedback",
+        "amount",
+        "dry",
+        "time_l",
+        "time_r",
+        "subdiv"
+      ]
+    },
+    {
+      "title": "TIME / COLOR",
+      "controls": [
+        "timing",
+        "bpm",
+        "ms",
+        "hz",
+        "medium",
+        "mix_mode",
+        "width",
+        "on"
+      ]
+    },
+    {
+      "title": "MORE",
+      "controls": [
+        "level_in",
+        "level_out",
+        "fragmentation",
+        "pbeats",
+        "pfrag",
+        "on",
+        "on",
+        "on"
+      ]
+    }
+  ],
+  "overrides": {
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "subdiv": {
+      "name": "DIVISION"
+    },
+    "time_l": {
+      "name": "LEFT TIME"
+    },
+    "time_r": {
+      "name": "RIGHT TIME"
+    },
+    "mix_mode": {
+      "choices": [
+        [
+          0.0,
+          "STEREO"
+        ],
+        [
+          1.0,
+          "PING-PONG"
+        ],
+        [
+          2.0,
+          "L THEN R"
+        ],
+        [
+          3.0,
+          "R THEN L"
+        ]
+      ],
+      "choice": true
+    },
+    "medium": {
+      "choices": [
+        [
+          0.0,
+          "PLAIN"
+        ],
+        [
+          1.0,
+          "TAPE"
+        ],
+        [
+          2.0,
+          "OLD TAPE"
+        ]
+      ],
+      "choice": true
+    },
+    "fragmentation": {
+      "choices": [
+        [
+          0.0,
+          "REPEATING"
+        ],
+        [
+          1.0,
+          "PATTERN"
+        ]
+      ],
+      "choice": true
+    },
+    "timing": {
+      "choices": [
+        [
+          0.0,
+          "BPM"
+        ],
+        [
+          1.0,
+          "MS"
+        ],
+        [
+          2.0,
+          "HZ"
+        ],
+        [
+          3.0,
+          "SYNC"
+        ]
+      ],
+      "choice": true
+    },
+    "ms": {
+      "unit": "ms"
+    },
+    "hz": {
+      "unit": "hz"
+    },
+    "on": {
+      "name": "ACTIVE"
+    },
+    "feedback": {},
+    "amount": {
+      "name": "WET",
+      "unit": "percent"
+    },
+    "dry": {
+      "name": "DRY",
+      "unit": "percent"
+    },
+    "width": {},
+    "pbeats": {},
+    "pfrag": {},
+    "bpm": {}
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

@@ -1,0 +1,2 @@
+# Python tests and display renderers. Native Linux dependencies: docs/BUILD.md.
+Pillow==12.3.0

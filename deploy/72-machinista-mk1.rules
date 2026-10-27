@@ -1,0 +1,2 @@
+# Full-size Maschine MK1 vendor-specific USB, independent of Mikro HID.
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="17cc", ATTR{idProduct}=="0808", GROUP="plugdev", MODE="0660"

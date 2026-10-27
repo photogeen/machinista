@@ -1,0 +1,3 @@
+# MK3 control HID and display bulk transport. Audio/MIDI retain kernel ownership.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1600", GROUP="plugdev", MODE="0660"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="17cc", ATTR{idProduct}=="1600", GROUP="plugdev", MODE="0660"

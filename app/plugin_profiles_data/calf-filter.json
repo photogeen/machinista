@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "id": "calf-filter",
+  "uri": "http://calf.sourceforge.net/plugins/Filter",
+  "title": "Calf Filter",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "freq",
+      "name": "CUTOFF",
+      "default": 2000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 5,
+      "symbol": "res",
+      "name": "RESONANCE",
+      "default": 0.707,
+      "min": 0.707,
+      "max": 32,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 6,
+      "symbol": "mode",
+      "name": "Mode",
+      "default": 0,
+      "min": 0,
+      "max": 12,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0,
+          "LP 12 DB"
+        ],
+        [
+          1,
+          "LP 24 DB"
+        ],
+        [
+          2,
+          "LP 36 DB"
+        ],
+        [
+          3,
+          "HP 12 DB"
+        ],
+        [
+          4,
+          "HP 24 DB"
+        ],
+        [
+          5,
+          "HP 36 DB"
+        ],
+        [
+          6,
+          "BP 6 DB"
+        ],
+        [
+          7,
+          "BP 12 DB"
+        ],
+        [
+          8,
+          "BP 18 DB"
+        ],
+        [
+          9,
+          "NOTCH 6 DB"
+        ],
+        [
+          10,
+          "NOTCH 12 DB"
+        ],
+        [
+          11,
+          "NOTCH 18 DB"
+        ],
+        [
+          12,
+          "ALLPASS"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 7,
+      "symbol": "inertia",
+      "name": "SMOOTH",
+      "default": 20,
+      "min": 5,
+      "max": 100,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "ms"
+    },
+    {
+      "index": 8,
+      "symbol": "bypass",
+      "name": "Bypass",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 9,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 10,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    }
+  ],
+  "pages": [
+    {
+      "title": "FILTER",
+      "controls": [
+        "@bank",
+        "@patch",
+        "freq",
+        "res",
+        "mode",
+        "inertia",
+        "level_in",
+        "level_out"
+      ]
+    },
+    {
+      "title": "MORE",
+      "controls": [
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass"
+      ]
+    }
+  ],
+  "overrides": {
+    "freq": {
+      "unit": "hz",
+      "name": "CUTOFF"
+    },
+    "res": {
+      "name": "RESONANCE"
+    },
+    "mode": {
+      "choices": [
+        [
+          0,
+          "LP 12 DB"
+        ],
+        [
+          1,
+          "LP 24 DB"
+        ],
+        [
+          2,
+          "LP 36 DB"
+        ],
+        [
+          3,
+          "HP 12 DB"
+        ],
+        [
+          4,
+          "HP 24 DB"
+        ],
+        [
+          5,
+          "HP 36 DB"
+        ],
+        [
+          6,
+          "BP 6 DB"
+        ],
+        [
+          7,
+          "BP 12 DB"
+        ],
+        [
+          8,
+          "BP 18 DB"
+        ],
+        [
+          9,
+          "NOTCH 6 DB"
+        ],
+        [
+          10,
+          "NOTCH 12 DB"
+        ],
+        [
+          11,
+          "NOTCH 18 DB"
+        ],
+        [
+          12,
+          "ALLPASS"
+        ]
+      ],
+      "choice": true
+    },
+    "inertia": {
+      "unit": "ms",
+      "name": "SMOOTH"
+    },
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "bypass": {}
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

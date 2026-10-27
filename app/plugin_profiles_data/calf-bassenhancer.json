@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "id": "calf-bassenhancer",
+  "uri": "http://calf.sourceforge.net/plugins/BassEnhancer",
+  "title": "Calf Bass Enhancer",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "BYPASS",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 7,
+      "symbol": "amount",
+      "name": "HARM LEVEL",
+      "default": 1,
+      "min": 0,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 12,
+      "symbol": "drive",
+      "name": "HARMONICS",
+      "default": 8.5,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 13,
+      "symbol": "blend",
+      "name": "COLOR",
+      "default": 0,
+      "min": -10,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 15,
+      "symbol": "freq",
+      "name": "SCOPE",
+      "default": 100,
+      "min": 10,
+      "max": 250,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 16,
+      "symbol": "listen",
+      "name": "LISTEN",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 17,
+      "symbol": "floor_active",
+      "name": "FLOOR ON",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 18,
+      "symbol": "floor",
+      "name": "FLOOR",
+      "default": 20,
+      "min": 10,
+      "max": 120,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    }
+  ],
+  "pages": [
+    {
+      "title": "BASS",
+      "controls": [
+        "@bank",
+        "@patch",
+        "amount",
+        "freq",
+        "drive",
+        "blend",
+        "floor",
+        "level_out"
+      ]
+    },
+    {
+      "title": "BASS RANGE",
+      "controls": [
+        "floor_active",
+        "listen",
+        "level_in",
+        "bypass",
+        "freq",
+        "floor",
+        "amount",
+        "level_out"
+      ]
+    }
+  ],
+  "overrides": {
+    "bypass": {
+      "name": "BYPASS"
+    },
+    "level_in": {
+      "name": "INPUT",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "level_out": {
+      "name": "OUTPUT",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "amount": {
+      "name": "HARM LEVEL",
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "drive": {
+      "name": "HARMONICS"
+    },
+    "blend": {
+      "name": "COLOR"
+    },
+    "freq": {
+      "name": "SCOPE",
+      "unit": "hz"
+    },
+    "listen": {
+      "name": "LISTEN"
+    },
+    "floor_active": {
+      "name": "FLOOR ON"
+    },
+    "floor": {
+      "name": "FLOOR",
+      "unit": "hz"
+    }
+  },
+  "quirks": [
+    "Calf Color optional ARM64 bundle. Original LV2 values retained.",
+    "Vinyl includes original Calf noise SoundFonts; no audio driver or external synth required."
+  ]
+}

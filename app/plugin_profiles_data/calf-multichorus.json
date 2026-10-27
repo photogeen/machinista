@@ -1,0 +1,299 @@
+{
+  "schema": 1,
+  "id": "calf-multichorus",
+  "uri": "http://calf.sourceforge.net/plugins/MultiChorus",
+  "title": "Calf Multi Chorus",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "min_delay",
+      "name": "DELAY",
+      "default": 5,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "ms"
+    },
+    {
+      "index": 5,
+      "symbol": "mod_depth",
+      "name": "DEPTH",
+      "default": 6,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "ms"
+    },
+    {
+      "index": 6,
+      "symbol": "mod_rate",
+      "name": "RATE",
+      "default": 0.1,
+      "min": 0.01,
+      "max": 20,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 7,
+      "symbol": "stereo",
+      "name": "SPREAD",
+      "default": 180,
+      "min": 0,
+      "max": 360,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "degree"
+    },
+    {
+      "index": 8,
+      "symbol": "voices",
+      "name": "Voices",
+      "default": 4,
+      "min": 1,
+      "max": 8,
+      "integer": true,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 9,
+      "symbol": "vphase",
+      "name": "PHASE",
+      "default": 64,
+      "min": 0,
+      "max": 360,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "degree"
+    },
+    {
+      "index": 10,
+      "symbol": "amount",
+      "name": "WET",
+      "default": 0.5,
+      "min": 0,
+      "max": 4,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 11,
+      "symbol": "dry",
+      "name": "DRY",
+      "default": 0.5,
+      "min": 0,
+      "max": 4,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 12,
+      "symbol": "freq",
+      "name": "CUTOFF",
+      "default": 100,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 13,
+      "symbol": "freq2",
+      "name": "Center Frq 2",
+      "default": 5000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 14,
+      "symbol": "q",
+      "name": "Q",
+      "default": 0.125,
+      "min": 0.125,
+      "max": 8,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 15,
+      "symbol": "overlap",
+      "name": "Overlap",
+      "default": 0.75,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 16,
+      "symbol": "on",
+      "name": "ACTIVE",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 17,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 18,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 27,
+      "symbol": "lfo",
+      "name": "LFO",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    }
+  ],
+  "pages": [
+    {
+      "title": "CHORUS",
+      "controls": [
+        "@bank",
+        "@patch",
+        "mod_rate",
+        "mod_depth",
+        "voices",
+        "amount",
+        "dry",
+        "stereo"
+      ]
+    },
+    {
+      "title": "TONE / VOICES",
+      "controls": [
+        "freq",
+        "freq2",
+        "q",
+        "min_delay",
+        "vphase",
+        "overlap",
+        "on",
+        "lfo"
+      ]
+    },
+    {
+      "title": "MORE",
+      "controls": [
+        "level_in",
+        "level_out",
+        "on",
+        "on",
+        "on",
+        "on",
+        "on",
+        "on"
+      ]
+    }
+  ],
+  "overrides": {
+    "min_delay": {
+      "unit": "ms",
+      "name": "DELAY"
+    },
+    "mod_depth": {
+      "unit": "ms",
+      "name": "DEPTH"
+    },
+    "mod_rate": {
+      "unit": "hz",
+      "name": "RATE"
+    },
+    "stereo": {
+      "unit": "degree",
+      "name": "SPREAD"
+    },
+    "vphase": {
+      "unit": "degree",
+      "name": "PHASE"
+    },
+    "freq": {
+      "unit": "hz",
+      "name": "CUTOFF"
+    },
+    "freq2": {
+      "unit": "hz"
+    },
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "voices": {},
+    "amount": {
+      "name": "WET",
+      "unit": "percent"
+    },
+    "dry": {
+      "name": "DRY",
+      "unit": "percent"
+    },
+    "q": {},
+    "overlap": {},
+    "on": {
+      "name": "ACTIVE"
+    },
+    "lfo": {}
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

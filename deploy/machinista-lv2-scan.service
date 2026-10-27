@@ -1,0 +1,29 @@
+[Unit]
+Description=Machinista unprivileged LV2 metadata scanner
+Before=machinista-lv2.service
+
+[Service]
+Type=simple
+DynamicUser=yes
+User=machinista-lv2-scan
+ExecStart=/usr/bin/python3 /usr/local/lib/machinista/lv2_manager.py --root / --scanner /usr/local/lib/machinista/lv2_scan --scan-server
+Restart=on-failure
+RestartSec=3
+RuntimeDirectory=machinista-lv2-scan
+RuntimeDirectoryMode=0700
+Nice=15
+IOSchedulingClass=idle
+CPUWeight=10
+IOWeight=10
+MemoryMax=512M
+TasksMax=8
+NoNewPrivileges=true
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX

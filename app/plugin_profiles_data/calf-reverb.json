@@ -1,0 +1,283 @@
+{
+  "schema": 1,
+  "id": "calf-reverb",
+  "uri": "http://calf.sourceforge.net/plugins/Reverb",
+  "title": "Calf Reverb",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 7,
+      "symbol": "decay_time",
+      "name": "DECAY",
+      "default": 1.5,
+      "min": 0.4,
+      "max": 15,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "s"
+    },
+    {
+      "index": 8,
+      "symbol": "hf_damp",
+      "name": "DAMP",
+      "default": 5000,
+      "min": 2000,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 9,
+      "symbol": "room_size",
+      "name": "Room size",
+      "default": 2,
+      "min": 0,
+      "max": 5,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "SMALL"
+        ],
+        [
+          1.0,
+          "MEDIUM"
+        ],
+        [
+          2.0,
+          "LARGE"
+        ],
+        [
+          3.0,
+          "TUNNEL-LIKE"
+        ],
+        [
+          4.0,
+          "LARGE/SMOOTH"
+        ],
+        [
+          5.0,
+          "EXPERIMENTAL"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 10,
+      "symbol": "diffusion",
+      "name": "Diffusion",
+      "default": 0.5,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 11,
+      "symbol": "amount",
+      "name": "WET",
+      "default": 0.25,
+      "min": 0,
+      "max": 2,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 12,
+      "symbol": "dry",
+      "name": "DRY",
+      "default": 1,
+      "min": 0,
+      "max": 2,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "percent"
+    },
+    {
+      "index": 13,
+      "symbol": "predelay",
+      "name": "Pre Delay",
+      "default": 0,
+      "min": 0,
+      "max": 500,
+      "integer": false,
+      "toggle": false,
+      "log": false,
+      "unit": "ms"
+    },
+    {
+      "index": 14,
+      "symbol": "bass_cut",
+      "name": "Bass Cut",
+      "default": 300,
+      "min": 20,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 15,
+      "symbol": "treble_cut",
+      "name": "Treble Cut",
+      "default": 5000,
+      "min": 20,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 16,
+      "symbol": "on",
+      "name": "ACTIVE",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 17,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 18,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    }
+  ],
+  "pages": [
+    {
+      "title": "SPACE",
+      "controls": [
+        "@bank",
+        "@patch",
+        "decay_time",
+        "room_size",
+        "amount",
+        "dry",
+        "predelay",
+        "hf_damp"
+      ]
+    },
+    {
+      "title": "TONE",
+      "controls": [
+        "bass_cut",
+        "treble_cut",
+        "diffusion",
+        "on",
+        "level_in",
+        "level_out",
+        "amount",
+        "dry"
+      ]
+    }
+  ],
+  "overrides": {
+    "decay_time": {
+      "unit": "s",
+      "name": "DECAY"
+    },
+    "hf_damp": {
+      "unit": "hz",
+      "name": "DAMP"
+    },
+    "room_size": {
+      "choices": [
+        [
+          0.0,
+          "SMALL"
+        ],
+        [
+          1.0,
+          "MEDIUM"
+        ],
+        [
+          2.0,
+          "LARGE"
+        ],
+        [
+          3.0,
+          "TUNNEL-LIKE"
+        ],
+        [
+          4.0,
+          "LARGE/SMOOTH"
+        ],
+        [
+          5.0,
+          "EXPERIMENTAL"
+        ]
+      ],
+      "choice": true
+    },
+    "predelay": {
+      "unit": "ms"
+    },
+    "bass_cut": {
+      "unit": "hz"
+    },
+    "treble_cut": {
+      "unit": "hz"
+    },
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "diffusion": {},
+    "amount": {
+      "name": "WET",
+      "unit": "percent"
+    },
+    "dry": {
+      "name": "DRY",
+      "unit": "percent"
+    },
+    "on": {
+      "name": "ACTIVE"
+    }
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

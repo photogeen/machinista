@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "b855218c3d58018a1eaf4950a9514ba0",
+  "name": "Glass Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "glass"
+  ],
+  "frames": 8,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

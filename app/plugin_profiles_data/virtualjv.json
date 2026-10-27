@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "virtualjv",
+  "uri": "urn:machinista:ports:virtualjv",
+  "provider": "virtualjv",
+  "parameters_file": "virtualjv_parameters.json",
+  "quirks": [
+    "Bank and patch names come from the user ROM catalog.",
+    "Patch changes reset tone edits; ROMs are external user data."
+  ]
+}

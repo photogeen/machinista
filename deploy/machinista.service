@@ -1,0 +1,25 @@
+[Unit]
+Description=Machinista headless groovebox
+After=sound.target machinista-lv2.service
+Wants=machinista-lv2.service
+
+Wants=machinista-power.service
+After=machinista-power.service
+
+[Service]
+Type=simple
+User=machinista
+WorkingDirectory=/home/machinista/Machinista
+ExecStart=/usr/bin/python3 /home/machinista/Machinista/tools/machinista.py
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+# Let the application save plug-in state and stop its audio worker first.
+KillMode=mixed
+UMask=0077
+# Permit the native hardware audio thread to request FIFO20. UI stays normal.
+LimitRTPRIO=20
+
+[Install]
+WantedBy=multi-user.target
+Alias=machinist.service maschineos.service

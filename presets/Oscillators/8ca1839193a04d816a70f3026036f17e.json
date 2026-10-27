@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "8ca1839193a04d816a70f3026036f17e",
+  "name": "Vocal Spectrum",
+  "folder": "Machinista Factory",
+  "tags": [
+    "factory",
+    "generated",
+    "vocal"
+  ],
+  "frames": 16,
+  "cycle": 1024,
+  "rate": 44100,
+  "kind": "Wavetable"
+}

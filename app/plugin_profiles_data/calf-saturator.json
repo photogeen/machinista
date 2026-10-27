@@ -1,0 +1,277 @@
+{
+  "schema": 1,
+  "id": "calf-saturator",
+  "uri": "http://calf.sourceforge.net/plugins/Saturator",
+  "title": "Calf Saturator",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "Bypass",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "mix",
+      "name": "Mix",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 16,
+      "symbol": "drive",
+      "name": "DRIVE",
+      "default": 5,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 17,
+      "symbol": "blend",
+      "name": "BLEND",
+      "default": 10,
+      "min": -10,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 18,
+      "symbol": "lp_pre_freq",
+      "name": "Lowpass",
+      "default": 20000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 19,
+      "symbol": "hp_pre_freq",
+      "name": "Highpass",
+      "default": 10,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 20,
+      "symbol": "lp_post_freq",
+      "name": "Lowpass",
+      "default": 20000,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 21,
+      "symbol": "hp_post_freq",
+      "name": "Highpass",
+      "default": 10,
+      "min": 10,
+      "max": 20000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 22,
+      "symbol": "p_freq",
+      "name": "Tone",
+      "default": 2000,
+      "min": 80,
+      "max": 8000,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    },
+    {
+      "index": 23,
+      "symbol": "p_level",
+      "name": "Amount",
+      "default": 1,
+      "min": 0.0625,
+      "max": 16,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 24,
+      "symbol": "p_q",
+      "name": "Gradient",
+      "default": 1,
+      "min": 0.1,
+      "max": 10,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 25,
+      "symbol": "pre",
+      "name": "PRE FILTER",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 26,
+      "symbol": "post",
+      "name": "POST FILTER",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    }
+  ],
+  "pages": [
+    {
+      "title": "DRIVE",
+      "controls": [
+        "@bank",
+        "@patch",
+        "drive",
+        "blend",
+        "mix",
+        "level_out",
+        "pre",
+        "post"
+      ]
+    },
+    {
+      "title": "TONE",
+      "controls": [
+        "lp_pre_freq",
+        "hp_pre_freq",
+        "lp_post_freq",
+        "hp_post_freq",
+        "p_freq",
+        "p_level",
+        "p_q",
+        "bypass"
+      ]
+    },
+    {
+      "title": "MORE",
+      "controls": [
+        "level_in",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass",
+        "bypass"
+      ]
+    }
+  ],
+  "overrides": {
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "lp_pre_freq": {
+      "unit": "hz"
+    },
+    "hp_pre_freq": {
+      "unit": "hz"
+    },
+    "lp_post_freq": {
+      "unit": "hz"
+    },
+    "hp_post_freq": {
+      "unit": "hz"
+    },
+    "p_freq": {
+      "unit": "hz"
+    },
+    "p_level": {
+      "unit": "amplitude_db",
+      "log": true
+    },
+    "bypass": {},
+    "mix": {},
+    "drive": {
+      "name": "DRIVE"
+    },
+    "blend": {
+      "name": "BLEND"
+    },
+    "p_q": {},
+    "pre": {
+      "name": "PRE FILTER"
+    },
+    "post": {
+      "name": "POST FILTER"
+    }
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}

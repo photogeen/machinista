@@ -1,0 +1,884 @@
+{
+  "schema": 1,
+  "id": "raffosynth",
+  "uri": "urn:machinista:ports:raffosynth",
+  "title": "RaffoSynth",
+  "provider": "parameter-bank",
+  "bank_format": "raffo-dat",
+  "extensions": [
+    ".dat",
+    ".json"
+  ],
+  "quirks": [
+    "Independent portable C/C++ headless adapter; monophonic four-oscillator synthesis with last-note priority.",
+    "Original fixed-velocity amplitude retained; no polyphony or ROM requirement.",
+    "Wave choices reflect DSP triangle/saw order, with no unimplemented wave 4.",
+    "DSP filter history fixed and envelope time normalized from 44.1 kHz."
+  ],
+  "parameters": [
+    {
+      "index": 2,
+      "symbol": "volume",
+      "name": "Volume",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 7.0,
+      "integer": false
+    },
+    {
+      "index": 3,
+      "symbol": "wave0",
+      "name": "Waveform Osc0",
+      "min": 0.0,
+      "max": 3,
+      "default": 2.0,
+      "integer": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 4,
+      "symbol": "wave1",
+      "name": "Waveform Osc1",
+      "min": 0.0,
+      "max": 3,
+      "default": 2.0,
+      "integer": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 5,
+      "symbol": "wave2",
+      "name": "Waveform Osc2",
+      "min": 0.0,
+      "max": 3,
+      "default": 0.0,
+      "integer": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 6,
+      "symbol": "wave3",
+      "name": "Waveform Osc3",
+      "min": 0.0,
+      "max": 3,
+      "default": 3.0,
+      "integer": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 7,
+      "symbol": "range0",
+      "name": "Range Osc0",
+      "min": 1.0,
+      "max": 6.0,
+      "default": 2.0,
+      "integer": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 8,
+      "symbol": "range1",
+      "name": "Range Osc1",
+      "min": 1.0,
+      "max": 6.0,
+      "default": 2.0,
+      "integer": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 9,
+      "symbol": "range2",
+      "name": "Range Osc2",
+      "min": 1.0,
+      "max": 6.0,
+      "default": 1.0,
+      "integer": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 10,
+      "symbol": "range3",
+      "name": "Range Osc3",
+      "min": 1.0,
+      "max": 6.0,
+      "default": 2.0,
+      "integer": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 11,
+      "symbol": "vol0",
+      "name": "Volume 0",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 7.0,
+      "integer": false
+    },
+    {
+      "index": 12,
+      "symbol": "vol1",
+      "name": "Volume 1",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 5.0,
+      "integer": false
+    },
+    {
+      "index": 13,
+      "symbol": "vol2",
+      "name": "Volume 2",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 4.0,
+      "integer": false
+    },
+    {
+      "index": 14,
+      "symbol": "vol3",
+      "name": "Volume 3",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 7.0,
+      "integer": false
+    },
+    {
+      "index": 15,
+      "symbol": "attack",
+      "name": "Attack",
+      "min": 0,
+      "max": 1000.01,
+      "default": 0.0,
+      "integer": false
+    },
+    {
+      "index": 16,
+      "symbol": "decay",
+      "name": "Decay",
+      "min": 0.0,
+      "max": 1000.01,
+      "default": 200.0,
+      "integer": false
+    },
+    {
+      "index": 17,
+      "symbol": "sustain",
+      "name": "Sustain",
+      "min": 0.0,
+      "max": 1,
+      "default": 0.8,
+      "integer": false
+    },
+    {
+      "index": 18,
+      "symbol": "release",
+      "name": "Release",
+      "min": 0.01,
+      "max": 1,
+      "default": 0.4,
+      "integer": false
+    },
+    {
+      "index": 19,
+      "symbol": "filter_cutoff",
+      "name": "Cutoff",
+      "min": 500.0,
+      "max": 10000.02,
+      "default": 3000.0,
+      "integer": false
+    },
+    {
+      "index": 20,
+      "symbol": "filter_attack",
+      "name": "Filter Attack",
+      "min": 0.0,
+      "max": 1000.01,
+      "default": 200.0,
+      "integer": false
+    },
+    {
+      "index": 21,
+      "symbol": "filter_decay",
+      "name": "Filter Decay",
+      "min": 0.0,
+      "max": 1000.01,
+      "default": 400.0,
+      "integer": false
+    },
+    {
+      "index": 22,
+      "symbol": "filter_sustain",
+      "name": "Filter Sustain",
+      "min": 0.0,
+      "max": 1,
+      "default": 0.7,
+      "integer": false
+    },
+    {
+      "index": 23,
+      "symbol": "glide",
+      "name": "Glide",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 1.0,
+      "integer": false
+    },
+    {
+      "index": 24,
+      "symbol": "oscButton0",
+      "name": "Button Osc0",
+      "min": 0.0,
+      "max": 1,
+      "default": 1.0,
+      "integer": true,
+      "toggle": true
+    },
+    {
+      "index": 25,
+      "symbol": "oscButton1",
+      "name": "Button Osc1",
+      "min": 0.0,
+      "max": 1,
+      "default": 1.0,
+      "integer": true,
+      "toggle": true
+    },
+    {
+      "index": 26,
+      "symbol": "oscButton2",
+      "name": "Button Osc2",
+      "min": 0.0,
+      "max": 1,
+      "default": 1.0,
+      "integer": true,
+      "toggle": true
+    },
+    {
+      "index": 27,
+      "symbol": "oscButton3",
+      "name": "Button Osc3",
+      "min": 0.0,
+      "max": 1,
+      "default": 0.0,
+      "integer": true,
+      "toggle": true
+    },
+    {
+      "index": 28,
+      "symbol": "filter_resonance",
+      "name": "Resonance",
+      "min": 0.0,
+      "max": 10.01,
+      "default": 3.0,
+      "integer": false
+    },
+    {
+      "index": 29,
+      "symbol": "tuning0",
+      "name": "Osc tuning 0",
+      "min": -12.0,
+      "max": 12.01,
+      "default": 0.0,
+      "integer": false
+    },
+    {
+      "index": 30,
+      "symbol": "tuning1",
+      "name": "Osc tuning 1",
+      "min": -12.0,
+      "max": 12.01,
+      "default": -0.02,
+      "integer": false
+    },
+    {
+      "index": 31,
+      "symbol": "tuning2",
+      "name": "Osc tuning2",
+      "min": -12.0,
+      "max": 12.01,
+      "default": 0.02,
+      "integer": false
+    },
+    {
+      "index": 32,
+      "symbol": "tuning3",
+      "name": "Osc tuning3",
+      "min": -12.0,
+      "max": 12.01,
+      "default": 0.0,
+      "integer": false
+    },
+    {
+      "index": 33,
+      "symbol": "filter_release",
+      "name": "Filter release",
+      "min": 0.0,
+      "max": 1,
+      "default": 0.5,
+      "integer": false
+    }
+  ],
+  "pages": [
+    {
+      "title": "PATCH",
+      "controls": [
+        "@bank",
+        "@patch",
+        "volume",
+        "filter_cutoff",
+        "filter_resonance",
+        "glide",
+        "attack",
+        "release"
+      ]
+    },
+    {
+      "title": "ENVELOPES",
+      "controls": [
+        "attack",
+        "decay",
+        "sustain",
+        "release",
+        "filter_attack",
+        "filter_decay",
+        "filter_sustain",
+        "filter_release"
+      ]
+    },
+    {
+      "title": "OSC MIXER",
+      "controls": [
+        "vol0",
+        "vol1",
+        "vol2",
+        "vol3",
+        "oscButton0",
+        "oscButton1",
+        "oscButton2",
+        "oscButton3"
+      ],
+      "labels": {
+        "vol0": "OSC1 LEVEL",
+        "vol1": "OSC2 LEVEL",
+        "vol2": "OSC3 LEVEL",
+        "vol3": "OSC4 LEVEL",
+        "oscButton0": "OSC1 ON",
+        "oscButton1": "OSC2 ON",
+        "oscButton2": "OSC3 ON",
+        "oscButton3": "OSC4 ON"
+      }
+    },
+    {
+      "title": "OSC 1",
+      "controls": [
+        "oscButton0",
+        "wave0",
+        "range0",
+        "vol0",
+        "tuning0",
+        "filter_cutoff",
+        "filter_resonance",
+        "volume"
+      ]
+    },
+    {
+      "title": "OSC 2",
+      "controls": [
+        "oscButton1",
+        "wave1",
+        "range1",
+        "vol1",
+        "tuning1",
+        "filter_cutoff",
+        "filter_resonance",
+        "volume"
+      ]
+    },
+    {
+      "title": "OSC 3",
+      "controls": [
+        "oscButton2",
+        "wave2",
+        "range2",
+        "vol2",
+        "tuning2",
+        "filter_cutoff",
+        "filter_resonance",
+        "volume"
+      ]
+    },
+    {
+      "title": "OSC 4",
+      "controls": [
+        "oscButton3",
+        "wave3",
+        "range3",
+        "vol3",
+        "tuning3",
+        "filter_cutoff",
+        "filter_resonance",
+        "volume"
+      ]
+    }
+  ],
+  "overrides": {
+    "wave0": {
+      "choice": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "name": "WAVE"
+    },
+    "wave1": {
+      "choice": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "name": "WAVE"
+    },
+    "wave2": {
+      "choice": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "name": "WAVE"
+    },
+    "wave3": {
+      "choice": true,
+      "choices": [
+        [
+          0,
+          "TRIANGLE"
+        ],
+        [
+          1,
+          "SAW"
+        ],
+        [
+          2,
+          "SQUARE"
+        ],
+        [
+          3,
+          "PULSE"
+        ]
+      ],
+      "name": "WAVE"
+    },
+    "range0": {
+      "choice": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "name": "RANGE"
+    },
+    "range1": {
+      "choice": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "name": "RANGE"
+    },
+    "range2": {
+      "choice": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "name": "RANGE"
+    },
+    "range3": {
+      "choice": true,
+      "choices": [
+        [
+          1,
+          "32'"
+        ],
+        [
+          2,
+          "16'"
+        ],
+        [
+          3,
+          "8'"
+        ],
+        [
+          4,
+          "4'"
+        ],
+        [
+          5,
+          "2'"
+        ],
+        [
+          6,
+          "1'"
+        ]
+      ],
+      "name": "RANGE"
+    },
+    "vol0": {
+      "name": "LEVEL"
+    },
+    "vol1": {
+      "name": "LEVEL"
+    },
+    "vol2": {
+      "name": "LEVEL"
+    },
+    "vol3": {
+      "name": "LEVEL"
+    },
+    "oscButton0": {
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "oscButton1": {
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "oscButton2": {
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "oscButton3": {
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "tuning0": {
+      "name": "TUNE",
+      "unit": "cents",
+      "display_scale": 100,
+      "display_offset": 0
+    },
+    "tuning1": {
+      "name": "TUNE",
+      "unit": "cents",
+      "display_scale": 100,
+      "display_offset": 0
+    },
+    "tuning2": {
+      "name": "TUNE",
+      "unit": "cents",
+      "display_scale": 100,
+      "display_offset": 0
+    },
+    "tuning3": {
+      "name": "TUNE",
+      "unit": "cents",
+      "display_scale": 100,
+      "display_offset": 0
+    },
+    "volume": {
+      "name": "VOLUME"
+    },
+    "filter_cutoff": {
+      "name": "CUTOFF",
+      "log": true,
+      "integer": true
+    },
+    "filter_resonance": {
+      "name": "RESONANCE"
+    },
+    "filter_attack": {
+      "name": "FLT ATTACK"
+    },
+    "filter_decay": {
+      "name": "FLT DECAY"
+    },
+    "filter_sustain": {
+      "name": "FLT SUST"
+    },
+    "filter_release": {
+      "name": "FLT REL"
+    }
+  }
+}

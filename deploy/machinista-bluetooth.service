@@ -1,0 +1,23 @@
+[Unit]
+Description=Machinista Bluetooth LE MIDI control and bridge
+After=bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/machinista/Machinista
+ExecStart=/usr/bin/python3 /home/machinista/Machinista/tools/ble_midi_service.py
+RuntimeDirectory=maschineos-bluetooth
+RuntimeDirectoryMode=0755
+StateDirectory=maschineos-bluetooth
+Restart=on-failure
+RestartSec=3
+KillMode=control-group
+TimeoutStopSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
+Alias=machinist-bluetooth.service maschineos-bluetooth.service

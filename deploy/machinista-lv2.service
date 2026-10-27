@@ -1,0 +1,36 @@
+[Unit]
+Description=Machinista LV2 bundle manager
+Before=machinista.service machinista-web.service
+Requires=machinista-lv2-scan.service
+After=machinista-lv2-scan.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/local/lib/machinista/lv2_manager.py --root /home/machinista/Machinista --user machinista --scanner /usr/local/lib/machinista/lv2_scan
+Restart=on-failure
+RestartSec=3
+StateDirectory=machinista/lv2
+StateDirectoryMode=0755
+RuntimeDirectory=machinista-lv2
+RuntimeDirectoryMode=0755
+Nice=15
+IOSchedulingClass=idle
+CPUWeight=10
+IOWeight=10
+MemoryMax=512M
+TasksMax=24
+UMask=0022
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/machinista/lv2 -/usr/lib/lv2 -/usr/local/lib/lv2 -/home/machinista/.lv2
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

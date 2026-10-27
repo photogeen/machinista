@@ -1,0 +1,2866 @@
+{
+  "schema": 1,
+  "id": "dexed",
+  "uri": "https://github.com/dcoredump/dexed.lv2",
+  "title": "Dexed",
+  "provider": "parameter-bank",
+  "bank_format": "dx7-sysex",
+  "extensions": [
+    ".syx",
+    ".json"
+  ],
+  "quirks": [
+    "DX7 32-voice VMEM or single-voice VCED SysEx is converted to the native LV2 parameter ranges.",
+    "DX7 algorithm is 0-based in SysEx but 1-based in this LV2 port; operator detune is centered at zero.",
+    "Host bank and patch names are retained with complete project parameter snapshots.",
+    "Operator pages repeat algorithm/feedback controls to keep each page aligned with eight encoders."
+  ],
+  "pages": [
+    {
+      "title": "PATCH / TONE",
+      "controls": [
+        "@bank",
+        "@patch",
+        "output",
+        "algorithm_num",
+        "feedback",
+        "cutoff",
+        "resonance",
+        "transpose"
+      ]
+    },
+    {
+      "title": "OPERATOR LEVELS",
+      "controls": [
+        "op1_operator_output_level",
+        "op2_operator_output_level",
+        "op3_operator_output_level",
+        "op4_operator_output_level",
+        "op5_operator_output_level",
+        "op6_operator_output_level",
+        "algorithm_num",
+        "feedback"
+      ],
+      "labels": {
+        "op1_operator_output_level": "OP1 LEVEL",
+        "op2_operator_output_level": "OP2 LEVEL",
+        "op3_operator_output_level": "OP3 LEVEL",
+        "op4_operator_output_level": "OP4 LEVEL",
+        "op5_operator_output_level": "OP5 LEVEL",
+        "op6_operator_output_level": "OP6 LEVEL"
+      }
+    },
+    {
+      "title": "OP1 ENV",
+      "controls": [
+        "op1_eg_rate_1",
+        "op1_eg_rate_2",
+        "op1_eg_rate_3",
+        "op1_eg_rate_4",
+        "op1_eg_level_1",
+        "op1_eg_level_2",
+        "op1_eg_level_3",
+        "op1_eg_level_4"
+      ]
+    },
+    {
+      "title": "OP FREQUENCIES",
+      "controls": [
+        "op1_osc_freq_coarse",
+        "op2_osc_freq_coarse",
+        "op3_osc_freq_coarse",
+        "op4_osc_freq_coarse",
+        "op5_osc_freq_coarse",
+        "op6_osc_freq_coarse",
+        "op1_osc_freq_fine",
+        "op2_osc_freq_fine"
+      ],
+      "labels": {
+        "op1_osc_freq_coarse": "OP1 COARSE",
+        "op2_osc_freq_coarse": "OP2 COARSE",
+        "op3_osc_freq_coarse": "OP3 COARSE",
+        "op4_osc_freq_coarse": "OP4 COARSE",
+        "op5_osc_freq_coarse": "OP5 COARSE",
+        "op6_osc_freq_coarse": "OP6 COARSE",
+        "op1_osc_freq_fine": "OP1 FINE",
+        "op2_osc_freq_fine": "OP2 FINE"
+      }
+    },
+    {
+      "title": "LFO / WHEEL",
+      "controls": [
+        "lfo_speed",
+        "lfo_delay",
+        "lfo_pitch_mod_depth",
+        "lfo_amp_mod_depth",
+        "lfo_waveform",
+        "lfo_sync",
+        "mod_wheel_range",
+        "mod_wheel_assign"
+      ]
+    },
+    {
+      "title": "OP1 OSC",
+      "controls": [
+        "op1_enable",
+        "op1_operator_output_level",
+        "op1_osc_freq_coarse",
+        "op1_osc_freq_fine",
+        "op1_osc_detune",
+        "op1_osc_mode",
+        "op1_amp_mod_sensitivity",
+        "op1_key_vel_sensitivity"
+      ]
+    },
+    {
+      "title": "OP1 SCALING",
+      "controls": [
+        "op1_kbd_lev_scl_brk_pt",
+        "op1_kbd_lev_scl_lft_depth",
+        "op1_kbd_lev_scl_rht_depth",
+        "op1_kbd_lev_scl_lft_curve",
+        "op1_kbd_lev_scl_rht_curve",
+        "op1_kbd_rate_scaling",
+        "algorithm_num",
+        "feedback"
+      ]
+    },
+    {
+      "title": "OP2 OSC",
+      "controls": [
+        "op2_enable",
+        "op2_operator_output_level",
+        "op2_osc_freq_coarse",
+        "op2_osc_freq_fine",
+        "op2_osc_detune",
+        "op2_osc_mode",
+        "op2_amp_mod_sensitivity",
+        "op2_key_vel_sensitivity"
+      ]
+    },
+    {
+      "title": "OP2 ENV",
+      "controls": [
+        "op2_eg_rate_1",
+        "op2_eg_rate_2",
+        "op2_eg_rate_3",
+        "op2_eg_rate_4",
+        "op2_eg_level_1",
+        "op2_eg_level_2",
+        "op2_eg_level_3",
+        "op2_eg_level_4"
+      ]
+    },
+    {
+      "title": "OP2 SCALING",
+      "controls": [
+        "op2_kbd_lev_scl_brk_pt",
+        "op2_kbd_lev_scl_lft_depth",
+        "op2_kbd_lev_scl_rht_depth",
+        "op2_kbd_lev_scl_lft_curve",
+        "op2_kbd_lev_scl_rht_curve",
+        "op2_kbd_rate_scaling",
+        "algorithm_num",
+        "feedback"
+      ]
+    },
+    {
+      "title": "OP3 OSC",
+      "controls": [
+        "op3_enable",
+        "op3_operator_output_level",
+        "op3_osc_freq_coarse",
+        "op3_osc_freq_fine",
+        "op3_osc_detune",
+        "op3_osc_mode",
+        "op3_amp_mod_sensitivity",
+        "op3_key_vel_sensitivity"
+      ]
+    },
+    {
+      "title": "OP3 ENV",
+      "controls": [
+        "op3_eg_rate_1",
+        "op3_eg_rate_2",
+        "op3_eg_rate_3",
+        "op3_eg_rate_4",
+        "op3_eg_level_1",
+        "op3_eg_level_2",
+        "op3_eg_level_3",
+        "op3_eg_level_4"
+      ]
+    },
+    {
+      "title": "OP3 SCALING",
+      "controls": [
+        "op3_kbd_lev_scl_brk_pt",
+        "op3_kbd_lev_scl_lft_depth",
+        "op3_kbd_lev_scl_rht_depth",
+        "op3_kbd_lev_scl_lft_curve",
+        "op3_kbd_lev_scl_rht_curve",
+        "op3_kbd_rate_scaling",
+        "algorithm_num",
+        "feedback"
+      ]
+    },
+    {
+      "title": "OP4 OSC",
+      "controls": [
+        "op4_enable",
+        "op4_operator_output_level",
+        "op4_osc_freq_coarse",
+        "op4_osc_freq_fine",
+        "op4_osc_detune",
+        "op4_osc_mode",
+        "op4_amp_mod_sensitivity",
+        "op4_key_vel_sensitivity"
+      ]
+    },
+    {
+      "title": "OP4 ENV",
+      "controls": [
+        "op4_eg_rate_1",
+        "op4_eg_rate_2",
+        "op4_eg_rate_3",
+        "op4_eg_rate_4",
+        "op4_eg_level_1",
+        "op4_eg_level_2",
+        "op4_eg_level_3",
+        "op4_eg_level_4"
+      ]
+    },
+    {
+      "title": "OP4 SCALING",
+      "controls": [
+        "op4_kbd_lev_scl_brk_pt",
+        "op4_kbd_lev_scl_lft_depth",
+        "op4_kbd_lev_scl_rht_depth",
+        "op4_kbd_lev_scl_lft_curve",
+        "op4_kbd_lev_scl_rht_curve",
+        "op4_kbd_rate_scaling",
+        "algorithm_num",
+        "feedback"
+      ]
+    },
+    {
+      "title": "OP5 OSC",
+      "controls": [
+        "op5_enable",
+        "op5_operator_output_level",
+        "op5_osc_freq_coarse",
+        "op5_osc_freq_fine",
+        "op5_osc_detune",
+        "op5_osc_mode",
+        "op5_amp_mod_sensitivity",
+        "op5_key_vel_sensitivity"
+      ]
+    },
+    {
+      "title": "OP5 ENV",
+      "controls": [
+        "op5_eg_rate_1",
+        "op5_eg_rate_2",
+        "op5_eg_rate_3",
+        "op5_eg_rate_4",
+        "op5_eg_level_1",
+        "op5_eg_level_2",
+        "op5_eg_level_3",
+        "op5_eg_level_4"
+      ]
+    },
+    {
+      "title": "OP5 SCALING",
+      "controls": [
+        "op5_kbd_lev_scl_brk_pt",
+        "op5_kbd_lev_scl_lft_depth",
+        "op5_kbd_lev_scl_rht_depth",
+        "op5_kbd_lev_scl_lft_curve",
+        "op5_kbd_lev_scl_rht_curve",
+        "op5_kbd_rate_scaling",
+        "algorithm_num",
+        "feedback"
+      ]
+    },
+    {
+      "title": "OP6 OSC",
+      "controls": [
+        "op6_enable",
+        "op6_operator_output_level",
+        "op6_osc_freq_coarse",
+        "op6_osc_freq_fine",
+        "op6_osc_detune",
+        "op6_osc_mode",
+        "op6_amp_mod_sensitivity",
+        "op6_key_vel_sensitivity"
+      ]
+    },
+    {
+      "title": "OP6 ENV",
+      "controls": [
+        "op6_eg_rate_1",
+        "op6_eg_rate_2",
+        "op6_eg_rate_3",
+        "op6_eg_rate_4",
+        "op6_eg_level_1",
+        "op6_eg_level_2",
+        "op6_eg_level_3",
+        "op6_eg_level_4"
+      ]
+    },
+    {
+      "title": "OP6 SCALING",
+      "controls": [
+        "op6_kbd_lev_scl_brk_pt",
+        "op6_kbd_lev_scl_lft_depth",
+        "op6_kbd_lev_scl_rht_depth",
+        "op6_kbd_lev_scl_lft_curve",
+        "op6_kbd_lev_scl_rht_curve",
+        "op6_kbd_rate_scaling",
+        "algorithm_num",
+        "feedback"
+      ]
+    },
+    {
+      "title": "PERFORMANCE",
+      "controls": [
+        "engine",
+        "polymono",
+        "number_of_voices",
+        "master_tune",
+        "pitch_bend_range",
+        "pitch_bend_step",
+        "oscillator_sync",
+        "pitch_mod_sensitivity"
+      ]
+    },
+    {
+      "title": "PITCH ENV",
+      "controls": [
+        "pitch_eg_rate_1",
+        "pitch_eg_rate_2",
+        "pitch_eg_rate_3",
+        "pitch_eg_rate_4",
+        "pitch_eg_level_1",
+        "pitch_eg_level_2",
+        "pitch_eg_level_3",
+        "pitch_eg_level_4"
+      ]
+    },
+    {
+      "title": "CONTROLLERS",
+      "controls": [
+        "foot_ctrl_range",
+        "foot_ctrl_assign",
+        "breath_ctrl_range",
+        "breath_ctrl_assign",
+        "aftertouch_range",
+        "aftertouch_assign",
+        "output",
+        "cutoff"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "index": 2,
+      "symbol": "cutoff",
+      "name": "Cutoff",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": false
+    },
+    {
+      "index": 3,
+      "symbol": "resonance",
+      "name": "Resonance",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": false
+    },
+    {
+      "index": 4,
+      "symbol": "output",
+      "name": "Gain",
+      "min": 0.0,
+      "max": 2.0,
+      "default": 1.0,
+      "integer": false
+    },
+    {
+      "index": 5,
+      "symbol": "engine",
+      "name": "Engine",
+      "min": 0.0,
+      "max": 2.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 6,
+      "symbol": "number_of_voices",
+      "name": "Num of Voices",
+      "min": 1.0,
+      "max": 32.0,
+      "default": 16.0,
+      "integer": true
+    },
+    {
+      "index": 7,
+      "symbol": "polymono",
+      "name": "Poly/Mono",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 8,
+      "symbol": "pitch_bend_range",
+      "name": "PitchBend Range",
+      "min": 0.0,
+      "max": 12.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 9,
+      "symbol": "pitch_bend_step",
+      "name": "PitchBend Step",
+      "min": 0.0,
+      "max": 12.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 10,
+      "symbol": "mod_wheel_range",
+      "name": "ModWheel Range",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 11,
+      "symbol": "mod_wheel_assign",
+      "name": "ModWheel Assign",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 12,
+      "symbol": "foot_ctrl_range",
+      "name": "FootCtrl Range",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 13,
+      "symbol": "foot_ctrl_assign",
+      "name": "FootCtrl Assign",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 14,
+      "symbol": "breath_ctrl_range",
+      "name": "BreathCtrl Range",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 15,
+      "symbol": "breath_ctrl_assign",
+      "name": "BreathCtrl Assign",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 16,
+      "symbol": "aftertouch_range",
+      "name": "AfterTouch Range",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 17,
+      "symbol": "aftertouch_assign",
+      "name": "AfterTouch Assign",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 18,
+      "symbol": "master_tune",
+      "name": "Master Tune",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": false
+    },
+    {
+      "index": 19,
+      "symbol": "algorithm_num",
+      "name": "Algorithm",
+      "min": 1.0,
+      "max": 32.0,
+      "default": 5.0,
+      "integer": true
+    },
+    {
+      "index": 20,
+      "symbol": "feedback",
+      "name": "Feedback",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 6.0,
+      "integer": true
+    },
+    {
+      "index": 21,
+      "symbol": "oscillator_sync",
+      "name": "OSC KeySync",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 22,
+      "symbol": "lfo_speed",
+      "name": "Speed",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 34.0,
+      "integer": true
+    },
+    {
+      "index": 23,
+      "symbol": "lfo_delay",
+      "name": "Delay",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 33.0,
+      "integer": true
+    },
+    {
+      "index": 24,
+      "symbol": "lfo_pitch_mod_depth",
+      "name": "PitchMod Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 25,
+      "symbol": "lfo_amp_mod_depth",
+      "name": "AmpMod Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 26,
+      "symbol": "lfo_sync",
+      "name": "KeySync",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 27,
+      "symbol": "lfo_waveform",
+      "name": "Waveform",
+      "min": 0.0,
+      "max": 5.0,
+      "default": 4.0,
+      "integer": true
+    },
+    {
+      "index": 28,
+      "symbol": "transpose",
+      "name": "Transpose",
+      "min": 0.0,
+      "max": 48.0,
+      "default": 12.0,
+      "integer": true
+    },
+    {
+      "index": 29,
+      "symbol": "pitch_mod_sensitivity",
+      "name": "PitchMod Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 30,
+      "symbol": "pitch_eg_rate_1",
+      "name": "Pitch EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 94.0,
+      "integer": true
+    },
+    {
+      "index": 31,
+      "symbol": "pitch_eg_rate_2",
+      "name": "Pitch EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 67.0,
+      "integer": true
+    },
+    {
+      "index": 32,
+      "symbol": "pitch_eg_rate_3",
+      "name": "Pitch EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 33,
+      "symbol": "pitch_eg_rate_4",
+      "name": "Pitch EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 60.0,
+      "integer": true
+    },
+    {
+      "index": 34,
+      "symbol": "pitch_eg_level_1",
+      "name": "Pitch EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 35,
+      "symbol": "pitch_eg_level_2",
+      "name": "Pitch EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 36,
+      "symbol": "pitch_eg_level_3",
+      "name": "Pitch EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 37,
+      "symbol": "pitch_eg_level_4",
+      "name": "Pitch EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 38,
+      "symbol": "op1_eg_rate_1",
+      "name": "OP1 EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 96.0,
+      "integer": true
+    },
+    {
+      "index": 39,
+      "symbol": "op1_eg_rate_2",
+      "name": "OP1 EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 25.0,
+      "integer": true
+    },
+    {
+      "index": 40,
+      "symbol": "op1_eg_rate_3",
+      "name": "OP1 EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 25.0,
+      "integer": true
+    },
+    {
+      "index": 41,
+      "symbol": "op1_eg_rate_4",
+      "name": "OP1 EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 67.0,
+      "integer": true
+    },
+    {
+      "index": 42,
+      "symbol": "op1_eg_level_1",
+      "name": "OP1 EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 43,
+      "symbol": "op1_eg_level_2",
+      "name": "OP1 EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 75.0,
+      "integer": true
+    },
+    {
+      "index": 44,
+      "symbol": "op1_eg_level_3",
+      "name": "OP1 EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 45,
+      "symbol": "op1_eg_level_4",
+      "name": "OP1 EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 46,
+      "symbol": "op1_operator_output_level",
+      "name": "OP1 Output Level",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 47,
+      "symbol": "op1_osc_mode",
+      "name": "OP1 mode",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 48,
+      "symbol": "op1_osc_freq_coarse",
+      "name": "OP1 Freq Coarse",
+      "min": 0.0,
+      "max": 31.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 49,
+      "symbol": "op1_osc_freq_fine",
+      "name": "OP1 Freq Fine",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 50,
+      "symbol": "op1_osc_detune",
+      "name": "OP1 OSC Detune",
+      "min": -7.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 51,
+      "symbol": "op1_kbd_lev_scl_brk_pt",
+      "name": "OP1 Break Point",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 52,
+      "symbol": "op1_kbd_lev_scl_lft_depth",
+      "name": "OP1 L Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 53,
+      "symbol": "op1_kbd_lev_scl_rht_depth",
+      "name": "OP1 R Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 54,
+      "symbol": "op1_kbd_lev_scl_lft_curve",
+      "name": "OP1 L Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 55,
+      "symbol": "op1_kbd_lev_scl_rht_curve",
+      "name": "OP1 R Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 56,
+      "symbol": "op1_kbd_rate_scaling",
+      "name": "OP1 Rate Scaling",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 57,
+      "symbol": "op1_amp_mod_sensitivity",
+      "name": "OP1 AmpMod Sens.",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 58,
+      "symbol": "op1_key_vel_sensitivity",
+      "name": "OP1 KeyVelo Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 2.0,
+      "integer": true
+    },
+    {
+      "index": 59,
+      "symbol": "op2_eg_rate_1",
+      "name": "OP2 EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 60,
+      "symbol": "op2_eg_rate_2",
+      "name": "OP2 EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 61,
+      "symbol": "op2_eg_rate_3",
+      "name": "OP2 EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 35.0,
+      "integer": true
+    },
+    {
+      "index": 62,
+      "symbol": "op2_eg_rate_4",
+      "name": "OP2 EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 78.0,
+      "integer": true
+    },
+    {
+      "index": 63,
+      "symbol": "op2_eg_level_1",
+      "name": "OP2 EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 64,
+      "symbol": "op2_eg_level_2",
+      "name": "OP2 EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 75.0,
+      "integer": true
+    },
+    {
+      "index": 65,
+      "symbol": "op2_eg_level_3",
+      "name": "OP2 EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 66,
+      "symbol": "op2_eg_level_4",
+      "name": "OP2 EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 67,
+      "symbol": "op2_operator_output_level",
+      "name": "OP2 Output Level",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 58.0,
+      "integer": true
+    },
+    {
+      "index": 68,
+      "symbol": "op2_osc_mode",
+      "name": "OP2 mode",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 69,
+      "symbol": "op2_osc_freq_coarse",
+      "name": "OP2 Freq Coarse",
+      "min": 0.0,
+      "max": 31.0,
+      "default": 14.0,
+      "integer": true
+    },
+    {
+      "index": 70,
+      "symbol": "op2_osc_freq_fine",
+      "name": "OP2 Freq Fine",
+      "min": 0.0,
+      "max": 100.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 71,
+      "symbol": "op2_osc_detune",
+      "name": "OP2 OSC Detune",
+      "min": -7.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 72,
+      "symbol": "op2_kbd_lev_scl_brk_pt",
+      "name": "OP2 Break Point",
+      "min": 0.0,
+      "max": 100.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 73,
+      "symbol": "op2_kbd_lev_scl_lft_depth",
+      "name": "OP2 L Scale Depth",
+      "min": 0.0,
+      "max": 100.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 74,
+      "symbol": "op2_kbd_lev_scl_rht_depth",
+      "name": "OP2 R Scale Depth",
+      "min": 0.0,
+      "max": 100.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 75,
+      "symbol": "op2_kbd_lev_scl_lft_curve",
+      "name": "OP2 L Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 76,
+      "symbol": "op2_kbd_lev_scl_rht_curve",
+      "name": "OP2 R Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 77,
+      "symbol": "op2_kbd_rate_scaling",
+      "name": "OP2 Rate Scaling",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 78,
+      "symbol": "op2_amp_mod_sensitivity",
+      "name": "OP2 AmpMod Sens.",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 79,
+      "symbol": "op2_key_vel_sensitivity",
+      "name": "OP2 KeyVelo Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 7.0,
+      "integer": true
+    },
+    {
+      "index": 80,
+      "symbol": "op3_eg_rate_1",
+      "name": "OP3 EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 81,
+      "symbol": "op3_eg_rate_2",
+      "name": "OP3 EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 20.0,
+      "integer": true
+    },
+    {
+      "index": 82,
+      "symbol": "op3_eg_rate_3",
+      "name": "OP3 EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 20.0,
+      "integer": true
+    },
+    {
+      "index": 83,
+      "symbol": "op3_eg_rate_4",
+      "name": "OP3 EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 84,
+      "symbol": "op3_eg_level_1",
+      "name": "OP3 EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 85,
+      "symbol": "op3_eg_level_2",
+      "name": "OP3 EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 86,
+      "symbol": "op3_eg_level_3",
+      "name": "OP3 EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 87,
+      "symbol": "op3_eg_level_4",
+      "name": "OP3 EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 88,
+      "symbol": "op3_operator_output_level",
+      "name": "OP3 Output Level",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 89,
+      "symbol": "op3_osc_mode",
+      "name": "OP3 mode",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 90,
+      "symbol": "op3_osc_freq_coarse",
+      "name": "OP3 Freq Coarse",
+      "min": 0.0,
+      "max": 31.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 91,
+      "symbol": "op3_osc_freq_fine",
+      "name": "OP3 Freq Fine",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 92,
+      "symbol": "op3_osc_detune",
+      "name": "OP3 OSC Detune",
+      "min": -7.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 93,
+      "symbol": "op3_kbd_lev_scl_brk_pt",
+      "name": "OP3 Break Point",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 94,
+      "symbol": "op3_kbd_lev_scl_lft_depth",
+      "name": "OP3 L Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 95,
+      "symbol": "op3_kbd_lev_scl_rht_depth",
+      "name": "OP3 R Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 96,
+      "symbol": "op3_kbd_lev_scl_lft_curve",
+      "name": "OP3 L Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 97,
+      "symbol": "op3_kbd_lev_scl_rht_curve",
+      "name": "OP3 R Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 98,
+      "symbol": "op3_kbd_rate_scaling",
+      "name": "OP3 Rate Scaling",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 99,
+      "symbol": "op3_amp_mod_sensitivity",
+      "name": "OP3 AmpMod Sens.",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 100,
+      "symbol": "op3_key_vel_sensitivity",
+      "name": "OP3 KeyVelo Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 2.0,
+      "integer": true
+    },
+    {
+      "index": 101,
+      "symbol": "op4_eg_rate_1",
+      "name": "OP4 EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 102,
+      "symbol": "op4_eg_rate_2",
+      "name": "OP4 EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 29.0,
+      "integer": true
+    },
+    {
+      "index": 103,
+      "symbol": "op4_eg_rate_3",
+      "name": "OP4 EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 20.0,
+      "integer": true
+    },
+    {
+      "index": 104,
+      "symbol": "op4_eg_rate_4",
+      "name": "OP4 EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 105,
+      "symbol": "op4_eg_level_1",
+      "name": "OP4 EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 106,
+      "symbol": "op4_eg_level_2",
+      "name": "OP4 EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 107,
+      "symbol": "op4_eg_level_3",
+      "name": "OP4 EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 108,
+      "symbol": "op4_eg_level_4",
+      "name": "OP4 EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 109,
+      "symbol": "op4_operator_output_level",
+      "name": "OP4 Output Level",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 89.0,
+      "integer": true
+    },
+    {
+      "index": 110,
+      "symbol": "op4_osc_mode",
+      "name": "OP4 mode",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 111,
+      "symbol": "op4_osc_freq_coarse",
+      "name": "OP4 Freq Coarse",
+      "min": 0.0,
+      "max": 31.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 112,
+      "symbol": "op4_osc_freq_fine",
+      "name": "OP4 Freq Fine",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 113,
+      "symbol": "op4_osc_detune",
+      "name": "OP4 OSC Detune",
+      "min": -7.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 114,
+      "symbol": "op4_kbd_lev_scl_brk_pt",
+      "name": "OP4 Break Point",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 115,
+      "symbol": "op4_kbd_lev_scl_lft_depth",
+      "name": "OP4 L Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 116,
+      "symbol": "op4_kbd_lev_scl_rht_depth",
+      "name": "OP4 R Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 117,
+      "symbol": "op4_kbd_lev_scl_lft_curve",
+      "name": "OP4 L Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 118,
+      "symbol": "op4_kbd_lev_scl_rht_curve",
+      "name": "OP4 R Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 119,
+      "symbol": "op4_kbd_rate_scaling",
+      "name": "OP4 Rate Scaling",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 120,
+      "symbol": "op4_amp_mod_sensitivity",
+      "name": "OP4 AmpMod Sens.",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 121,
+      "symbol": "op4_key_vel_sensitivity",
+      "name": "OP4 KeyVelo Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 6.0,
+      "integer": true
+    },
+    {
+      "index": 122,
+      "symbol": "op5_eg_rate_1",
+      "name": "OP5 EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 123,
+      "symbol": "op5_eg_rate_2",
+      "name": "OP5 EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 20.0,
+      "integer": true
+    },
+    {
+      "index": 124,
+      "symbol": "op5_eg_rate_3",
+      "name": "OP5 EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 20.0,
+      "integer": true
+    },
+    {
+      "index": 125,
+      "symbol": "op5_eg_rate_4",
+      "name": "OP5 EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 126,
+      "symbol": "op5_eg_level_1",
+      "name": "OP5 EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 127,
+      "symbol": "op5_eg_level_2",
+      "name": "OP5 EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 128,
+      "symbol": "op5_eg_level_3",
+      "name": "OP5 EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 129,
+      "symbol": "op5_eg_level_4",
+      "name": "OP5 EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 130,
+      "symbol": "op5_operator_output_level",
+      "name": "OP5 Output Level",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 131,
+      "symbol": "op5_osc_mode",
+      "name": "OP5 mode",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 132,
+      "symbol": "op5_osc_freq_coarse",
+      "name": "OP5 Freq Coarse",
+      "min": 0.0,
+      "max": 31.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 133,
+      "symbol": "op5_osc_freq_fine",
+      "name": "OP5 Freq Fine",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 134,
+      "symbol": "op5_osc_detune",
+      "name": "OP5 OSC Detune",
+      "min": -7.0,
+      "max": 7.0,
+      "default": -7.0,
+      "integer": true
+    },
+    {
+      "index": 135,
+      "symbol": "op5_kbd_lev_scl_brk_pt",
+      "name": "OP5 Break Point",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 136,
+      "symbol": "op5_kbd_lev_scl_lft_depth",
+      "name": "OP5 L Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 137,
+      "symbol": "op5_kbd_lev_scl_rht_depth",
+      "name": "OP5 R Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 138,
+      "symbol": "op5_kbd_lev_scl_lft_curve",
+      "name": "OP5 L Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 139,
+      "symbol": "op5_kbd_lev_scl_rht_curve",
+      "name": "OP5 R Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 140,
+      "symbol": "op5_kbd_rate_scaling",
+      "name": "OP5 Rate Scaling",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 141,
+      "symbol": "op5_amp_mod_sensitivity",
+      "name": "OP5 AmpMod Sens.",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 142,
+      "symbol": "op5_key_vel_sensitivity",
+      "name": "OP5 KeyVelo Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 143,
+      "symbol": "op6_eg_rate_1",
+      "name": "OP6 EG Rate 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 144,
+      "symbol": "op6_eg_rate_2",
+      "name": "OP6 EG Rate 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 29.0,
+      "integer": true
+    },
+    {
+      "index": 145,
+      "symbol": "op6_eg_rate_3",
+      "name": "OP6 EG Rate 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 20.0,
+      "integer": true
+    },
+    {
+      "index": 146,
+      "symbol": "op6_eg_rate_4",
+      "name": "OP6 EG Rate 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 50.0,
+      "integer": true
+    },
+    {
+      "index": 147,
+      "symbol": "op6_eg_level_1",
+      "name": "OP6 EG Level 1",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 99.0,
+      "integer": true
+    },
+    {
+      "index": 148,
+      "symbol": "op6_eg_level_2",
+      "name": "OP6 EG Level 2",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 95.0,
+      "integer": true
+    },
+    {
+      "index": 149,
+      "symbol": "op6_eg_level_3",
+      "name": "OP6 EG Level 3",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 150,
+      "symbol": "op6_eg_level_4",
+      "name": "OP6 EG Level 4",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 151,
+      "symbol": "op6_operator_output_level",
+      "name": "OP6 Output Level",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 79.0,
+      "integer": true
+    },
+    {
+      "index": 152,
+      "symbol": "op6_osc_mode",
+      "name": "OP6 mode",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 153,
+      "symbol": "op6_osc_freq_coarse",
+      "name": "OP6 Freq Coarse",
+      "min": 0.0,
+      "max": 31.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 154,
+      "symbol": "op6_osc_freq_fine",
+      "name": "OP6 Freq Fine",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 155,
+      "symbol": "op6_osc_detune",
+      "name": "OP6 OSC Detune",
+      "min": -7.0,
+      "max": 7.0,
+      "default": 7.0,
+      "integer": true
+    },
+    {
+      "index": 156,
+      "symbol": "op6_kbd_lev_scl_brk_pt",
+      "name": "OP6 Break Point",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 41.0,
+      "integer": true
+    },
+    {
+      "index": 157,
+      "symbol": "op6_kbd_lev_scl_lft_depth",
+      "name": "OP6 L Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 158,
+      "symbol": "op6_kbd_lev_scl_rht_depth",
+      "name": "OP6 R Scale Depth",
+      "min": 0.0,
+      "max": 99.0,
+      "default": 19.0,
+      "integer": true
+    },
+    {
+      "index": 159,
+      "symbol": "op6_kbd_lev_scl_lft_curve",
+      "name": "OP6 L Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 160,
+      "symbol": "op6_kbd_lev_scl_rht_curve",
+      "name": "OP6 R Key Curve",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 161,
+      "symbol": "op6_kbd_rate_scaling",
+      "name": "OP6 Rate Scaling",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 3.0,
+      "integer": true
+    },
+    {
+      "index": 162,
+      "symbol": "op6_amp_mod_sensitivity",
+      "name": "OP6 AmpMod Sens.",
+      "min": 0.0,
+      "max": 3.0,
+      "default": 0.0,
+      "integer": true
+    },
+    {
+      "index": 163,
+      "symbol": "op6_key_vel_sensitivity",
+      "name": "OP6 KeyVelo Sens.",
+      "min": 0.0,
+      "max": 7.0,
+      "default": 6.0,
+      "integer": true
+    },
+    {
+      "index": 164,
+      "symbol": "op1_enable",
+      "name": "OP1 Enable",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 165,
+      "symbol": "op2_enable",
+      "name": "OP2 Enable",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 166,
+      "symbol": "op3_enable",
+      "name": "OP3 Enable",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 167,
+      "symbol": "op4_enable",
+      "name": "OP4 Enable",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 168,
+      "symbol": "op5_enable",
+      "name": "OP5 Enable",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": true
+    },
+    {
+      "index": 169,
+      "symbol": "op6_enable",
+      "name": "OP6 Enable",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "integer": true
+    }
+  ],
+  "overrides": {
+    "engine": {
+      "choices": [
+        [
+          0.0,
+          "MSFA"
+        ],
+        [
+          1.0,
+          "Mark I"
+        ],
+        [
+          2.0,
+          "OPL"
+        ]
+      ],
+      "choice": true
+    },
+    "polymono": {
+      "toggle": true
+    },
+    "mod_wheel_assign": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "Pitch"
+        ],
+        [
+          2.0,
+          "Amp"
+        ],
+        [
+          3.0,
+          "Amp+Pitch"
+        ],
+        [
+          4.0,
+          "EG"
+        ],
+        [
+          5.0,
+          "EG+Pitch"
+        ],
+        [
+          6.0,
+          "EG+Amp"
+        ],
+        [
+          7.0,
+          "EG+Pitch+Amp"
+        ]
+      ],
+      "choice": true
+    },
+    "foot_ctrl_assign": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "Pitch"
+        ],
+        [
+          2.0,
+          "Amp"
+        ],
+        [
+          3.0,
+          "Amp+Pitch"
+        ],
+        [
+          4.0,
+          "EG"
+        ],
+        [
+          5.0,
+          "EG+Pitch"
+        ],
+        [
+          6.0,
+          "EG+Amp"
+        ],
+        [
+          7.0,
+          "EG+Pitch+Amp"
+        ]
+      ],
+      "choice": true
+    },
+    "breath_ctrl_assign": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "Pitch"
+        ],
+        [
+          2.0,
+          "Amp"
+        ],
+        [
+          3.0,
+          "Amp+Pitch"
+        ],
+        [
+          4.0,
+          "EG"
+        ],
+        [
+          5.0,
+          "EG+Pitch"
+        ],
+        [
+          6.0,
+          "EG+Amp"
+        ],
+        [
+          7.0,
+          "EG+Pitch+Amp"
+        ]
+      ],
+      "choice": true
+    },
+    "aftertouch_assign": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "Pitch"
+        ],
+        [
+          2.0,
+          "Amp"
+        ],
+        [
+          3.0,
+          "Amp+Pitch"
+        ],
+        [
+          4.0,
+          "EG"
+        ],
+        [
+          5.0,
+          "EG+Pitch"
+        ],
+        [
+          6.0,
+          "EG+Amp"
+        ],
+        [
+          7.0,
+          "EG+Pitch+Amp"
+        ]
+      ],
+      "choice": true
+    },
+    "oscillator_sync": {
+      "toggle": true
+    },
+    "lfo_sync": {
+      "toggle": true
+    },
+    "lfo_waveform": {
+      "choices": [
+        [
+          0.0,
+          "Triangle"
+        ],
+        [
+          1.0,
+          "Saw-Down"
+        ],
+        [
+          2.0,
+          "Saw-Up"
+        ],
+        [
+          3.0,
+          "Square"
+        ],
+        [
+          4.0,
+          "Sine"
+        ],
+        [
+          5.0,
+          "Sample & Hold"
+        ]
+      ],
+      "choice": true
+    },
+    "op1_osc_mode": {
+      "choices": [
+        [
+          0.0,
+          "Ratio"
+        ],
+        [
+          1.0,
+          "Fixed"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "MODE"
+    },
+    "op1_kbd_lev_scl_lft_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "LEFT CURVE"
+    },
+    "op1_kbd_lev_scl_rht_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "RIGHT CURVE"
+    },
+    "op2_osc_mode": {
+      "choices": [
+        [
+          0.0,
+          "Ratio"
+        ],
+        [
+          1.0,
+          "Fixed"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "MODE"
+    },
+    "op2_kbd_lev_scl_lft_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "LEFT CURVE"
+    },
+    "op2_kbd_lev_scl_rht_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "RIGHT CURVE"
+    },
+    "op3_osc_mode": {
+      "choices": [
+        [
+          0.0,
+          "Ratio"
+        ],
+        [
+          1.0,
+          "Fixed"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "MODE"
+    },
+    "op3_kbd_lev_scl_lft_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "LEFT CURVE"
+    },
+    "op3_kbd_lev_scl_rht_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "RIGHT CURVE"
+    },
+    "op4_osc_mode": {
+      "choices": [
+        [
+          0.0,
+          "Ratio"
+        ],
+        [
+          1.0,
+          "Fixed"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "MODE"
+    },
+    "op4_kbd_lev_scl_lft_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "LEFT CURVE"
+    },
+    "op4_kbd_lev_scl_rht_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "RIGHT CURVE"
+    },
+    "op5_osc_mode": {
+      "choices": [
+        [
+          0.0,
+          "Ratio"
+        ],
+        [
+          1.0,
+          "Fixed"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "MODE"
+    },
+    "op5_kbd_lev_scl_lft_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "LEFT CURVE"
+    },
+    "op5_kbd_lev_scl_rht_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "RIGHT CURVE"
+    },
+    "op6_osc_mode": {
+      "choices": [
+        [
+          0.0,
+          "Ratio"
+        ],
+        [
+          1.0,
+          "Fixed"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "MODE"
+    },
+    "op6_kbd_lev_scl_lft_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "LEFT CURVE"
+    },
+    "op6_kbd_lev_scl_rht_curve": {
+      "choices": [
+        [
+          0.0,
+          "-LIN"
+        ],
+        [
+          1.0,
+          "-EXP"
+        ],
+        [
+          2.0,
+          "+EXP"
+        ],
+        [
+          3.0,
+          "+LIN"
+        ]
+      ],
+      "choice": true,
+      "name": "RIGHT CURVE"
+    },
+    "op1_enable": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "On"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "op2_enable": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "On"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "op3_enable": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "On"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "op4_enable": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "On"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "op5_enable": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "On"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "op6_enable": {
+      "choices": [
+        [
+          0.0,
+          "Off"
+        ],
+        [
+          1.0,
+          "On"
+        ]
+      ],
+      "choice": true,
+      "toggle": true,
+      "name": "ENABLE"
+    },
+    "algorithm_num": {
+      "name": "ALGORITHM",
+      "choice": true
+    },
+    "number_of_voices": {
+      "name": "VOICES",
+      "choice": true
+    },
+    "op1_eg_rate_1": {
+      "name": "RATE 1"
+    },
+    "op1_eg_rate_2": {
+      "name": "RATE 2"
+    },
+    "op1_eg_rate_3": {
+      "name": "RATE 3"
+    },
+    "op1_eg_rate_4": {
+      "name": "RATE 4"
+    },
+    "op1_eg_level_1": {
+      "name": "LEVEL 1"
+    },
+    "op1_eg_level_2": {
+      "name": "LEVEL 2"
+    },
+    "op1_eg_level_3": {
+      "name": "LEVEL 3"
+    },
+    "op1_eg_level_4": {
+      "name": "LEVEL 4"
+    },
+    "op1_operator_output_level": {
+      "name": "LEVEL"
+    },
+    "op1_osc_freq_coarse": {
+      "name": "COARSE"
+    },
+    "op1_osc_freq_fine": {
+      "name": "FINE"
+    },
+    "op1_osc_detune": {
+      "name": "DETUNE"
+    },
+    "op1_kbd_lev_scl_brk_pt": {
+      "name": "BREAKPOINT"
+    },
+    "op1_kbd_lev_scl_lft_depth": {
+      "name": "LEFT DEPTH"
+    },
+    "op1_kbd_lev_scl_rht_depth": {
+      "name": "RIGHT DEPTH"
+    },
+    "op1_kbd_rate_scaling": {
+      "name": "RATE SCALE"
+    },
+    "op1_amp_mod_sensitivity": {
+      "name": "AMP MOD"
+    },
+    "op1_key_vel_sensitivity": {
+      "name": "VELOCITY"
+    },
+    "op2_eg_rate_1": {
+      "name": "RATE 1"
+    },
+    "op2_eg_rate_2": {
+      "name": "RATE 2"
+    },
+    "op2_eg_rate_3": {
+      "name": "RATE 3"
+    },
+    "op2_eg_rate_4": {
+      "name": "RATE 4"
+    },
+    "op2_eg_level_1": {
+      "name": "LEVEL 1"
+    },
+    "op2_eg_level_2": {
+      "name": "LEVEL 2"
+    },
+    "op2_eg_level_3": {
+      "name": "LEVEL 3"
+    },
+    "op2_eg_level_4": {
+      "name": "LEVEL 4"
+    },
+    "op2_operator_output_level": {
+      "name": "LEVEL"
+    },
+    "op2_osc_freq_coarse": {
+      "name": "COARSE"
+    },
+    "op2_osc_freq_fine": {
+      "name": "FINE"
+    },
+    "op2_osc_detune": {
+      "name": "DETUNE"
+    },
+    "op2_kbd_lev_scl_brk_pt": {
+      "name": "BREAKPOINT"
+    },
+    "op2_kbd_lev_scl_lft_depth": {
+      "name": "LEFT DEPTH"
+    },
+    "op2_kbd_lev_scl_rht_depth": {
+      "name": "RIGHT DEPTH"
+    },
+    "op2_kbd_rate_scaling": {
+      "name": "RATE SCALE"
+    },
+    "op2_amp_mod_sensitivity": {
+      "name": "AMP MOD"
+    },
+    "op2_key_vel_sensitivity": {
+      "name": "VELOCITY"
+    },
+    "op3_eg_rate_1": {
+      "name": "RATE 1"
+    },
+    "op3_eg_rate_2": {
+      "name": "RATE 2"
+    },
+    "op3_eg_rate_3": {
+      "name": "RATE 3"
+    },
+    "op3_eg_rate_4": {
+      "name": "RATE 4"
+    },
+    "op3_eg_level_1": {
+      "name": "LEVEL 1"
+    },
+    "op3_eg_level_2": {
+      "name": "LEVEL 2"
+    },
+    "op3_eg_level_3": {
+      "name": "LEVEL 3"
+    },
+    "op3_eg_level_4": {
+      "name": "LEVEL 4"
+    },
+    "op3_operator_output_level": {
+      "name": "LEVEL"
+    },
+    "op3_osc_freq_coarse": {
+      "name": "COARSE"
+    },
+    "op3_osc_freq_fine": {
+      "name": "FINE"
+    },
+    "op3_osc_detune": {
+      "name": "DETUNE"
+    },
+    "op3_kbd_lev_scl_brk_pt": {
+      "name": "BREAKPOINT"
+    },
+    "op3_kbd_lev_scl_lft_depth": {
+      "name": "LEFT DEPTH"
+    },
+    "op3_kbd_lev_scl_rht_depth": {
+      "name": "RIGHT DEPTH"
+    },
+    "op3_kbd_rate_scaling": {
+      "name": "RATE SCALE"
+    },
+    "op3_amp_mod_sensitivity": {
+      "name": "AMP MOD"
+    },
+    "op3_key_vel_sensitivity": {
+      "name": "VELOCITY"
+    },
+    "op4_eg_rate_1": {
+      "name": "RATE 1"
+    },
+    "op4_eg_rate_2": {
+      "name": "RATE 2"
+    },
+    "op4_eg_rate_3": {
+      "name": "RATE 3"
+    },
+    "op4_eg_rate_4": {
+      "name": "RATE 4"
+    },
+    "op4_eg_level_1": {
+      "name": "LEVEL 1"
+    },
+    "op4_eg_level_2": {
+      "name": "LEVEL 2"
+    },
+    "op4_eg_level_3": {
+      "name": "LEVEL 3"
+    },
+    "op4_eg_level_4": {
+      "name": "LEVEL 4"
+    },
+    "op4_operator_output_level": {
+      "name": "LEVEL"
+    },
+    "op4_osc_freq_coarse": {
+      "name": "COARSE"
+    },
+    "op4_osc_freq_fine": {
+      "name": "FINE"
+    },
+    "op4_osc_detune": {
+      "name": "DETUNE"
+    },
+    "op4_kbd_lev_scl_brk_pt": {
+      "name": "BREAKPOINT"
+    },
+    "op4_kbd_lev_scl_lft_depth": {
+      "name": "LEFT DEPTH"
+    },
+    "op4_kbd_lev_scl_rht_depth": {
+      "name": "RIGHT DEPTH"
+    },
+    "op4_kbd_rate_scaling": {
+      "name": "RATE SCALE"
+    },
+    "op4_amp_mod_sensitivity": {
+      "name": "AMP MOD"
+    },
+    "op4_key_vel_sensitivity": {
+      "name": "VELOCITY"
+    },
+    "op5_eg_rate_1": {
+      "name": "RATE 1"
+    },
+    "op5_eg_rate_2": {
+      "name": "RATE 2"
+    },
+    "op5_eg_rate_3": {
+      "name": "RATE 3"
+    },
+    "op5_eg_rate_4": {
+      "name": "RATE 4"
+    },
+    "op5_eg_level_1": {
+      "name": "LEVEL 1"
+    },
+    "op5_eg_level_2": {
+      "name": "LEVEL 2"
+    },
+    "op5_eg_level_3": {
+      "name": "LEVEL 3"
+    },
+    "op5_eg_level_4": {
+      "name": "LEVEL 4"
+    },
+    "op5_operator_output_level": {
+      "name": "LEVEL"
+    },
+    "op5_osc_freq_coarse": {
+      "name": "COARSE"
+    },
+    "op5_osc_freq_fine": {
+      "name": "FINE"
+    },
+    "op5_osc_detune": {
+      "name": "DETUNE"
+    },
+    "op5_kbd_lev_scl_brk_pt": {
+      "name": "BREAKPOINT"
+    },
+    "op5_kbd_lev_scl_lft_depth": {
+      "name": "LEFT DEPTH"
+    },
+    "op5_kbd_lev_scl_rht_depth": {
+      "name": "RIGHT DEPTH"
+    },
+    "op5_kbd_rate_scaling": {
+      "name": "RATE SCALE"
+    },
+    "op5_amp_mod_sensitivity": {
+      "name": "AMP MOD"
+    },
+    "op5_key_vel_sensitivity": {
+      "name": "VELOCITY"
+    },
+    "op6_eg_rate_1": {
+      "name": "RATE 1"
+    },
+    "op6_eg_rate_2": {
+      "name": "RATE 2"
+    },
+    "op6_eg_rate_3": {
+      "name": "RATE 3"
+    },
+    "op6_eg_rate_4": {
+      "name": "RATE 4"
+    },
+    "op6_eg_level_1": {
+      "name": "LEVEL 1"
+    },
+    "op6_eg_level_2": {
+      "name": "LEVEL 2"
+    },
+    "op6_eg_level_3": {
+      "name": "LEVEL 3"
+    },
+    "op6_eg_level_4": {
+      "name": "LEVEL 4"
+    },
+    "op6_operator_output_level": {
+      "name": "LEVEL"
+    },
+    "op6_osc_freq_coarse": {
+      "name": "COARSE"
+    },
+    "op6_osc_freq_fine": {
+      "name": "FINE"
+    },
+    "op6_osc_detune": {
+      "name": "DETUNE"
+    },
+    "op6_kbd_lev_scl_brk_pt": {
+      "name": "BREAKPOINT"
+    },
+    "op6_kbd_lev_scl_lft_depth": {
+      "name": "LEFT DEPTH"
+    },
+    "op6_kbd_lev_scl_rht_depth": {
+      "name": "RIGHT DEPTH"
+    },
+    "op6_kbd_rate_scaling": {
+      "name": "RATE SCALE"
+    },
+    "op6_amp_mod_sensitivity": {
+      "name": "AMP MOD"
+    },
+    "op6_key_vel_sensitivity": {
+      "name": "VELOCITY"
+    },
+    "master_tune": {
+      "unit": "cents",
+      "display_scale": 200,
+      "display_offset": 0
+    },
+    "output": {
+      "unit": "percent"
+    }
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "schema": 1,
+  "id": "calf-crusher",
+  "uri": "http://calf.sourceforge.net/plugins/Crusher",
+  "title": "Calf Crusher",
+  "provider": "parameter-bank",
+  "bank_format": "json",
+  "extensions": [
+    ".json"
+  ],
+  "parameters": [
+    {
+      "index": 4,
+      "symbol": "bypass",
+      "name": "Bypass",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 5,
+      "symbol": "level_in",
+      "name": "INPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 6,
+      "symbol": "level_out",
+      "name": "OUTPUT",
+      "default": 1,
+      "min": 0.015625,
+      "max": 64,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "amplitude_db"
+    },
+    {
+      "index": 15,
+      "symbol": "bits",
+      "name": "BITS",
+      "default": 4,
+      "min": 1,
+      "max": 16,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 16,
+      "symbol": "morph",
+      "name": "Morph",
+      "default": 0.5,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 17,
+      "symbol": "mode",
+      "name": "Mode",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": true,
+      "toggle": false,
+      "log": false,
+      "choices": [
+        [
+          0.0,
+          "LINEAR"
+        ],
+        [
+          1.0,
+          "LOGARITHMIC"
+        ]
+      ],
+      "choice": true
+    },
+    {
+      "index": 18,
+      "symbol": "dc",
+      "name": "DC",
+      "default": 1,
+      "min": 0.25,
+      "max": 4,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 19,
+      "symbol": "anti_aliasing",
+      "name": "SMOOTH",
+      "default": 0.5,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": false,
+      "log": false
+    },
+    {
+      "index": 20,
+      "symbol": "samples",
+      "name": "DOWNSAMPLE",
+      "default": 1,
+      "min": 1,
+      "max": 250,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 21,
+      "symbol": "lfo",
+      "name": "LFO Active",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "integer": false,
+      "toggle": true,
+      "log": false
+    },
+    {
+      "index": 22,
+      "symbol": "lforange",
+      "name": "LFO Depth",
+      "default": 20,
+      "min": 1,
+      "max": 250,
+      "integer": false,
+      "toggle": false,
+      "log": true
+    },
+    {
+      "index": 23,
+      "symbol": "lforate",
+      "name": "LFO Rate",
+      "default": 0.3,
+      "min": 0.01,
+      "max": 200,
+      "integer": false,
+      "toggle": false,
+      "log": true,
+      "unit": "hz"
+    }
+  ],
+  "pages": [
+    {
+      "title": "CRUSH",
+      "controls": [
+        "@bank",
+        "@patch",
+        "bits",
+        "samples",
+        "morph",
+        "mode",
+        "anti_aliasing",
+        "level_out"
+      ]
+    },
+    {
+      "title": "MODULATION",
+      "controls": [
+        "lfo",
+        "lforange",
+        "lforate",
+        "dc",
+        "level_in",
+        "bypass",
+        "bits",
+        "samples"
+      ]
+    }
+  ],
+  "overrides": {
+    "level_in": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "INPUT"
+    },
+    "level_out": {
+      "unit": "amplitude_db",
+      "log": true,
+      "name": "OUTPUT"
+    },
+    "mode": {
+      "choices": [
+        [
+          0.0,
+          "LINEAR"
+        ],
+        [
+          1.0,
+          "LOGARITHMIC"
+        ]
+      ],
+      "choice": true
+    },
+    "anti_aliasing": {
+      "name": "SMOOTH"
+    },
+    "samples": {
+      "name": "DOWNSAMPLE"
+    },
+    "lforate": {
+      "unit": "hz"
+    },
+    "bypass": {},
+    "bits": {
+      "name": "BITS"
+    },
+    "morph": {},
+    "dc": {},
+    "lfo": {},
+    "lforange": {}
+  },
+  "quirks": [
+    "Optional Calf 0.90.3 effects pack. Standard LV2 values are retained in projects.",
+    "No graphical Calf UI required. Encoder pages show the most useful controls first."
+  ]
+}
