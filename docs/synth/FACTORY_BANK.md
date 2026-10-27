@@ -1,8 +1,13 @@
 # Machinista Factory
 
-264 original patches in one bank: 250 retained previous sounds and 14 newly designed wavetable patches. No hardware-emulation claim.
+264 original patches organized into 13 category banks plus Init: 250 retained previous sounds and 14 newly designed wavetable patches. No hardware-emulation claim.
 
 The nine generated waveforms contain only mathematically synthesized harmonics. There are no third-party recordings or manufacturer ROM waveforms. Tine, reed and plucked timbres are synthesized approximations. Natural acoustic piano/guitar realism requires appropriate transient and multisample material.
+
+The aggregate Factory JSON is retained for compatibility and packaging checks.
+It is hidden from BANK and Sounds when all its patches are covered by the
+category banks. Existing Factory selections resolve to their categories without
+changing saved sound parameters. No patches are removed.
 
 ## Consolidation audit
 

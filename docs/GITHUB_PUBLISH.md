@@ -58,8 +58,7 @@ assets rather than normal Git history. Add SHA256 checksums, component licenses,
 a matching source archive, test results and explicit hardware qualification.
 Tag stable releases vX.Y.Z and betas vX.Y.Z-beta.N after choosing the version.
 
-The updater skeleton already distinguishes beta/release and public/supporter
-editions. A Git branch alone is not an update feed: tools/build_update.py creates
+The updater is available to everyone with beta/release channels. A Git branch alone is not an update feed: tools/build_update.py creates
 a manifest and signed bundle. Configure the real repository and verification
 key only when the release infrastructure is ready. Private signing keys remain
-outside the repository. Public images retain updater=False.
+outside the repository. All newly built images include the updater service.

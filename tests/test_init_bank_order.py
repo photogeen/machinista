@@ -49,10 +49,36 @@ class FactoryImagePayloadTests(unittest.TestCase):
    for source in factory_files(ROOT):
     target=root/source.relative_to(ROOT);target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
    p=profile('urn:machinista:instrument:synth');available=banks(root,p)
-   self.assertEqual(len(available),15);self.assertEqual(available[-1]['id'],'init')
-   bank=next(b for b in available if b['id']=='factory');self.assertEqual(len(bank['patches']),264)
-   for patch in bank['patches']:preset_waves(root,patch)
+   self.assertEqual(len(available),14);self.assertEqual(available[-1]['id'],'init')
+   self.assertNotIn('factory',[b['id'] for b in available])
+   patches=[p for b in available if b['id']!='init' for p in b['patches']]
+   self.assertEqual(len(patches),264)
+   for patch in patches:preset_waves(root,patch)
    self.assertFalse((root/'projects').exists());self.assertFalse(list(root.rglob('*.lv2')))
  def test_missing_factory_stops_packaging_instead_of_silently_omitting_patches(self):
   with tempfile.TemporaryDirectory() as root:
    with self.assertRaises((OSError,ValueError)):factory_files(root)
+
+class FactoryConsolidationTests(unittest.TestCase):
+ def test_legacy_factory_sound_resolves_to_category_without_changing_controls(self):
+  from app.plugin_profiles import profile
+  p=profile('urn:machinista:instrument:synth')
+  factory=json.loads((ROOT/'presets/plugin-banks/machinista-synth/factory.json').read_text())
+  for program,patch in enumerate(factory['patches']):
+   sound=dict(uri=p['uri'],controls=copy.deepcopy(patch['controls']),synth_waves=copy.deepcopy(patch.get('synth_waves',{})),profile_preset=dict(bank='factory',program=program,name=patch['name']))
+   before=copy.deepcopy(sound);available,b,i=selection(ROOT,sound,p)
+   self.assertIsNotNone(b);self.assertTrue(available[b]['id'].startswith('category-'))
+   self.assertEqual(available[b]['patches'][i]['name'],patch['name']);self.assertEqual(sound,before)
+   unnamed=copy.deepcopy(sound);unnamed['profile_preset'].pop('name')
+   entries,b,i=selection(ROOT,unnamed,p)
+   self.assertEqual(entries[b]['patches'][i]['name'],patch['name'])
+ def test_partial_or_custom_factory_is_never_hidden(self):
+  from app.plugin_profiles import profile,read_banks
+  p=profile('urn:machinista:instrument:synth')
+  with tempfile.TemporaryDirectory() as root:
+   folder=bank_folder(root,p);folder.mkdir(parents=True)
+   data=json.loads((ROOT/'presets/plugin-banks/machinista-synth/factory.json').read_text())
+   (folder/'factory.json').write_text(json.dumps(data))
+   partial=dict(data,name='Synth Bass',patches=data['patches'][:1])
+   (folder/'category-bass.json').write_text(json.dumps(partial))
+   self.assertIn('factory',[b['id'] for b in read_banks(root,p)[1]])

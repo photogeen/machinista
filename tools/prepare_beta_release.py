@@ -9,7 +9,7 @@ import argparse,hashlib,json,tarfile,struct,getpass,re
 ROOT=Path(__file__).resolve().parents[1]
 
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--version',required=True);parser.add_argument('--native',type=Path,required=True);parser.add_argument('--edition',choices=('public','supporter'),default='public')
+ parser=argparse.ArgumentParser();parser.add_argument('--version',required=True);parser.add_argument('--native',type=Path,required=True)
  args=parser.parse_args();version=args.version
  from app.branding import VERSION
  assert version==VERSION,(version,VERSION)
@@ -45,7 +45,7 @@ def main():
  for needed in ('audio_engine','mikro_monitor','mk1_monitor','mk2_monitor'):assert 'build/'+needed in files
  for p in release.glob('*.md'):add(p,p.name)
  add(release/'README.md','BETA-README.txt')
- edition=work/'image-edition.json';edition.write_text(json.dumps(dict(edition=args.edition,updater=args.edition=='supporter',channel='release' if args.edition=='supporter' else None),indent=2)+'\n');add(edition,'deploy/image-edition.json')
+ edition=work/'image-edition.json';edition.write_text(json.dumps(dict(edition='standard',updater=True,channel='release'),indent=2)+'\n');add(edition,'deploy/image-edition.json')
  for name,p in files.items():
   assert not any(part.endswith('.lv2') for part in Path(name).parts),name
   assert p.suffix.lower() not in ('.wav','.mp3','.flac','.rom','.bin','.sound','.xpm'),name
@@ -58,5 +58,5 @@ def main():
  with tarfile.open(work/'machinista-payload.tar.gz','w:gz') as tar:
   for name,p in sorted(files.items()):tar.add(p,arcname=name)
  (work/'payload-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
- print(json.dumps(dict(version=version,edition=args.edition,files=len(files),plugins=0,manuals=sum(name.endswith('.pdf') for name in files),payload=str(work/'machinista-payload.tar.gz'))))
+ print(json.dumps(dict(version=version,edition='standard',files=len(files),plugins=0,manuals=sum(name.endswith('.pdf') for name in files),payload=str(work/'machinista-payload.tar.gz'))))
 if __name__=='__main__':main()

@@ -70,3 +70,9 @@ paid activation require separate permission. Third-party licenses remain intact.
 
 Machinista is an independent project. Hardware and plug-in product names
 identify compatibility; no manufacturer sponsorship or endorsement is implied.
+
+## Optional plug-ins
+
+Third-party LV2 bundles are available from the separate [plug-in port repositories](docs/PLUGIN_PORTS.md). They retain their upstream licenses and are installed through the WebUI. Machinista Synth and its original factory patches are included.
+
+One image includes the updater for everyone, with Beta and Release channels. Signed-feed setup and a real SD-card update test are required before application updates can be offered.

@@ -13,7 +13,7 @@ from tools.factory_payload import factory_files
 
 DOCS=('BUILD','INSTALL','ARCHITECTURE','GITHUB_PUBLISH','LICENSING_PLAN','WEB_UI',
       'USER_MANUALS','SOUNDS_AND_AUTOSAMPLER','SOUNDFONT_IMPORT','PLUGIN_PROFILES',
-      'MK1_MIDI','MK3_SUPPORT','MASCHINE_PLUS_SUPPORT','INIT_BANK_ORDER','UPDATER_PLAN')
+      'MK1_MIDI','MK3_SUPPORT','MASCHINE_PLUS_SUPPORT','INIT_BANK_ORDER','UPDATER_PLAN','PLUGIN_PORTS')
 MAPS=('mikro-mk1-pad-led-map.json','mikro-mk1-button-map.json',
       'mikro-mk1-button-led-map.json','maschine-mk2-hardware-map.json')
 EXCLUDED_TOOLS={'install_machinista_branding.py','install_lv2_web.py'}

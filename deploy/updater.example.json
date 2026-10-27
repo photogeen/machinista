@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "repository": "",
+  "repository": "photogeen/machinista",
   "public_key": "",
-  "current_version": "0.1.0-beta.6"
+  "current_version": "0.1.0-beta.8"
 }

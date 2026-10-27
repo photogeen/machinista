@@ -5,11 +5,9 @@ import json,os,socket,time
 from app.branding import VERSION
 
 def enabled(root):
-    try:
-        value=json.loads((Path(root)/'deploy/image-edition.json').read_text())
-        return value.get('edition')!='public' and value.get('updater') is True
-    except FileNotFoundError:return True  # Source/development checkout.
-    except (OSError,ValueError):return False
+    # One distribution for everyone, including installations with legacy markers.
+    # The privileged broker still requires its own root-owned trusted config/key.
+    return True
 
 def initial(root):return dict(enabled=enabled(root),configured=False,current=VERSION,latest=None,channel='release',state='OFFLINE',progress=0,busy=False,available=False,message='Update service unavailable',error='',os_included=True)
 

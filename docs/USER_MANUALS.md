@@ -1,6 +1,6 @@
 # Controller user manuals
 
-Edition: 24 October 2026, Machinista 0.1.0-beta.6 / Fokus V2.
+Edition: 27 October 2026, Machinista 0.1.0-beta.8 / Fokus V2.
 
 `output/pdf/` contains separate illustrated English and German manuals for
 Mikro MK1, full-size MK1, MK2 and MK3. Screens and menu names stay English in both
@@ -9,7 +9,7 @@ workspace index, current screen atlas and shortcut/troubleshooting reference.
 Topic-local illustrated continuation pages document WebUI operations and
 Keyboard/CUSTOM chords; TOC page numbers and links include these pages.
 The manuals contain 110 pages (Mikro), 102 pages (MK1/MK2),
-and 160 pages per language (MK3).
+and 159 pages per language (MK3).
 
 This edition includes Live FX/recording, restored mode actions and pinning,
 Scene Options/banks/Quantize, current Tap Tempo, custom chord imports/variations,
@@ -17,9 +17,10 @@ Sounds/Zones/Autosampler, WebUI file/project/plugin management, hardware mixer
 levels and power controls. The MK1 guide uses its dedicated master encoders and
 labelled confirmation actions instead of a nonexistent master push/ENTER.
 
-The public image contains no LV2 plugins, Sound presets or samples. Install
-compatible ARM64 Linux LV2 bundles separately using the WebUI. This edition has
-no updater; the later supporter edition and its channels are a separate task.
+The standard image includes Machinista Synth and its categorized Factory patches,
+but no third-party LV2 plugins or personal samples. Install compatible ARM64
+Linux LV2 bundles separately using the WebUI. The updater is available to everyone
+with Beta and Release channels; installation requires a configured signed feed.
 
 ## Rebuilding
 

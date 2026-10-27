@@ -11,7 +11,7 @@ from urllib.parse import urlsplit
 
 CHANNELS=('beta','release');MAX_ARCHIVE=256*1024**2;MAX_EXPANDED=768*1024**2
 BUSY=('CHECKING','DOWNLOADING','VALIDATING','SAVING','OS UPDATE','INSTALLING','RESTARTING')
-ALLOWED=('app','web','assets','build','tools','docs','captures','output')
+ALLOWED=('app','web','assets','build','tools','docs','captures','output','presets')
 
 def version(value):
     match=re.fullmatch(r'v?(\d+)\.(\d+)\.(\d+)(?:-(beta|rc)\.(\d+))?',value or '')
@@ -93,6 +93,11 @@ def members(path):
             if m.isdir():continue
             if not m.isfile() or m.name in seen or len(parts)<2 or parts[0] not in ALLOWED:raise ValueError('Unsupported update file or link.')
             if parts[0]=='output' and (len(parts)!=3 or parts[1]!='pdf' or not parts[2].endswith('.pdf')):raise ValueError('Unsupported update output file.')
+            if parts[0]=='presets':
+                # Only the built-in synth's reserved factory namespace is updatable.
+                # Imported banks, Sounds, plug-ins and user tables stay untouched.
+                allowed=re.fullmatch(r'presets/plugin-banks/machinista-synth/(?:factory|category-[a-z-]+)\.json',m.name) or re.fullmatch(r'presets/Oscillators/[0-9a-f]{32}\.json',m.name) or re.fullmatch(r'presets/Oscillators/\.assets/[0-9a-f]{32}\.mwave',m.name)
+                if not allowed:raise ValueError('Unsupported update preset file.')
             total+=m.size
             if total>MAX_EXPANDED or len(result)>=4096:raise ValueError('Expanded update is too large.')
             if m.size<0 or m.size>128*1024**2:raise ValueError('Update file is too large.')

@@ -4,17 +4,14 @@ The update menu is implemented in System and in the WebUI. Beta and Release use
 one shared, persistent channel selection. Release is the default. Checking is
 manual; there is no scheduled installation or unattended OS upgrade.
 
-## Image editions
+## One image for everyone
 
-- Public: updater menu hidden, HTTP update writes rejected, no installed/enabled
-  updater daemon. Continue distributing full images for manual installation.
-- Supporter: update daemon and menu enabled. An unconfigured source displays
-  `Update source not configured`; installation is unavailable.
-- Development source checkout: menu/client available for testing the daemon.
-
-`tools/prepare_beta_release.py --edition public|supporter` creates the edition
-marker. `tools/build_beta_image.py` installs the broker and its root-owned config
-only for the supporter edition. No new SD image is built by this change.
+All installations include the update menu and the root-owned updater service.
+There is no public/supporter feature split. Legacy image-edition markers do not
+hide the UI. A missing signing key or feed configuration leaves installation
+unavailable with an explicit status; it never bypasses signature verification.
+`tools/prepare_beta_release.py` creates a standard image marker and
+`tools/build_beta_image.py` provisions the broker on every new image.
 
 ## User workflow
 
@@ -33,9 +30,10 @@ installs the application, restarts it and checks a fresh application heartbeat
 from a new PID. It also restarts the WebUI. Finish using Power > Restart when the
 completion state requests a Pi restart for OS/kernel changes.
 
-Projects, samples, imported Sounds, LV2 binaries/state, plugin banks, settings,
+Projects, samples, imported Sounds, LV2 binaries/state, imported plugin banks, settings,
 network configuration and SSH keys are outside the update payload. They are not
-replaced or reset. Rollback restores application code; it does not undo the
+replaced or reset. Only reserved built-in Machinista Synth factory category banks
+and content-addressed generated factory waves can be updated. Rollback restores application code; it does not undo the
 user's project save. Space required before starting: at least 2 GiB or four times
 the download size, whichever is larger.
 
@@ -60,12 +58,13 @@ OS updates. No real APT upgrade is executed by automated tests or setup.
 Raspberry Pi's recommended APT/major-version distinction:
 https://www.raspberrypi.com/documentation/computers/os.html
 
-## Configure the future GitHub repository
+## Configure the signed GitHub feed
 
-Repository owner/name and the production signing key are deliberately unset.
-No endpoint, account, repository or private key is invented or uploaded.
+The repository is photogeen/machinista, with beta and release branches.
+The production signing key and signed feed still require trusted provisioning.
+Never publish the private signing key.
 
-1. Create the GitHub repository with `beta` and `release` branches. Keep the source
+1. Use the GitHub repository with `beta` and `release` branches. Keep the source
    appropriate to each train on its branch.
 2. Create an Ed25519 signing key outside the repository:
    `openssl genpkey -algorithm ED25519 -out update-private.pem`.
@@ -87,7 +86,7 @@ No endpoint, account, repository or private key is invented or uploaded.
    https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
 6. Check and exercise an actual signed application+APT update on a disposable SD
    card, including interrupted network, reboot and restoration, before enabling
-   the feed for supporters. Tests use temporary keys and fake APT/service calls.
+   the feed for users. Tests use temporary keys and fake APT/service calls.
 
 The broker reads
 `https://raw.githubusercontent.com/OWNER/REPOSITORY/CHANNEL/updates/update.json`
@@ -114,7 +113,7 @@ scripts or arbitrary shell supplied by GitHub or the WebUI.
 - `deploy/machinista-updater.service`, `deploy/updater.example.json`: provisioning.
 - `tools/build_update.py`: sanitized, architecture-checked artifact + signature.
 - `tests/test_updater.py`: signatures, tampering, compatibility, idle/stale state,
-  public edition, user-data preservation, failed APT/start rollback, interrupted
+  legacy edition compatibility, user-data preservation, failed APT/start rollback, interrupted
   transactions, controller routing, freeze and HTTP authorization.
 
 Service logs/status survive a restart; a partially downloaded package is replaced

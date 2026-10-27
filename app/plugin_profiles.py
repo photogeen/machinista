@@ -42,6 +42,25 @@ def is_init_name(name):
     import re
     return bool(re.fullmatch(r'init(?:[ _-]+(?:patch|voice|sound|bank|program))?',name.strip(),re.I))
 
+def patch_identity(patch):
+    """Compare sound data, rather than titles or descriptive metadata."""
+    return json.dumps(dict(controls=patch['controls'],synth_waves=patch.get('synth_waves',{})),sort_keys=True)
+
+def consolidate_factory(result,p):
+    if p['uri']!='urn:machinista:instrument:synth':return result
+    factory=next((b for b in result if b['id']=='factory' and b['name']=='Machinista Factory'),None)
+    if not factory:return result
+    covered={patch_identity(v) for b in result if b['id'].startswith('category-') for v in b['patches']}
+    # Hide the legacy aggregate only when every sound is present in a category.
+    # Incomplete installations and customized Factory banks retain their sounds.
+    if all(patch_identity(v) in covered for v in factory['patches']):
+        programs={patch_identity(v):v.get('_program',i) for i,v in enumerate(factory['patches'])}
+        for bank in result:
+            if bank['id'].startswith('category-'):
+                bank['_factory_aliases']={str(programs[identity]):i for i,v in enumerate(bank['patches']) if (identity:=patch_identity(v)) in programs}
+        return [b for b in result if b is not factory]
+    return result
+
 def read_banks(root,p,old=None):
     now=time.monotonic()
     paths=[]
@@ -64,6 +83,7 @@ def read_banks(root,p,old=None):
             patches=([dict(data['patches'][i],_program=i) for i in order] if order!=list(range(len(order))) else list(data['patches']))
             result.append(dict(data,id=path.stem,patches=patches))
         except (OSError,ValueError,TypeError):continue
+    result=consolidate_factory(result,p)
     result.sort(key=lambda v:is_init_name(v['name']))
     result.append(initial)
     return (now+1,result,signature)
@@ -79,6 +99,19 @@ def banks(root,p):
 def selection(root,selected,p):
     available=banks(root,p);stored=selected.get('profile_preset',{});stored=stored if isinstance(stored,dict) else {}
     index=next((i for i,b in enumerate(available) if b['id']==stored.get('bank','init')),None)
+    if index is None and p['uri']=='urn:machinista:instrument:synth' and stored.get('bank')=='factory':
+        # Resolve saved aggregate identities without changing project controls.
+        for b,bank in enumerate(available):
+            for i,patch in enumerate(bank['patches']):
+                if patch['name']==stored.get('name') and patch['controls']==selected.get('controls') and patch.get('synth_waves',{})==selected.get('synth_waves',{}):
+                    return available,b,i
+        for b,bank in enumerate(available):
+            for i,patch in enumerate(bank['patches']):
+                if patch['name']==stored.get('name'):return available,b,i
+        if not stored.get('name'):
+            for b,bank in enumerate(available):
+                i=bank.get('_factory_aliases',{}).get(str(stored.get('program',0)))
+                if i is not None:return available,b,i
     if index is None:return available,None,0
     number=stored.get('program',0);number=number if type(number) is int else 0
     patches=available[index]['patches']

@@ -27,7 +27,7 @@ def verify():
                 assert forbidden not in text,(path.name,forbidden)
             for other in ('MK1','MK2','MK3','Mikro'):
                 if other not in device:assert not re.search(r'\b'+other+r'\b',text),(path.name,other)
-            assert ('26 October 2026' if lang=='EN' else '26. Oktober 2026') in texts[0]
+            assert ('27 October 2026' if lang=='EN' else '27. Oktober 2026') in texts[0]
             assert ('selected Sound/pad only' if lang=='EN' else 'ausgewählten Sounds/Pads') in text,path.name
             assert all(value in text for value in ('Ducktor','SoundFont','FOLLOW','SELECT'))
             if device!='Mikro_MK1':
@@ -65,7 +65,7 @@ def verify():
         sources={}
         for pattern in ('tools/*manual*.py','app/mk3*.py','app/pattern_editor.py','app/mk2_surface.py'):
             for source in ROOT.glob(pattern):sources[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
-        manifest=dict(edition='2026-10-26',software='Machinista 0.1.0-beta.6 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
+        manifest=dict(edition='2026-10-27',software='Machinista 0.1.0-beta.8 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
         (OUT/('manuals-manifest.json' if lang=='EN' else 'manuals-manifest-de.json')).write_text(json.dumps(manifest,indent=2)+'\n')
     with zipfile.ZipFile(OUT/'Machinista-Manuals-EN-DE.zip','w',zipfile.ZIP_DEFLATED) as archive:
         for row in results:archive.write(OUT/row['file'],row['file'])

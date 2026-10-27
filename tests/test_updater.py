@@ -53,10 +53,17 @@ class UpdaterTests(unittest.TestCase):
   self.cfg['repository']=''
   with self.assertRaisesRegex(ValueError,'configured'):self.m.command('check')
   self.assertEqual(self.calls,[])
- def test_public_edition_rejects_actions(self):
+ def test_administratively_disabled_broker_rejects_actions(self):
   self.cfg['enabled']=False
   for op in ('check','channel','install'):
    with self.assertRaisesRegex(ValueError,'edition'):self.m.command(op,'beta')
+ def test_only_reserved_native_factory_assets_can_be_updated(self):
+  identity='a'*32
+  safe={'presets/plugin-banks/machinista-synth/category-keys.json':b'{}','presets/Oscillators/'+identity+'.json':b'{}','presets/Oscillators/.assets/'+identity+'.mwave':b'MWAVET02'}
+  archive(self.pkg,safe);self.assertTrue(set(safe)<=set(members(self.pkg)))
+  for name in ('presets/custom.json','presets/plugin-banks/dexed/warm.json','presets/plugin-banks/machinista-synth/user-bank.json','presets/Oscillators/custom.wav'):
+   archive(self.pkg,{name:b'user'})
+   with self.assertRaises(ValueError):members(self.pkg)
  def test_incompatible_arch_os_channel_and_url_rejected(self):
   for key,value in [('architecture','x86_64'),('os_codename','bookworm'),('channel','beta')]:
    m=dict(self.feed,**{key:value})
@@ -131,9 +138,9 @@ class UpdaterTests(unittest.TestCase):
 class UpdateUITests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.a=Application(self.tmp.name);self.s=Mk3Surface(self.a,ControllerInputs(self.a))
- def test_public_image_hides_menu(self):
+ def test_legacy_public_image_now_shows_update_menu(self):
   root=Path(self.tmp.name);(root/'deploy').mkdir();(root/'deploy/image-edition.json').write_text('{"edition":"public","updater":false}')
-  self.a=Application(root);self.a.open_settings('SYSTEM');self.assertNotIn('UPDATE',self.a.setting_entries());self.assertFalse(enabled(root))
+  self.a=Application(root);self.a.open_settings('SYSTEM');self.assertIn('UPDATE',self.a.setting_entries());self.assertTrue(enabled(root))
  def test_all_controller_screens_and_channel_actions(self):
   from app.ni_display import frame
   from app.mk2_display import Mk2Renderer,snapshot as mk2_state
@@ -178,10 +185,11 @@ class UpdateHTTPTests(unittest.TestCase):
    self.assertEqual(self.call('/api/update?op=channel&channel=beta','POST')[0],200)
    self.assertEqual(call.call_args.args[0]['channel'],'beta')
    self.assertEqual(self.call('/api/update?op=install','POST',False)[0],403)
- def test_public_edition_hides_status_and_blocks_writes(self):
+ def test_legacy_public_marker_no_longer_blocks_service_access(self):
   (self.root/'deploy').mkdir();(self.root/'deploy/image-edition.json').write_text('{"edition":"public","updater":false}')
-  self.assertEqual(self.call('/api/update')[1],{'enabled':False})
-  self.assertEqual(self.call('/api/update?op=check','POST')[0],403)
+  with patch('app.updater.request',return_value={'enabled':True,'channel':'release'}):
+   self.assertTrue(self.call('/api/update')[1]['enabled'])
+   self.assertEqual(self.call('/api/update?op=check','POST')[0],200)
 
 class PublisherTests(unittest.TestCase):
  def test_signed_release_builder_produces_verifiable_compatible_artifact(self):

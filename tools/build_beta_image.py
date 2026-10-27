@@ -13,7 +13,7 @@ import subprocess
 import sys
 import tarfile
 
-VERSION='0.1.0-beta.6'
+VERSION='0.1.0-beta.8'
 
 def main():
  root=Path(sys.argv[1]).resolve();payload=Path(sys.argv[2]).resolve()
@@ -56,7 +56,7 @@ def main():
  Application(app)  # Validate generic configuration and blank project in situ.
  manager=root/'usr/local/lib/machinista/lv2_manager.py';manager.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(app/'app/lv2_manager.py',manager);manager.chmod(0o644)
  shutil.copy2(app/'tools/power_service.py',manager.parent/'power_service.py');(manager.parent/'power_service.py').chmod(0o644)
- edition=json.loads((app/'deploy/image-edition.json').read_text());updates=edition.get('edition')=='supporter' and edition.get('updater') is True
+ updates=True  # All newly built images include the same updater service.
  if updates:
   for source in ('tools/update_service.py','tools/update_rpc.py','app/update_manager.py'):
    shutil.copy2(app/source,manager.parent/Path(source).name)
