@@ -1,5 +1,11 @@
 # GitHub preparation and publication
 
+Repository: https://github.com/photogeen/machinista
+
+The default branch is beta; release is reserved for tested promotions. The
+commands below describe a new source import. The hosted repository already has
+its initial import; use a normal clone/fork for ongoing work.
+
 ## Prepared source tree
 
 Run the exporter from the development workspace:

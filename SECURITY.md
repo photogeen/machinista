@@ -10,6 +10,6 @@ explicitly rather than being shipped with private developer keys. Keep update
 signing keys, WLAN profiles and device state outside Git.
 
 Do not disclose a suspected vulnerability with working credentials, private
-samples, ROMs or identifying hardware captures in a public issue. Before the
-repository is made public, its owner must configure GitHub private vulnerability
-reporting or publish a private contact. No reporting address is invented here.
+samples, ROMs or identifying hardware captures in a public issue. Use [GitHub private vulnerability reporting](https://github.com/photogeen/machinista/security/advisories/new)
+for confidential reports. The repository has this feature enabled. No private
+email address or credentials need to be posted in a public issue.

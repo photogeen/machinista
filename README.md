@@ -1,5 +1,9 @@
 # Machinista
 
+[![Source and workflow checks](https://github.com/photogeen/machinista/actions/workflows/ci.yml/badge.svg?branch=beta)](https://github.com/photogeen/machinista/actions/workflows/ci.yml)
+
+[Repository](https://github.com/photogeen/machinista) · [Issues](https://github.com/photogeen/machinista/issues)
+
 A standalone sampling groovebox for Raspberry Pi, controlled by legacy and
 current Maschine hardware. The audio engine runs in C++20; controller workflows,
 color/monochrome displays and the local WebUI are implemented in Python.
