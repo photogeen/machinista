@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "channel": "beta",
-  "version": "0.1.0-beta.9",
-  "minimum_version": "0.1.0-beta.8",
+  "version": "0.1.0-beta.10",
+  "minimum_version": "0.1.0-beta.6",
   "os_codename": "trixie",
   "architecture": "arm64",
-  "notes": "Patch banks have a dedicated WebUI tab. Sounds are grouped by type, instrument and bank. Removing a bank removes its generated Sounds entries. Saved projects and editable Sounds retain their patch parameters.",
+  "notes": "Refined original OB-Xd banks (separate patch import for existing installations), updated manuals and public controller-screen gallery. First-install Pi 4/Pi 5 image available in this release; no third-party LV2 binaries or personal samples included.",
   "artifact": {
-    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.9/machinista-0.1.0-beta.9-arm64.tar.gz",
-    "size": 32297902,
-    "sha256": "edc65413b2c599fbc72b756edbf4d32ecf9c0b6bf86046913ce8019a77426803"
+    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.10/machinista-0.1.0-beta.10-arm64.tar.gz",
+    "size": 32891977,
+    "sha256": "976c4528a805580b6841738732f97940dafdf9417c7b010550b395efc3ce1944"
   }
 }
