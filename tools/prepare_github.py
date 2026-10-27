@@ -37,6 +37,9 @@ def prepare(source,destination):
             if path.is_file():add(path)
     for path in factory_files(source):add(path)
     for name in DOCS:add(source/'docs'/(name+'.md'))
+    for name in ('update.json','update.json.sig'):
+        path=source/'updates'/name
+        if path.is_file():add(path)
     for name in ('README.md','CMakeLists.txt','THIRD_PARTY_NOTICES.md','CONTRIBUTING.md','SECURITY.md','LICENSING.md','LICENSE.md','.gitignore','.gitattributes','.python-version','requirements-dev.txt'):add(source/name)
     for name,path in sorted(selected.items()):
         target=destination/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
