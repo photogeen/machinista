@@ -119,3 +119,11 @@ scripts or arbitrary shell supplied by GitHub or the WebUI.
 Service logs/status survive a restart; a partially downloaded package is replaced
 on retry. Channel changes invalidate the prior candidate. Downgrades are refused.
 No automatic branch checkout, local compilation or plugin installation occurs.
+
+## Published feeds
+
+The deployment public key is distributed in deploy/update-public.pub and installed
+as /etc/machinista/update-public.pem. The private signing key stays outside the
+public export. Beta carries signed ARM64 packages; Release carries a signed empty
+feed until a stable release exists. Empty feeds cannot install files. Each check
+verifies the signature before accepting either kind of feed.

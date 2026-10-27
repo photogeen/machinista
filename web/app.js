@@ -41,7 +41,7 @@ networkStatus();setInterval(networkStatus,5000);
 let lv2Visible=false,lv2Uploading=false,lv2Busy=false,lv2Data=null,lv2Job=null,lv2JobState=null,lv2MessageTimer=null;
 const lv2Expanded=new Set();
 function lv2Message(text,error=false,temporary=false){clearTimeout(lv2MessageTimer);$('lv2-message').textContent=text;$('lv2-message').className=error?'error':'';if(temporary)lv2MessageTimer=setTimeout(()=>{$('lv2-message').textContent=''},5000)}
-function workspace(name){lv2Visible=name==='lv2';for(const key of ['samples','projects','lv2','chords','sounds','oscillators','synth']){$('tab-'+key).setAttribute('aria-pressed',String(key===name));$(key==='samples'?'sample-panel':key==='projects'?'project-panel':key==='chords'?'chords-panel':key==='sounds'?'sounds-panel':key==='oscillators'?'oscillator-panel':key==='synth'?'synth-panel':'lv2-panel').hidden=key!==name}if(lv2Visible){lv2Status();pluginBanksLoad()}synthVisible=name==='synth';if(synthVisible)synthLoad();if(name==='oscillators')oscillatorLoad();if(name==='projects')projectList();if(name==='chords')chordsList();soundVisible=name==='sounds';if(soundVisible)soundsLoad()}
+function workspace(name){lv2Visible=name==='lv2';for(const key of ['samples','projects','lv2','chords','sounds','oscillators','synth','banks']){$('tab-'+key).setAttribute('aria-pressed',String(key===name));$(key==='samples'?'sample-panel':key==='projects'?'project-panel':key==='chords'?'chords-panel':key==='sounds'?'sounds-panel':key==='oscillators'?'oscillator-panel':key==='synth'?'synth-panel':key==='banks'?'banks-panel':'lv2-panel').hidden=key!==name}if(lv2Visible){lv2Status()}if(name==='banks')pluginBanksLoad();synthVisible=name==='synth';if(synthVisible)synthLoad();if(name==='oscillators')oscillatorLoad();if(name==='projects')projectList();if(name==='chords')chordsList();soundVisible=name==='sounds';if(soundVisible)soundsLoad()}
 $('tab-samples').onclick=()=>workspace('samples');$('tab-projects').onclick=()=>workspace('projects');$('tab-lv2').onclick=()=>workspace('lv2');
 function lv2Render(){if(!lv2Data)return;const q=$('lv2-search').value.toLowerCase();$('lv2-bundles').replaceChildren();
  const rows=lv2Data.bundles.filter(b=>(b.name+' '+b.plugins.map(p=>p.name+' '+p.uri).join(' ')).toLowerCase().includes(q));
@@ -181,7 +181,7 @@ function pluginBanksRender(){
   const row=element('div',undefined,'lv2-bundle-footer');row.append(element('span',selected.name+' · '+bank.name+' · '+bank.patches+' patches'));
   if(bank.canDelete){const remove=element('button','Remove bank');remove.type='button';remove.onclick=async()=>{
    if(!confirm('Remove '+bank.name+' from the bank list? Saved project patches will remain playable.'))return;
-   try{await api('/api/plugin-banks/delete?'+new URLSearchParams({profile:selected.id,id:bank.id}),{method:'POST',headers:{'X-Machinista-Token':token}});pluginBankMessage('Preset bank removed.');await pluginBanksLoad()}catch(e){pluginBankMessage(e.message,true)}
+   try{await api('/api/plugin-banks/delete?'+new URLSearchParams({profile:selected.id,id:bank.id}),{method:'POST',headers:{'X-Machinista-Token':token}});pluginBankMessage('Bank and its Sounds entries removed.');await pluginBanksLoad();if(soundVisible)await soundsLoad()}catch(e){pluginBankMessage(e.message,true)}
   };row.append(remove)}list.append(row)
  }
  if(!selected.banks.length)list.append(element('p','No preset banks for '+selected.name+'.','muted'));
@@ -198,3 +198,8 @@ $('plugin-bank-profile').onchange=pluginBanksRender;
 $('plugin-bank-file').onchange=async()=>{const input=$('plugin-bank-file'),file=input.files[0];if(!file)return;input.disabled=true;try{if(file.size>8*1024**2)throw new Error('Maximum 8 MiB per preset bank.');const result=await api('/api/plugin-banks/upload?'+new URLSearchParams({profile:$('plugin-bank-profile').value,name:file.name}),{method:'POST',headers:{'X-Machinista-Token':token,'Content-Type':'application/octet-stream'},body:file});pluginBankMessage(result.name+' · '+result.patches+' patches imported.');await pluginBanksLoad()}catch(e){pluginBankMessage(e.message,true)}finally{input.disabled=false;input.value=''}};
 
 $('tab-oscillators').onclick=()=>workspace('oscillators');
+
+$('tab-banks').onclick=()=>workspace('banks');
+$('sound-banks').onclick=()=>workspace('banks');
+
+$('lv2-banks').onclick=()=>workspace('banks');

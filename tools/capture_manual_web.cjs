@@ -14,6 +14,7 @@ const data={
 '/api/chords':[{id:'evening-keys',preset:chord}],
 '/api/sounds':{folders:['Keys'],sounds:[{id:'electric-piano',name:'Electric Piano',folder:'Keys',tags:['keys','warm'],kind:'SAMPLER',zones:2}],job:{state:'IDLE'}},
 '/api/sounds/runtime':context,'/api/sounds/item':draft,'/api/sounds/current':draft,
+'/api/plugin-banks':[{id:'dexed',uri:'https://github.com/dcoredump/dexed.lv2',name:'Dexed',banks:[{id:'warm',name:'Warm Circuits',patches:32,canDelete:true}]}],
 '/api/lv2':{target:'ARM64',busy:false,jobs:[],bundles:[],error:''},
 '/api/virtualjv':{available:false,banks:[],uploads:[],runtime:{plugins:[]}},
 };
@@ -23,8 +24,8 @@ async function shot(name,selector){await page.locator(selector).screenshot({path
 await shot('library','#sample-panel');await shot('system','aside');await shot('network','#wifi-form');await shot('ssh','.ssh');await shot('power','.power');
 await page.locator('#tab-projects').click();await shot('projects','#project-panel');
 await page.locator('#tab-chords').click();await page.locator('#chords-list button').filter({hasText:/^Edit$/}).click();await shot('chords','#chords-panel');await shot('chord-editor','#chords-editor');
-await page.locator('#tab-lv2').click();await shot('plugins','#lv2-panel');
-await page.locator('#tab-sounds').click();await page.locator('#sounds-list button').filter({hasText:/^Edit$/}).click();await shot('zones','#sound-editor');await shot('zone-map','#zone-map');await shot('zone-table','#sound-editor .file-table');
+await page.locator('#tab-lv2').click();await shot('plugins','#lv2-panel');await page.locator('#tab-banks').click();await shot('patch-banks','#banks-panel');
+await page.locator('#tab-sounds').click();await page.locator('#sounds-list > details > summary').first().click();await page.locator('#sounds-list > details > details > summary').first().click();await page.locator('#sounds-list button').filter({hasText:/^Edit$/}).click();await shot('zones','#sound-editor');await shot('zone-map','#zone-map');await shot('zone-table','#sound-editor .file-table');
 await page.locator('#sound-cancel').click();await page.locator('#sound-capture').click();await page.locator('#sound-capture-name').fill('Electric Piano Live');await shot('patch','#sound-name-dialog');await page.locator('#sound-capture-cancel').click();
 await page.locator('#sound-auto-open').click();await page.locator('#auto-name').fill('Electric Piano Sampled');await shot('autosampler','#autosampler-form');
 }finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});

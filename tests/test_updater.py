@@ -64,6 +64,14 @@ class UpdaterTests(unittest.TestCase):
   for name in ('presets/custom.json','presets/plugin-banks/dexed/warm.json','presets/plugin-banks/machinista-synth/user-bank.json','presets/Oscillators/custom.wav'):
    archive(self.pkg,{name:b'user'})
    with self.assertRaises(ValueError):members(self.pkg)
+ def test_signed_empty_release_feed_is_configured_but_has_no_installable_update(self):
+  self.feed=dict(schema=1,channel='release',available=False,notes='No stable release published yet.')
+  self.check();status=self.m.status();self.assertEqual(status['state'],'NO RELEASE');self.assertTrue(status['configured']);self.assertFalse(status['available']);self.assertIsNone(status['latest']);self.assertEqual(status['notes'],self.feed['notes']);self.assertEqual(self.calls,[])
+ def test_empty_feed_cannot_bypass_channel_or_signature_checks(self):
+  self.feed=dict(schema=1,channel='beta',available=False)
+  self.check();self.assertEqual(self.m.phase,'ERROR')
+  self.feed['channel']='release';self.m.verify=lambda *args:(_ for _ in ()).throw(ValueError('bad signature'))
+  self.m.work('check');self.assertEqual(self.m.phase,'ERROR');self.assertEqual(self.calls,[])
  def test_incompatible_arch_os_channel_and_url_rejected(self):
   for key,value in [('architecture','x86_64'),('os_codename','bookworm'),('channel','beta')]:
    m=dict(self.feed,**{key:value})

@@ -315,7 +315,10 @@ class Handler(BaseHTTPRequestHandler):
                     self.json(result);return
                 if path=='/api/plugin-banks/delete':
                     from app.web_plugin_banks import delete
-                    self.json(delete(library.root,q.get('profile',''),q.get('id','')));return
+                    if not library.upload_lock.acquire(blocking=False):raise BlockingIOError('Another upload is in progress.')
+                    try:result=delete(library.root,q.get('profile',''),q.get('id',''))
+                    finally:library.upload_lock.release()
+                    self.json(result);return
                 if path=='/api/lv2/upload':
                     from app.lv2_client import upload
                     if self.headers.get('Transfer-Encoding'):raise ValueError('Content-Length required.')

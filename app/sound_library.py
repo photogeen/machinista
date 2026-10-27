@@ -78,7 +78,7 @@ class SoundLibrary:
             if p.is_symlink() or not p.is_dir():raise ValueError('Invalid or missing Sound bundle.')
         return path
     def scan(self):
-        rows=[];directories={''}
+        rows=[];directories={''};bank_presence={}
         def walk(relative,depth):
             if depth>8:return
             with self.directory(relative) as fd:
@@ -95,7 +95,12 @@ class SoundLibrary:
                             with os.fdopen(f,'rb') as stream:value=json.loads(stream.read(MAX_JSON+1))
                             identity=self.identity(value['id'])
                             if value.get('format')=='Machinista-bank-sound':
-                                rows.append(dict(id=identity,name=name(value['name']),folder=relative,tags=[value['bank_name']],kind='SYNTH' if value['uri']=='urn:machinista:instrument:synth' else 'LV2',zones=0,readonly=True,link=str((self.folder/relative/item.name).relative_to(self.folder))))
+                                from app.bank_sounds import bank_exists
+                                from app.plugin_profiles import profile
+                                key=(value['uri'],value['bank'])
+                                if key not in bank_presence:bank_presence[key]=bank_exists(self.root,value)
+                                if not bank_presence[key]:continue
+                                rows.append(dict(id=identity,name=name(value['name']),folder=relative,tags=[value['bank_name']],kind='SYNTH' if value['uri']=='urn:machinista:instrument:synth' else 'LV2',instrument=profile(value['uri'])['title'],bank=value['bank'],bank_name=value['bank_name'],zones=0,readonly=True,link=str((self.folder/relative/item.name).relative_to(self.folder))))
                                 continue
                             if value.get('format')!='Machinista-sound-link':continue
                             rows.append(dict(id=identity,name=name(value['name']),folder=relative,tags=tags(value.get('tags',[])),kind=value.get('kind','SAMPLER'),zones=value.get('zones',0),link=str((self.folder/relative/item.name).relative_to(self.folder))))

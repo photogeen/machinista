@@ -2,7 +2,7 @@
 let updateState=null,updateBusy=false,updateChoice=null;
 function showUpdate(s){
  updateState=s;$('updates').hidden=!s.enabled;if(!s.enabled)return;
- $('update-current').textContent=s.current||'—';$('update-latest').textContent=s.latest||'Not checked';$('update-channel').value=s.channel||'release';
+ $('update-current').textContent=s.current||'—';$('update-latest').textContent=s.latest||(s.state==='NO RELEASE'?'No release published yet':'Not checked');$('update-channel').value=s.channel||'release';
  $('update-status').textContent=s.error||(!s.configured?'Update source not configured':s.state==='COMPLETE'?'Update complete':s.state);
  $('update-notes').textContent=s.notes||'';$('update-progress').hidden=!s.busy;$('update-progress').value=s.progress||0;
  $('update-channel').disabled=Boolean(s.busy||updateBusy);$('update-check').disabled=Boolean(s.busy||updateBusy||!s.configured);$('update-install').disabled=Boolean(s.busy||updateBusy||!s.available||!s.configured);$('update-reboot').hidden=!s.reboot_required;

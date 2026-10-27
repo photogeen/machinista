@@ -159,7 +159,7 @@ class Manager:
         self.fetch=fetch;self.verify=verify;self.run=run or self.execute_command
         self.os_name=os_name or self.os_info().get('VERSION_CODENAME','');self.machine=machine or platform.machine()
         self.state.mkdir(parents=True,exist_ok=True);self.lock=threading.Lock();self.latest=None;self.thread=None;self.lease=None;self.lease_path=Path(lease_path)
-        self.channel='release';self.current=cfg['current_version'];self.phase='IDLE';self.error='';self.progress=0;self.reboot_required=False;self.checked=None
+        self.channel='release';self.current=cfg['current_version'];self.phase='IDLE';self.error='';self.progress=0;self.reboot_required=False;self.checked=None;self.feed_notes=''
         try:self.channel=json.loads((self.state/'channel.json').read_text())['channel'];assert self.channel in CHANNELS
         except (OSError,ValueError,KeyError,AssertionError):self.channel='release'
         try:self.current=json.loads((self.state/'installed.json').read_text())['version'];version(self.current)
@@ -174,7 +174,7 @@ class Manager:
         return dict(enabled=self.cfg['enabled'],configured=configured,current=self.current,latest=self.latest['version'] if self.latest else None,
             channel=self.channel,state=self.phase,error=self.error,message=self.error or ('Ready' if configured else 'Update source not configured'),
             progress=self.progress,busy=self.phase in BUSY,available=bool(self.latest and version(self.latest['version'])>version(self.current)),
-            notes=self.latest.get('notes','') if self.latest else '',os=self.os_name,kernel=platform.release(),os_included=True,reboot_required=self.reboot_required,checked=self.checked)
+            notes=self.latest.get('notes','') if self.latest else self.feed_notes,os=self.os_name,kernel=platform.release(),os_included=True,reboot_required=self.reboot_required,checked=self.checked)
     def publish(self,phase=None,progress=None,error=None):
         if phase is not None:self.phase=phase
         if progress is not None:self.progress=progress
@@ -192,7 +192,7 @@ class Manager:
             if self.phase in BUSY:raise ValueError('An update operation is already running.')
             if op=='channel':
                 if channel not in CHANNELS:raise ValueError('Choose beta or release.')
-                self.channel=channel;self.latest=None;self.checked=None;atomic(self.state/'channel.json',{'channel':channel});self.publish('IDLE',0,'');return self.status()
+                self.channel=channel;self.latest=None;self.checked=None;self.feed_notes='';atomic(self.state/'channel.json',{'channel':channel});self.publish('IDLE',0,'');return self.status()
             if op not in ('check','install'):raise ValueError('Invalid update operation.')
             if not self.status()['configured']:raise ValueError('GitHub repository and signing key are not configured yet.')
             if op=='install':
@@ -211,6 +211,10 @@ class Manager:
                 base=f"https://raw.githubusercontent.com/{self.cfg['repository']}/{self.channel}/updates/"
                 raw=self.fetch(base+'update.json',32768);signature=self.fetch(base+'update.json.sig',1024)
                 self.verify(raw,signature,self.cfg['public_key'])
+                data=json.loads(raw)
+                if isinstance(data,dict) and data.get('available') is False:
+                    if data.get('schema')!=1 or data.get('channel')!=self.channel or set(data)-{'schema','channel','available','notes'} or not isinstance(data.get('notes',''),str) or len(data.get('notes',''))>4000:raise ValueError('Invalid empty update feed.')
+                    self.latest=None;self.checked=time.time();self.feed_notes=data.get('notes','');self.publish('NO RELEASE',100);return
                 latest=manifest(raw,self.channel,self.cfg,self.os_name,self.machine)
                 if version(self.current)<version(latest['minimum_version']):raise ValueError('Install a newer image before this update.')
                 self.latest=latest;self.checked=time.time();self.publish('AVAILABLE' if version(latest['version'])>version(self.current) else 'UP TO DATE',100)

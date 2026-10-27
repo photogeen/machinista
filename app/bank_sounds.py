@@ -13,6 +13,40 @@ from pathlib import Path
 FORMAT='Machinista-bank-sound'
 INSTRUMENTS={'machinista-synth','dexed','obxd','raffosynth'}
 
+def bank_exists(root,data):
+    from app.plugin_profiles import profile,bank_folder
+    p=profile(data.get('uri'));identity=data.get('bank')
+    if not p or not isinstance(identity,str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,128}',identity):return False
+    if identity=='init':return True
+    folder=bank_folder(root,p);path=folder/(identity+'.json')
+    return not folder.is_symlink() and not path.is_symlink() and path.is_file()
+
+def remove_snapshots(root,uri,bank):
+    """Delete only unchanged generated entries; saved project patches are separate."""
+    from app.sound_library import SoundLibrary
+    library=SoundLibrary(root)
+    with library.writing():
+        manifest=library.folder/'.bank-sounds.json'
+        if not manifest.exists():return
+        old=json.loads(manifest.read_text());retained=dict(old)
+        for relative,digest in old.items():
+            category,leaf=relative.rsplit('/',1)
+            try:
+                with library.directory(category):
+                    path=library.folder/relative
+                    if path.is_symlink():continue
+                    body=path.read_bytes();data=json.loads(body)
+                    if data.get('uri')!=uri or data.get('bank')!=bank:continue
+                    if hashlib.sha256(body).hexdigest()==digest:path.unlink()
+                    retained.pop(relative,None)
+                parent=path.parent
+                while parent!=library.folder:
+                    try:parent.rmdir()
+                    except OSError:break
+                    parent=parent.parent
+            except (OSError,ValueError):continue
+        temporary=manifest.with_name('.'+secrets.token_hex(16));temporary.write_text(json.dumps(retained,sort_keys=True));temporary.replace(manifest)
+
 def component(value):
     value=re.sub(r'[/\\\x00-\x1f]', ' ', value).strip().strip('.')[:100]
     return value or 'Untitled'
@@ -53,6 +87,7 @@ def sync(root,entries,enabled):
         old=json.loads(manifest.read_text()) if manifest.exists() else {}
         published={}
         for relative,data in wanted.items():
+            if not bank_exists(root,data):continue
             category,leaf=relative.rsplit('/',1);body=json.dumps(data,ensure_ascii=False,sort_keys=True)
             with library.directory(category,True):
                 path=library.folder/relative

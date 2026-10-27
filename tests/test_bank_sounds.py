@@ -49,3 +49,26 @@ class BankSoundTests(unittest.TestCase):
  def test_last_factory_programs_validate(self):
   self.build();row=next(r for r in self.library.scan()['sounds'] if r['kind']=='SYNTH');data=json.loads((self.library.folder/row['link']).read_text());data['program']=263
   self.assertEqual(project(self.root,data)['groups'][0]['pads'][0]['plugins'][0]['profile_preset']['program'],263)
+
+class BankRemovalTests(unittest.TestCase):
+ setUp=BankSoundTests.setUp
+ build=BankSoundTests.build
+ def test_bank_removal_cleans_catalog_immediately_and_stale_worker_cannot_recreate(self):
+  from app.web_plugin_banks import delete
+  self.build();row=next(r for r in self.library.scan()['sounds'] if r['folder']=='OB-Xd/Warm bank');path=self.library.folder/row['link']
+  saved=read_preset(path,'SOUND',self.root);before=copy.deepcopy(saved)
+  delete(self.root,'obxd','warm')
+  self.assertFalse(path.exists());self.assertFalse(any(r['folder']=='OB-Xd/Warm bank' for r in self.library.scan()['sounds']))
+  self.build()  # A worker may still hold the previous in-memory bank snapshot.
+  self.assertFalse(path.exists());self.assertEqual(saved,before)
+  self.assertTrue(any(r['folder'].startswith('Dexed/') for r in self.library.scan()['sounds']))
+ def test_scan_hides_bank_deleted_outside_webui_before_worker_refresh(self):
+  self.build();(self.root/'presets/plugin-banks/obxd/warm.json').unlink()
+  self.assertFalse(any(r['folder']=='OB-Xd/Warm bank' for r in self.library.scan()['sounds']))
+ def test_builtin_categories_and_traversal_cannot_be_deleted(self):
+  from app.web_plugin_banks import delete
+  for identity in ('init','factory','category-keys','../obxd/warm'):
+   with self.assertRaises(ValueError):delete(self.root,'machinista-synth',identity)
+ def test_bank_metadata_contains_instrument_and_bank_for_grouped_browser(self):
+  self.build();row=next(r for r in self.library.scan()['sounds'] if r['folder']=='OB-Xd/Warm bank')
+  self.assertEqual((row['instrument'],row['bank_name']),('OB-Xd','Warm bank'))

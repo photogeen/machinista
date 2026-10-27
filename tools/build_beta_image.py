@@ -13,7 +13,7 @@ import subprocess
 import sys
 import tarfile
 
-VERSION='0.1.0-beta.8'
+VERSION='0.1.0-beta.9'
 
 def main():
  root=Path(sys.argv[1]).resolve();payload=Path(sys.argv[2]).resolve()
@@ -62,6 +62,7 @@ def main():
    shutil.copy2(app/source,manager.parent/Path(source).name)
   (root/'etc/machinista').mkdir(exist_ok=True)
   shutil.copy2(app/'deploy/updater.example.json',root/'etc/machinista/updater.json')
+  if (app/'deploy/update-public.pub').is_file():shutil.copy2(app/'deploy/update-public.pub',root/'etc/machinista/update-public.pem')
   (root/'etc/machinista/updater.json').chmod(0o644)
  shutil.copy2(app/'build/audio_engine',manager.parent/'lv2_scan');(manager.parent/'lv2_scan').chmod(0o755)
  shutil.copy2(app/'deploy/smb.conf',root/'etc/samba/smb.conf')

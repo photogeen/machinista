@@ -1,6 +1,6 @@
 # Controller user manuals
 
-Edition: 27 October 2026, Machinista 0.1.0-beta.8 / Fokus V2.
+Edition: 27 October 2026, Machinista 0.1.0-beta.9 / Fokus V2.
 
 `output/pdf/` contains separate illustrated English and German manuals for
 Mikro MK1, full-size MK1, MK2 and MK3. Screens and menu names stay English in both

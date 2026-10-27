@@ -51,6 +51,9 @@ id_ed25519*
 /{{HOMEBREW_PREFIX}}/
 /{{pkgetc}}/
 
+# Private release signing material; only the public key is distributable.
+/.private/
+
 # Explicit original Factory assets and sanitized generic maps.
 !/presets/Oscillators/
 /presets/Oscillators/*
