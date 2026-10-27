@@ -55,6 +55,7 @@ def prepare(source,destination):
     with ignore.open('a') as stream:
         stream.write('\n# Explicit original Factory assets and sanitized generic maps.\n')
         stream.write('!/presets/Oscillators/\n/presets/Oscillators/*\n!/presets/Oscillators/.assets/\n/presets/Oscillators/.assets/*\n!/presets/plugin-banks/\n/presets/plugin-banks/*\n!/presets/plugin-banks/machinista-synth/\n/presets/plugin-banks/machinista-synth/*\n')
+        stream.write('!/presets/plugin-banks/obxd/\n/presets/plugin-banks/obxd/*\n')
         for name in permitted:stream.write('!/'+name+'\n')
         for name in MAPS:stream.write('!/captures/'+name+'\n')
     report=audit(destination)

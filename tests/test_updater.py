@@ -203,10 +203,10 @@ class PublisherTests(unittest.TestCase):
  def test_signed_release_builder_produces_verifiable_compatible_artifact(self):
   import sys
   with tempfile.TemporaryDirectory() as tmp:
-   root=Path(tmp).resolve();payload=root/'payload.tar.gz';archive(payload);key=root/'private.pem';pub=root/'public.pem';out=root/'out'
+   root=Path(tmp).resolve();payload=root/'payload.tar.gz';archive(payload,{'presets/plugin-banks/obxd/machinista-bass.json':b'{}'});key=root/'private.pem';pub=root/'public.pem';out=root/'out'
    subprocess.run(['openssl','genpkey','-algorithm','ED25519','-out',str(key)],check=True,capture_output=True)
    subprocess.run(['openssl','pkey','-in',str(key),'-pubout','-out',str(pub)],check=True,capture_output=True)
    subprocess.run([sys.executable,'tools/build_update.py','--payload',str(payload),'--key',str(key),'--repository','example/machinista','--channel','release','--version','0.1.1','--minimum-version','0.1.0-beta.6','--os-codename','trixie','--output',str(out)],check=True,capture_output=True)
    raw=(out/'update.json').read_bytes();pub.chmod(0o644);verify_signature(raw,(out/'update.json.sig').read_bytes(),pub)
    m=manifest(raw,'release',{'repository':'example/machinista'},'trixie','aarch64')
-   artifact=out/'machinista-0.1.1-arm64.tar.gz';self.assertEqual(m['artifact']['sha256'],hashlib.sha256(artifact.read_bytes()).hexdigest());self.assertIn('build/audio_engine',members(artifact))
+   artifact=out/'machinista-0.1.1-arm64.tar.gz';self.assertEqual(m['artifact']['sha256'],hashlib.sha256(artifact.read_bytes()).hexdigest());self.assertIn('build/audio_engine',members(artifact));self.assertNotIn('presets/plugin-banks/obxd/machinista-bass.json',members(artifact))

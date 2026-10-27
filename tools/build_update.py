@@ -18,6 +18,9 @@ def main():
         for item in source:
             parts=PurePosixPath(item.name).parts
             if not parts or parts[0] not in ALLOWED or (parts[0]=='output' and (len(parts)!=3 or parts[1]!='pdf' or not parts[2].endswith('.pdf'))):continue
+            # Optional OB-Xd banks ship in clean images and as a separate import.
+            # Keep updates compatible with deployed brokers and preserve user banks.
+            if item.name.startswith('presets/plugin-banks/obxd/'):continue
             if item.isdir():continue
             if not item.isfile() or item.name.startswith('/') or '..' in parts:raise ValueError('Unsafe source payload.')
             stream=source.extractfile(item)

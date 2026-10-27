@@ -31,6 +31,15 @@ def factory_files(root):
         data=asset.read_bytes();row=allowed[identity]
         if data[:8] not in (b'MWAVE001',b'MWAVET02') or struct.unpack_from('<II',data,8)!=(row['frames'],row['cycle']) or len(data)!=16+4*row['frames']*row['cycle']*(10 if data[:8]==b'MWAVET02' else 1):raise ValueError('Invalid Factory wave data')
         result.extend((metadata,asset))
+    # Only these independently authored CC0 add-on banks ship in clean images.
+    # Never collect arbitrary banks from a developer's/user's preset library.
+    for category in ('bass','keys','pads','leads'):
+        path=root/'presets/plugin-banks/obxd'/('machinista-'+category+'.json')
+        data=json.loads(path.read_text())
+        bank=validate_bank(data,profile('urn:machinista:ports:obxd-2dat'))
+        if data.get('license')!='CC0-1.0' or data.get('author')!='Machinista' or len(bank['patches'])!=8:
+            raise ValueError('Invalid original OB-Xd factory bank')
+        result.append(path)
     for path in result:
         if not path.is_file() or path.is_symlink():raise ValueError('Missing or unsafe Factory asset: '+str(path))
     return tuple(result)

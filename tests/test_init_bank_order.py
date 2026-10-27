@@ -38,9 +38,9 @@ class FactoryImagePayloadTests(unittest.TestCase):
   files=factory_files(ROOT);paths=[str(p.relative_to(ROOT)) for p in files]
   bank=json.loads((ROOT/'presets/plugin-banks/machinista-synth/factory.json').read_text())
   self.assertEqual(len(bank['patches']),264)
-  self.assertEqual(sum(p.startswith('presets/plugin-banks/') for p in paths),14)
+  self.assertEqual(sum(p.startswith('presets/plugin-banks/') for p in paths),18)
   self.assertEqual(sum(p.endswith('.mwave') for p in paths),9)
-  self.assertFalse(any('dexed' in p or 'obxd' in p or '.lv2' in p or p.endswith(('.wav','.syx','.rom')) for p in paths))
+  self.assertFalse(any('dexed' in p or '.lv2' in p or p.endswith(('.wav','.syx','.rom')) for p in paths))
  def test_fresh_image_payload_resolves_every_factory_patch_without_personal_content(self):
   from app.synth_library import preset_waves
   from app.plugin_profiles import profile
@@ -55,6 +55,19 @@ class FactoryImagePayloadTests(unittest.TestCase):
    self.assertEqual(len(patches),264)
    for patch in patches:preset_waves(root,patch)
    self.assertFalse((root/'projects').exists());self.assertFalse(list(root.rglob('*.lv2')))
+ def test_original_obxd_banks_ship_without_plugin_binary(self):
+  from app.plugin_profiles import profile
+  files=factory_files(ROOT)
+  selected=[p for p in files if p.parent.name=='obxd']
+  self.assertEqual({p.stem for p in selected},{'machinista-'+v for v in ('bass','keys','pads','leads')})
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory)
+   for source in selected:
+    target=root/source.relative_to(ROOT);target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+   available=banks(root,profile('urn:machinista:ports:obxd-2dat'))
+   self.assertEqual(available[-1]['id'],'init')
+   self.assertEqual(sum(len(b['patches']) for b in available if b['id']!='init'),32)
+   self.assertEqual(len({p['name'] for b in available if b['id']!='init' for p in b['patches']}),32)
  def test_missing_factory_stops_packaging_instead_of_silently_omitting_patches(self):
   with tempfile.TemporaryDirectory() as root:
    with self.assertRaises((OSError,ValueError)):factory_files(root)

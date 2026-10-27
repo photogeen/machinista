@@ -35,3 +35,16 @@ but is hidden when every patch is covered by the category banks. Existing projec
 controls are not changed. The same category catalog is used by controllers and
 Browser/WebUI Sounds. Incomplete or customized aggregate banks remain visible,
 so sound data is never silently discarded.
+
+## Original OB-Xd patch banks
+
+Clean image payloads include 32 independently authored CC0-1.0 parameter patches:
+**Machinista Bass**, **Machinista Keys**, **Machinista Leads** and **Machinista Pads**,
+eight patches each. They are data only; OB-Xd itself remains an optional separate
+installation. Once OB-Xd is installed, its banks appear on the controller and in
+Sounds grouped by instrument and bank. Init remains last. No downloaded third-party
+bank is included. Existing user banks are preserved.
+
+For an existing installation, download `Machinista-OBXd-Patches.zip` from the
+OB-Xd repository's Releases and import its four JSON files via WebUI > Patch banks,
+with OB-Xd selected. Each bank may also be imported individually.

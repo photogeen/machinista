@@ -63,6 +63,8 @@ id_ed25519*
 /presets/plugin-banks/*
 !/presets/plugin-banks/machinista-synth/
 /presets/plugin-banks/machinista-synth/*
+!/presets/plugin-banks/obxd/
+/presets/plugin-banks/obxd/*
 !/presets/plugin-banks/machinista-synth/factory.json
 !/presets/plugin-banks/machinista-synth/category-bass.json
 !/presets/plugin-banks/machinista-synth/category-bells-mallets.json
@@ -95,6 +97,10 @@ id_ed25519*
 !/presets/Oscillators/.assets/b855218c3d58018a1eaf4950a9514ba0.mwave
 !/presets/Oscillators/c036c1151fda33daadbd987bf045438b.json
 !/presets/Oscillators/.assets/c036c1151fda33daadbd987bf045438b.mwave
+!/presets/plugin-banks/obxd/machinista-bass.json
+!/presets/plugin-banks/obxd/machinista-keys.json
+!/presets/plugin-banks/obxd/machinista-pads.json
+!/presets/plugin-banks/obxd/machinista-leads.json
 !/captures/mikro-mk1-pad-led-map.json
 !/captures/mikro-mk1-button-map.json
 !/captures/mikro-mk1-button-led-map.json
