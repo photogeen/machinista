@@ -12,7 +12,7 @@ from tools.check_public_source import audit
 from tools.factory_payload import factory_files
 
 DOCS=('BUILD','INSTALL','ARCHITECTURE','GITHUB_PUBLISH','LICENSING_PLAN','WEB_UI',
-      'USER_MANUALS','SOUNDS_AND_AUTOSAMPLER','SOUNDFONT_IMPORT','PLUGIN_PROFILES',
+      'USER_MANUALS','OVERVIEW_DE','SOUNDS_AND_AUTOSAMPLER','SOUNDFONT_IMPORT','PLUGIN_PROFILES',
       'MK1_MIDI','MK3_SUPPORT','MASCHINE_PLUS_SUPPORT','INIT_BANK_ORDER','UPDATER_PLAN','PLUGIN_PORTS')
 MAPS=('mikro-mk1-pad-led-map.json','mikro-mk1-button-map.json',
       'mikro-mk1-button-led-map.json','maschine-mk2-hardware-map.json')

@@ -1,6 +1,32 @@
 # Controller user manuals
 
-Edition: 27 October 2026, Machinista 0.1.0-beta.10 / Fokus V2.
+[Download all illustrated manuals (English and German)](https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.10/Machinista-Manuals-EN-DE-2026-10-30.zip)
+
+Choose the illustrated guide for your controller, in English or German. Start
+with setup and **Your first sound**: it uses a built-in patch, so no sample pack
+is needed. Then try **Your first beat** with your own drum samples. Look up the
+other chapters as you need them. The complete screen reference is at the back.
+
+**Neu:** Alle Anleitungen sind auch auf Deutsch verfügbar. Beginne mit
+Einrichtung und **Dein erster Sound**. Die englischen Menü- und Tastennamen
+bleiben unverändert, damit du sie am Gerät wiederfindest.
+
+MK3 and Maschine+ use the same guide; on Maschine+ this applies only to
+Controller mode with Machinista running on the connected Pi.
+
+## What changed in this edition?
+
+- Musical tasks come before technical explanations.
+- A first-sound walkthrough works without uploading samples or plug-ins.
+- A short glossary explains Sound, Group, Pattern, Scene, bank, patch and encoder.
+- Examples explain how Attack, Release, Cutoff and other controls affect sound.
+- Audio settings explain listening levels, input gain, buffer and CPU load.
+- Detailed instructions, button bindings, WebUI topics and screen references
+  remain available; nothing needs to be learned all at once.
+
+## Editions and rebuilding
+
+Edition: 30 October 2026, Machinista 0.1.0-beta.10 / Fokus V2.
 
 `output/pdf/` contains separate illustrated English and German manuals for
 Mikro MK1, full-size MK1, MK2 and MK3. Screens and menu names stay English in both
@@ -8,8 +34,8 @@ languages. Each guide has 40 workflow/reference chapters, linked contents,
 workspace index, current screen atlas and shortcut/troubleshooting reference.
 Topic-local illustrated continuation pages document WebUI operations and
 Keyboard/CUSTOM chords; TOC page numbers and links include these pages.
-The manuals contain 111 pages (Mikro), 103 pages (MK1/MK2),
-and 160 pages per language (MK3).
+The manuals contain 116 pages (Mikro), 108 pages (MK1/MK2),
+and 165 pages per language (MK3 / Maschine+).
 
 This edition includes Live FX/recording, restored mode actions and pinning,
 Scene Options/banks/Quantize, current Tap Tempo, custom chord imports/variations,
@@ -66,7 +92,7 @@ Ducktor and native SoundFont import have topic-local instructions. Existing
 WebUI sample/project transfers, chords, Sounds/Zones, Autosampler, live patches,
 synth editor/waves and network/system controls remain included.
 
-The MK3 atlas contains 191 distinct render states; its larger figures use two
+The MK3 atlas contains 190 distinct render states; its larger figures use two
 states per atlas page. MK3 contents are generated in two passes so continuation
 pages do not shift chapter links. English menu labels and screen pixels are
 identical in both language editions. Verification checks page margins, outline

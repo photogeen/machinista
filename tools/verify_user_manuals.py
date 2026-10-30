@@ -27,8 +27,10 @@ def verify():
                 assert forbidden not in text,(path.name,forbidden)
             for other in ('MK1','MK2','MK3','Mikro'):
                 if other not in device:assert not re.search(r'\b'+other+r'\b',text),(path.name,other)
-            assert ('27 October 2026' if lang=='EN' else '27. Oktober 2026') in texts[0]
+            assert ('30 October 2026' if lang=='EN' else '30. Oktober 2026') in texts[0]
             assert ('selected Sound/pad only' if lang=='EN' else 'ausgewählten Sounds/Pads') in text,path.name
+            assert ('Your first sound - no samples needed' if lang=='EN' else 'Dein erster Sound - ohne eigene Samples') in text
+            assert ('Words you will see on screen' if lang=='EN' else 'Begriffe auf dem Display') in text
             assert all(value in text for value in ('Ducktor','SoundFont','FOLLOW','SELECT'))
             if device!='Mikro_MK1':
                 assert not any('\n'+page+'\n' in text for page in ('PARAM NAV','SAMPLING NAV')),(path.name,'Mikro-only intermediate view')
@@ -50,7 +52,10 @@ def verify():
             # All MK3 pages, plus overview and changed chapters in existing guides.
             pdf=pdfium.PdfDocument(path)
             selected=range(len(pdf)) if device=='MK3' else [i for i,t in enumerate(texts) if i==0 or any(x in t for x in ('Events: select a time range','Events: einen Zeitbereich','Ducktor:','SoundFonts as native','SoundFonts als native','Die Anzeigen verstehen','Reading the displays'))]
-            indices=list(selected)
+            # Render every revised guide page; unchanged reference atlases stay covered
+            # by layout checks, with the full color atlas retained for visual review.
+            atlas_begin=next((i for i,t in enumerate(texts) if ('Screen atlas / workspace index' in t or 'Displayübersicht / Arbeitsbereichsindex' in t) and i>5),len(texts))
+            indices=sorted(set(selected)|set(range(atlas_begin)))
             for bank in range((len(indices)+29)//30):
                 sheet=Image.new('RGB',(1000,1500),'#d9d9d9');draw=ImageDraw.Draw(sheet)
                 for j,idx in enumerate(indices[bank*30:(bank+1)*30]):
@@ -65,7 +70,7 @@ def verify():
         sources={}
         for pattern in ('tools/*manual*.py','app/mk3*.py','app/pattern_editor.py','app/mk2_surface.py'):
             for source in ROOT.glob(pattern):sources[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
-        manifest=dict(edition='2026-10-27',software='Machinista 0.1.0-beta.10 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
+        manifest=dict(edition='2026-10-30',software='Machinista 0.1.0-beta.10 / Fokus V2',accent='orange',outputs=outputs,sources=sources)
         (OUT/('manuals-manifest.json' if lang=='EN' else 'manuals-manifest-de.json')).write_text(json.dumps(manifest,indent=2)+'\n')
     with zipfile.ZipFile(OUT/'Machinista-Manuals-EN-DE.zip','w',zipfile.ZIP_DEFLATED) as archive:
         for row in results:archive.write(OUT/row['file'],row['file'])

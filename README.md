@@ -6,26 +6,49 @@
 
 [Repository](https://github.com/photogeen/machinista) · [Issues](https://github.com/photogeen/machinista/issues)
 
-A standalone sampling groovebox for Raspberry Pi, controlled by legacy and
-current Maschine hardware. The audio engine runs in C++20; controller workflows,
-color/monochrome displays and the local WebUI are implemented in Python.
+Make beats, play instruments and turn loops into songs - directly from your
+controller. Machinista runs on a Raspberry Pi, so you can make music without
+keeping a laptop connected. Use your own recordings or start playing with the
+built-in Machinista Synth and its ready-made sounds.
 
-**Status: beta.** Raspberry Pi 4 / Pi 5 with 64-bit Raspberry Pi OS are the
-primary target. Automated Linux tests do not replace hardware/audio qualification.
-See [licensing status](LICENSING.md) before reusing or redistributing the code.
+**Machinista is currently a beta for Raspberry Pi 4 and Pi 5.** It is ready for
+musicians to try and help test, but it still needs testing with different
+controllers and audio devices. Save backups of work you want to keep.
 
-## Features
+[Beschreibung auf Deutsch](docs/OVERVIEW_DE.md)
 
-- Sample recording, editing, manual/grid/transient slicing, zones and multisamples.
-- Pattern recording, step sequencing, note editing, scenes and song arrangement.
-- Keyboard, scales, custom chords, note repeat and automation.
-- Native four-oscillator Machinista Synth with original Factory patches/wavetables.
-- Live performance effects and the native Ducktor sidechain ducker.
-- Optional LV2 instruments/effects, parameter pages, preset banks and saved Sounds.
-- Audio Loops, resampling, Bounce to Pad and external/LV2 autosampling.
-- ALSA audio routing, supported USB/HAT interfaces, MIDI and Bluetooth MIDI.
-- Local WebUI for samples/projects/Sounds, synth editing, plug-in installation,
-  Wi-Fi configuration, storage and system controls.
+## What can I make with it?
+
+- **Beats:** play drums on the pads, record a repeating phrase, or place hits one
+  step at a time. Correct individual notes afterwards.
+- **Sample-based music:** record audio, load WAV/MP3 files, cut loops into playable
+  slices, and turn several recordings into one keyboard instrument.
+- **Synth parts:** play the built-in four-oscillator synth, choose a ready-made
+  patch (a saved sound), and adjust it with the controller or browser editor.
+- **Chords and melodies:** play notes across the pads, choose a scale, put a chord
+  on one pad, or use Note Repeat and an arpeggiator for rhythmic patterns.
+- **Whole songs:** combine Patterns (repeating phrases) into Scenes (song sections),
+  then put those sections in order. Record knob movements as automation.
+- **Live performances:** mute parts, balance sounds in the Mixer and play effects
+  with the pads. Ducktor can lower one sound when another plays - for example,
+  making room in the bass whenever the kick hits.
+- **Audio loops:** record a loop that plays with your Pattern, or bounce a playing
+  part to another pad to keep working with it as audio.
+- **Extra instruments and effects:** install compatible LV2 plug-ins. LV2 is the
+  add-on format; the public image does not include third-party plug-ins.
+- **External gear:** play from a MIDI keyboard, control an external instrument,
+  use supported Bluetooth MIDI devices, and choose audio inputs and outputs.
+- **Easy file management:** open the WebUI (a browser control page) on a phone,
+  tablet or computer to upload samples, back up projects and organize Sounds.
+
+## What do I need?
+
+A Raspberry Pi 4 or 5 with its power supply, an SD card of at least 8 GB, a
+supported controller below, and a supported audio device for headphones or
+speakers. A computer is needed to prepare the SD card. Afterwards, use the
+controller to make music; the browser page is there when you want easier file
+management or more detailed editing. The public image includes synth sounds,
+but no drum samples or personal recordings.
 
 ## Controller support
 
@@ -36,8 +59,8 @@ See [licensing status](LICENSING.md) before reusing or redistributing the code.
 | Maschine MK3 | Dual color |
 | Maschine+ in controller mode | Dual color |
 
-Controller mode requires a host Pi; this project does not replace Maschine+
-standalone firmware. Device-specific hardware tests remain necessary.
+For Maschine+, switch the unit to Controller mode and connect it to the Pi.
+Machinista runs on the Pi; it does not replace the software inside Maschine+.
 
 ## Install the beta
 
@@ -67,21 +90,25 @@ MK3 color screens also apply to Maschine+ in controller mode.
 
 [Full-size screen gallery](assets/screens/README.md).
 
-## Start here
+## Learn to use it
 
-- [Build and test from source](docs/BUILD.md)
-- [Image installation and first boot](docs/INSTALL.md)
-- [Architecture and source layout](docs/ARCHITECTURE.md)
-- [Preparing GitHub and release branches](docs/GITHUB_PUBLISH.md)
-- [Controller manuals](docs/USER_MANUALS.md)
-- [WebUI](docs/WEB_UI.md), [Sounds and autosampling](docs/SOUNDS_AND_AUTOSAMPLER.md)
-- [Plug-in profiles and banks](docs/PLUGIN_PROFILES.md)
-- [Factory synth collection](docs/synth/FACTORY_BANK.md)
+Start with [installation and first sound](docs/INSTALL.md), then choose the
+[illustrated manual for your controller](docs/USER_MANUALS.md). Each manual
+starts with setup, a first sound and a first beat. You can look up the editing
+and reference chapters later; you do not need to learn every page first.
 
-The public source export includes original Factory assets and reproducible test
-fixtures. It excludes personal samples, projects, credentials, ROMs, recorded
-hardware captures, disk images and optional third-party LV2 binaries/banks.
-Images and generated manuals belong in release assets, not Git source history.
+The [WebUI guide](docs/WEB_UI.md) explains the browser controls. For making
+instruments from several recordings, see [Sounds and Autosampler](docs/SOUNDS_AND_AUTOSAMPLER.md).
+
+## For developers
+
+You do not need to build or program anything to use the prepared SD-card image.
+If you want to change the software, see [building from source](docs/BUILD.md),
+[software structure](docs/ARCHITECTURE.md), [plug-in profiles](docs/PLUGIN_PROFILES.md)
+and [release preparation](docs/GITHUB_PUBLISH.md).
+The audio engine uses C++20; controller and browser workflows use Python.
+The public repository excludes personal samples, projects, passwords, ROMs and
+third-party LV2 binaries. Images and PDFs are provided as release downloads.
 
 ## Network access
 

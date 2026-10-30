@@ -14,6 +14,7 @@ WORDS={
 '22 October 2026':'22. Oktober 2026',
 '24 October 2026':'24. Oktober 2026',
 '27 October 2026':'27. Oktober 2026',
+'30 October 2026':'30. Oktober 2026',
 ' / continued':' / Fortsetzung',
 'Workflows, controls and illustrated screen reference':'Arbeitsabläufe, Bedienung und bebilderte Displayübersicht',
 'Contents':'Inhalt',
@@ -105,6 +106,9 @@ if __name__=='__main__':
     enrich_synth(base.CH,'de')
     from tools.manual_current import enrich as enrich_current
     enrich_current(base.CH,'de')
+    from tools.manual_plain_language import enrich as enrich_plain
+    enrich_plain(base.CH,'de')
+    base.MANUAL_LANGUAGE='de'
     # The same source labels choose the same chapter-specific screenshots.
     catalog=json.loads((base.ASSETS/'catalog.json').read_text()) if (base.ASSETS/'catalog.json').exists() else base.render_assets()
     required={label for ch in base.CH for supplement in ch.get('supplements',[]) for label in supplement.get('figures',[])}
