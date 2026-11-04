@@ -1,31 +1,32 @@
-# Licensing policy and release review
+# Open-source licensing policy
 
-The project owner confirmed this policy on 27 October 2026; LICENSE.md implements it:
+The project owner selected genuine open-source licensing on 4 November 2026,
+replacing the software-resale restriction selected on 27 October 2026.
 
-- Reading, modifying, forking and sharing free copies are permitted.
-- Selling Machinista, derived versions or paid activation/license keys requires
-  the rights holder's separate permission.
-- Commercial music production and ownership/sale of the resulting music should
-  remain permitted, as expressly stated in the license.
-- Third-party licenses remain unchanged; no restriction here can override them.
+Original Machinista material is now offered under GPL-3.0-or-later, including
+original material in earlier official beta releases. LICENSE.md contains the
+unmodified GPLv3 text; LICENSING.md identifies its scope and the later-version
+option. Third-party and explicitly separately licensed assets retain their terms.
 
-LICENSE.md is the license text. This document explains the selected policy and
-does not expand its grant. Identify the publishing rights holder and obtain
-specialist review of the custom text before public distribution. No ownership
-of third-party material is claimed.
+- Running, studying, modifying, forking and sharing are permitted.
+- Commercial use, software redistribution and hardware bundling are permitted
+  under the GPL's conditions; no owner-only right to sell licenses is reserved.
+- Conveyed derivatives must preserve applicable GPL terms and make Corresponding
+  Source available. Private changes do not have to be published merely for use.
+- Independent music made with Machinista is not placed under GPL by that use.
+- Contributors keep their copyright; no automatic proprietary relicensing grant
+  or copyright assignment is required.
+- Each binary release should identify its matching source and retain licenses,
+  notices and build/install scripts. Older embedded license files are superseded
+  by the additional GPL grant for the owner's original material, not for third
+  parties' work.
 
-GPL and MIT permit commercial redistribution and therefore do not implement the
-requested restriction. A general noncommercial license also limits commercial
-use, which is broader than the desired resale restriction. A targeted
-source-available license needs precise definitions of resale, derived versions,
-hardware bundles, paid support, donations and permitted end-user use.
-
-For future outside contributions, agree on contributor terms before merging if
-the project must also remain available under a separate commercial license.
-Do not imply that a DCO alone grants unrestricted relicensing rights.
+Optional stem-model redistribution requires separate review of model provenance
+and component notices; changing Machinista's license does not settle upstream
+model-weight licensing questions.
 
 References:
 
-- https://www.gnu.org/licenses/gpl-faq.en.html#DoesTheGPLAllowMoney
 - https://opensource.org/osd
-- https://polyformproject.org/licenses/noncommercial/1.0.0
+- https://opensource.org/license/gpl-3.0
+- https://www.gnu.org/licenses/gpl-3.0.html

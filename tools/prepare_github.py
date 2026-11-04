@@ -57,7 +57,7 @@ def prepare(source,destination):
     report=audit(destination)
     reportfile=destination.parent/(destination.name+'-audit.json');reportfile.write_text(json.dumps(report,indent=2)+'\n')
     if not report['ok']:raise ValueError('Export audit failed: '+json.dumps(report['errors']))
-    return dict(destination=str(destination),audit=str(reportfile),files=report['files'],bytes=report['bytes'],published=False,license_status='custom-source-available; legal review recommended')
+    return dict(destination=str(destination),audit=str(reportfile),files=report['files'],bytes=report['bytes'],published=False,license_status='GPL-3.0-or-later; separately licensed components retain their terms')
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--destination',type=Path,default=ROOT/'output/github/machinista')

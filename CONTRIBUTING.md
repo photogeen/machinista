@@ -1,8 +1,10 @@
 # Contributing
 
-The project is in beta and uses the custom LICENSE.md. Contributor terms for
-commercial relicensing are not yet finalized. Discuss substantial changes first;
-no commercial relicensing permission is inferred from opening a pull request.
+The project is in beta and licensed under GNU GPL version 3 or later.
+Submit original contributions under GPL-3.0-or-later unless a separate license
+has been explicitly agreed. You retain your copyright and must have the right
+to contribute the material. No copyright assignment or proprietary relicensing
+permission is implied by a pull request. Discuss substantial changes first.
 
 1. Start a branch from beta and keep changes focused.
 2. Explain the visible problem and resulting behavior.
@@ -15,5 +17,4 @@ no commercial relicensing permission is inferred from opening a pull request.
 
 For UI changes, show the affected controller screens and identify the tested
 hardware. Do not claim that a rendered screenshot proves physical USB/audio
-behavior. Maintainers will define contribution licensing before accepting code
-that changes the commercial licensing position.
+behavior. Identify any third-party code and its license before submitting it.

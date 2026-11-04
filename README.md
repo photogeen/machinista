@@ -64,9 +64,13 @@ public internet interfaces. See [security guidance](SECURITY.md).
 ## Contributing and licensing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSING.md](LICENSING.md) and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Original code uses the custom [Machinista Source-Available License](LICENSE.md):
-free forks and commercial music production are permitted; software resale and
-paid activation require separate permission. Third-party licenses remain intact.
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Machinista is open-source software
+under [GNU GPL version 3 or later](LICENSE.md). You may use, modify, fork, share
+and sell copies under its terms. Distributed derivatives must preserve GPL
+freedoms and provide Corresponding Source as required. Your independently
+created music remains yours. Third-party licenses remain intact.
+The GPL grant also covers original Machinista material in earlier official beta
+releases; see [licensing details](LICENSING.md).
 
 Machinista is an independent project. Hardware and plug-in product names
 identify compatibility; no manufacturer sponsorship or endorsement is implied.
