@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "channel": "release",
+  "available": false,
+  "notes": "No stable Pi 3B sampler release yet. Select Beta for the experimental image."
+}
