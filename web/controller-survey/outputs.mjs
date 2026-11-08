@@ -21,13 +21,39 @@ export async function enableBacklight(profile,devices){
 }
 export async function restoreBacklight(){const entries=[...savedLights];savedLights.clear();for(const [,r] of entries)try{await bounded(r.device.sendFeatureReport(r.data[0],r.data.subarray(1)));}catch{} }
 export function ledInventory(profile){return profile.led_tests||[];}
-export async function clearLeds(profile,devices){for(const b of profile.led_banks||[]){const d=target(profile,devices,b.report_id,b.size-1);await bounded(d.sendReport(b.report_id,new Uint8Array(b.size-1)));}}
+function ledTarget(profile,devices,bank,optional=false){
+ const id=bank.report_id,canonical=bank.size-1;
+ if(profile.id!=='maschine_jam')return {device:target(profile,devices,id,canonical),bytes:canonical};
+ // The native transport uses longer zero-padded forms for reports 0x80 and 0x82.
+ const allowed=id===0x80?[canonical,63,64,65]:id===0x82?[canonical,89]:[canonical];
+ const matches=new Map(),advertised=[];
+ for(const d of new Set(devices.map(e=>e.device))){
+  if(d.vendorId!==0x17cc||d.productId!==0x1500)continue;
+  for(const r of reports(d,'outputReports')){
+   const bytes=size(r);
+   advertised.push('0x'+r.reportId.toString(16)+'/'+bytes);
+   if(r.reportId===id&&allowed.includes(bytes)&&(!matches.has(d)||bytes<matches.get(d)))matches.set(d,bytes);
+  }
+ }
+ if(matches.size===1){
+  const [device,bytes]=matches.entries().next().value;
+  return {device,bytes};
+ }
+ if(optional&&matches.size===0)return null;
+ throw new Error('JAM LED report 0x'+id.toString(16)+' requires one HID output ('+matches.size+' found). Browser advertises: '+([...new Set(advertised)].join(', ')||'none')+'.');
+}
+export async function clearLeds(profile,devices){
+ for(const bank of profile.led_banks||[]){
+  const link=ledTarget(profile,devices,bank,profile.id==='maschine_jam');
+  if(link)await bounded(link.device.sendReport(bank.report_id,new Uint8Array(link.bytes)));
+ }
+}
 export async function showLed(profile,devices,test){
  const known=ledInventory(profile).find(t=>t.id===test.id);if(!known)throw new Error('Unknown LED test.');
+ const b=profile.led_banks.find(b=>b.report_id===known.bank),{device,bytes}=ledTarget(profile,devices,b),data=new Uint8Array(bytes);
  await clearLeds(profile,devices);
- const b=profile.led_banks.find(b=>b.report_id===known.bank),d=target(profile,devices,b.report_id,b.size-1),data=new Uint8Array(b.size-1);
  for(const offset of [known.offset,...known.extra_offsets]){if(offset<1||offset>=b.size)throw new Error('Invalid LED address.');data[offset-1]=known.value;}
- await bounded(d.sendReport(b.report_id,data));return {transport:'hid',report_id:b.report_id,offset:known.offset,value:known.value};
+ await bounded(device.sendReport(b.report_id,data));return {transport:'hid',report_id:b.report_id,offset:known.offset,value:known.value};
 }
 export function sanitizeLeds(input,profile){
  if(input===undefined)return [];if(!Array.isArray(input)||input.length>1024)throw new Error('Invalid LED observations.');const seen=new Set();

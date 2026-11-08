@@ -29,3 +29,15 @@ test('JAM tests every declared LED byte using the descriptor payload lengths',as
  assert.equal(tests.filter(t=>t.name.startsWith('SMART STRIP')).length,88);
  assert.deepEqual(sanitizeLeds([{id:'led_80_65_observe',status:'blocked',sent:false}],jam),[]);
 });
+
+test('JAM accepts padded Windows LED reports and can test a bank when another is unavailable',async()=>{
+ const jam=profiles.maschine_jam,writes=[];
+ const d={device:{vendorId:0x17cc,productId:0x1500,collections:[{children:[{
+  outputReports:[{reportId:0x80,items:[{reportSize:8,reportCount:65}]}],
+ }]}],sendReport:async(id,data)=>writes.push({id,data})}};
+ await showLed(jam,[d],jam.led_tests[0]);
+ assert.equal(writes.at(-1).data.length,65);
+ assert.equal(writes.at(-1).data[0],60);
+ const rgb=jam.led_tests.find(t=>t.bank===0x81);
+ await assert.rejects(showLed(jam,[d],rgb),/Browser advertises: 0x80\/65/);
+});

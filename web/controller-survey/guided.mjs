@@ -26,8 +26,8 @@ export class ActionDetector {
   if(!midi&&kind!=='pad'&&[0x20,2].includes(b[0]))return;
   if(!midi&&kind==='pad'&&![0x20,2].includes(b[0]))return;
   this.record(id,b,now);
-  if(this.jamHidButton&&!old){
-   this.jamFirstButton(id,k,b,now);
+  if(this.jamHidButton){
+   this.jamButton(id,k,old,b,now);
    return;
   }
   if(now<this.readyAt){if(old&&!midi&&!this.calibrating.has(k)){const mask=this.unstable.get(k)||new Uint8Array(b.length);for(let i=1;i<b.length;i++){const id=k+':'+i,values=this.warmValues.get(id)||new Set([old[i]]);values.add(b[i]);this.warmValues.set(id,values);if(values.size>=3)mask[i]|=old[i]^b[i];}this.unstable.set(k,mask);}if(this.calibrating.has(k)&&old&&b.some((v,i)=>v!==old[i]))this.readyAt=now+300;this.base.set(k,b.slice());return;}
@@ -40,9 +40,8 @@ export class ActionDetector {
   }
   if([0x20,2].includes(b[0]))return; // continuous pad packets are never button/encoder evidence
   if(!old){this.base.set(k,b.slice());this.calibrating.add(k);this.readyAt=now+400;return;}
-  if(['button','touch'].includes(kind)||this.jamHidButton&&kind==='pedal'){
-   const ignored=this.unstable.get(k),changed=[];for(let byte=this.jamHidButton?2:1;byte<b.length;byte++){const jamEncoderTouch=this.jamHidButton&&this.step.id==='button_encoder_push'&&byte===16 ? 0x08 : 0;const delta=(old[byte]^b[byte])&~((ignored?.[byte]||0)|jamEncoderTouch);for(let bit=0;bit<8;bit++)if(delta&(1<<bit))changed.push({byte,mask:1<<bit});}
-   if(this.jamHidButton&&this.active&&changed.some(c=>this.active.k!==k||this.active.byte!==c.byte||this.active.mask!==c.mask)){this.problem='More than one control responded. Release everything and retry.';return;}
+  if(['button','touch'].includes(kind)){
+   const ignored=this.unstable.get(k),changed=[];for(let byte=1;byte<b.length;byte++){const delta=(old[byte]^b[byte])&~(ignored?.[byte]||0);for(let bit=0;bit<8;bit++)if(delta&(1<<bit))changed.push({byte,mask:1<<bit});}
    if(!this.active&&changed.length>1){this.problem='Several bits changed together. Retry only this control, or use manual recording.';return;}
    if(!this.active&&changed.length===1){const c=changed[0];this.begin(id+':bit:'+b[0]+':'+c.byte+':'+c.mask,now);this.active.k=k;this.active.byte=c.byte;this.active.mask=c.mask;}
    if(this.active?.k===k){const c=this.active;if(((old[c.byte]^b[c.byte])&c.mask)===0){if(!c.released){c.released=true;this.lastMove=now;}}}
@@ -56,25 +55,29 @@ export class ActionDetector {
    const moved=[...this.stats.values()].filter(s=>s.values.size>=3&&s.changes>=2);if(moved.length>1){this.problem='Several independent values moved. Retry only the named control, or use manual recording.';return;}if(moved.length===1){if(!this.active)this.begin(moved[0].signature,now);this.active.released=true;}return;
   }
  }
- // JAM button bits are active-high. If the device sends no idle report at
- // connection, a one-bit press followed by actual idle is sufficient evidence.
- jamFirstButton(id,k,b,now){
-  const pressed=[];
-  for(let byte=2;byte<17;byte++){
-   const bits=b[byte]&~(this.step.id==='button_encoder_push'&&byte===16?0x08:0);
-   for(let bit=0;bit<8;bit++)if(bits&(1<<bit))pressed.push([byte,1<<bit]);
-  }
-  if(pressed.length>1){this.problem='Several JAM buttons are held. Release everything and repeat this step.';return;}
-  if(pressed.length===1){
-   const [byte,mask]=pressed[0];
-   this.begin(id+':bit:1:'+byte+':'+mask,now);
-   if(!this.problem)Object.assign(this.active,{k,byte,mask});
-   return;
-  }
-  this.base.set(k,b.slice());
+ // Track active-high edges separately from the idle snapshot in the export.
+ jamButton(id,k,old,b,now){
+  this.jamPrevious??=new Map();
+  const previous=this.jamPrevious.get(k)||old;
+  this.jamPrevious.set(k,b.slice());
   this.readyAt=now;
-  if(this.active?.k===k){
-   this.active.released=true;
+  const rising=[];
+  for(let byte=2;byte<17;byte++){
+   const companion=this.step.id==='button_encoder_push'&&byte===16?0x08:0;
+   const bits=b[byte]&~((previous?.[byte]||0)|companion);
+   for(let bit=0;bit<8;bit++)if(bits&(1<<bit))rising.push([byte,1<<bit]);
+  }
+  if(rising.length>1){this.problem='Several JAM buttons responded. Release everything and repeat this step.';return;}
+  if(rising.length===1){
+   const [byte,mask]=rising[0];
+   this.begin(id+':bit:1:'+byte+':'+mask,now);
+   if(this.problem)return;
+   Object.assign(this.active,{k,byte,mask,released:false});
+  }
+  const c=this.active;
+  if(c?.k===k&&!c.released&&!(b[c.byte]&c.mask)){
+   if(!old)this.base.set(k,b.slice());
+   c.released=true;
    this.lastMove=now;
   }
  }

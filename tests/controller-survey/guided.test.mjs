@@ -173,3 +173,22 @@ test('first JAM press and release work without an idle report at connect time',(
  assert.equal(result.signature,'hid0:bit:1:2:1');
  assert.equal(result.frames.filter(f=>f.ms>=1000).length,2);
 });
+
+test('JAM encoder touch does not end an encoder push or turn its release into a matrix press',()=>{
+ const push={id:'button_encoder_push',kind:'button'};
+ const p=new ActionDetector(push,jamIdle,0,jamOptions);
+ const encoder=bits=>{const report=jamButton(0);report[16]=bits;return report;};
+ p.feed('hid0',encoder(8),100);
+ p.feed('hid0',encoder(24),200);
+ p.feed('hid0',encoder(16),300);
+ assert.equal(p.tick(600).state,'release');
+ p.feed('hid0',encoder(0),700);
+ assert.equal(p.tick(1000).signature,'hid0:bit:1:16:16');
+ const held=[{interface:'hid0',hex:Buffer.from(encoder(16)).toString('hex')}];
+ const matrix=new ActionDetector({kind:'button'},held,1000,jamOptions);
+ matrix.feed('hid0',encoder(0),1100);
+ assert.equal(matrix.tick(1400).state,'waiting');
+ matrix.feed('hid0',jamButton(4),1500);
+ matrix.feed('hid0',jamButton(0),1600);
+ assert.equal(matrix.tick(1900).signature,'hid0:bit:1:2:4');
+});

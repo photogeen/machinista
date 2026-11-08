@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {FORMAT, MAX_BYTES, stepsFor, validateReport, coverage, compactFrames, matchedMidiPorts,emailDraft,availableProfiles,upgradeChecklist} from './core.mjs?v=15';
 import {displayInventory,PATTERNS,testImage,sendMono,sendColor,transmissionEvidence,displayCoverage,openColor,sendPrompt} from './displays.mjs?v=10';
-import {enableBacklight,restoreBacklight,ledInventory,showLed,clearLeds,ledCoverage} from './outputs.mjs?v=15';
-import {createActionDetector} from './guided.mjs?v=16';
+import {enableBacklight,restoreBacklight,ledInventory,showLed,clearLeds,ledCoverage} from './outputs.mjs?v=17';
+import {createActionDetector} from './guided.mjs?v=17';
 const $=id=>document.getElementById(id), profiles=await (await fetch('catalog.json?v=15',{cache:'no-cache'})).json();
 const config=await (await fetch('config.json',{cache:'no-cache'})).json();
 let report=null, devices=[], midi=null, selectedPorts=new Set(), capture=null, latest=new Map(), stepIndex=0, db=null, saveQueue=Promise.resolve(), displayBusy=false, autoStage='idle', resumeStage='controls', autoDetector=null, autoTimer=null, autoGeneration=0, colorLink=null, promptEnabled=true, skippedDisplays=new Set(),ledIndex=0,ledSent=false,ledBusy=false,ledDetector=null,ledError='';
@@ -61,7 +61,11 @@ function draw(){
 function detectorOptions(){return {profileId:profile().id,hidConnected:devices.length>0,midiSelected:selectedPorts.size>0,jamInput:$('jam-input').value};}
 function autoInstruction(s){
  if(profile().id==='maschine_jam'){
-  if(s.kind==='slider')return 'Move '+(s.name.endsWith('/ two fingers')?'two fingers':'one finger')+' along this strip, then lift.';
+  if(s.kind==='slider')return s.name.endsWith('/ two fingers')
+   ?'Place two fingers apart on the same strip, slide them up or down, then lift both. No pinch needed.'
+   :'Touch this strip with one finger, slide along it, then lift.';
+  if(s.kind==='encoder')return 'Turn clockwise a few clicks, then stop. Both directions use the same counter.';
+  if(s.id==='button_encoder_push')return 'Press the encoder until it clicks, then fully release it.';
   if(s.kind==='pedal')return 'Press and release the connected footswitch once. Skip if none is connected.';
  }
  return s.kind==='encoder'?'Turn clockwise through a few steps, then stop.':s.kind==='button'||s.kind==='touch'?'Press or touch once, then release.':s.kind==='pad'||s.kind==='key'?'Play once, then release.':'Move only this control, then release or stop.';}
@@ -110,6 +114,8 @@ function drawLeds(){
  $('led-status').textContent=ledBusy?'Lighting the next LED…':ledError||(!active?'LED check follows the inputs.':ledSent?test?.kind==='unknown'?'Check which light is on, then confirm below.':'Press the illuminated button or pad, then release. You can also identify it below and click Confirm & next.':'No LED output confirmed. Retry or mark untested.');
  for(const id of ['led-observed','led-color','led-note','led-next','led-dark','led-skip-all'])$(id).disabled=!active||ledBusy;
  $('led-next').disabled=!active||ledBusy||!ledSent;
+ $('led-resume').hidden=profile().id!=='maschine_jam';
+ $('led-resume').disabled=!report||report.demo||!devices.length||!!capture||displayBusy||ledBusy||active||['controls','displays'].includes(autoStage);
 }
 async function beginLeds(){
  if(autoTimer)clearInterval(autoTimer);autoDetector=null;ledDetector=null;
@@ -127,6 +133,7 @@ async function saveLed(status,observed){
  if(autoStage!=='leds'||ledBusy)return;const t=ledInventory(profile())[ledIndex];if(status==='confirmed'&&(!ledSent||!observed.trim()))throw new Error('Name the illuminated control before confirming.');
  report.leds=report.leds.filter(r=>r.id!==t.id);report.leds.push({id:t.id,bank:t.bank,offset:t.offset,value:t.value,status,observed,color:$('led-color').value,note:$('led-note').value,sent:ledSent});ledDetector=null;await persist();ledIndex=ledInventory(profile()).findIndex((next,index)=>index>ledIndex&&!report.leds.some(r=>r.id===next.id&&['confirmed','not_tested'].includes(r.status)));if(ledIndex<0)await finishAll();else await armLed();
 }
+$('led-resume').onclick=safe(beginLeds);
 $('led-next').onclick=safe(()=>saveLed('confirmed',$('led-observed').value.trim()));
 $('led-dark').onclick=safe(()=>saveLed(ledSent?'failed':'blocked',$('led-observed').value.trim()));
 $('led-skip-all').onclick=safe(async()=>{if(!confirm('Skip the remaining LED tests? They will remain untested in the JSON.'))return;for(const t of ledInventory(profile()).slice(ledIndex))if(!report.leds.some(r=>r.id===t.id))report.leds.push({id:t.id,status:'not_tested',observed:'',color:'',note:'Skipped by tester.',sent:false});await finishAll();});
