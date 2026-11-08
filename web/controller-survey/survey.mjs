@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {FORMAT, MAX_BYTES, stepsFor, validateReport, coverage, compactFrames, matchedMidiPorts,emailDraft,availableProfiles,upgradeChecklist} from './core.mjs?v=15';
 import {displayInventory,PATTERNS,testImage,sendMono,sendColor,transmissionEvidence,displayCoverage,openColor,sendPrompt} from './displays.mjs?v=10';
-import {enableBacklight,restoreBacklight,ledInventory,showLed,clearLeds,ledCoverage} from './outputs.mjs?v=17';
+import {enableBacklight,restoreBacklight,ledInventory,showLed,clearLeds,ledCoverage} from './outputs.mjs?v=18';
 import {createActionDetector} from './guided.mjs?v=17';
 const $=id=>document.getElementById(id), profiles=await (await fetch('catalog.json?v=15',{cache:'no-cache'})).json();
 const config=await (await fetch('config.json',{cache:'no-cache'})).json();

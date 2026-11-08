@@ -24,8 +24,8 @@ export function ledInventory(profile){return profile.led_tests||[];}
 function ledTarget(profile,devices,bank,optional=false){
  const id=bank.report_id,canonical=bank.size-1;
  if(profile.id!=='maschine_jam')return {device:target(profile,devices,id,canonical),bytes:canonical};
- // The native transport uses longer zero-padded forms for reports 0x80 and 0x82.
- const allowed=id===0x80?[canonical,63,64,65]:id===0x82?[canonical,89]:[canonical];
+ // Windows WebHID can advertise all JAM outputs at the same 88-byte payload size.
+ const allowed=id===0x80?[canonical,63,64,65,88]:id===0x81?[canonical,88]:id===0x82?[canonical,89]:[canonical];
  const matches=new Map(),advertised=[];
  for(const d of new Set(devices.map(e=>e.device))){
   if(d.vendorId!==0x17cc||d.productId!==0x1500)continue;

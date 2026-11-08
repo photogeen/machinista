@@ -41,3 +41,22 @@ test('JAM accepts padded Windows LED reports and can test a bank when another is
  const rgb=jam.led_tests.find(t=>t.bank===0x81);
  await assert.rejects(showLed(jam,[d],rgb),/Browser advertises: 0x80\/65/);
 });
+
+test('JAM sends all three LED banks with the Windows 88-byte descriptor',async()=>{
+ const jam=profiles.maschine_jam,writes=[];
+ const d={device:{vendorId:0x17cc,productId:0x1500,collections:[{
+  outputReports:[0x80,0x81,0x82,0xf4].map(reportId=>({
+   reportId,items:[{reportSize:8,reportCount:88}],
+  })),
+ }],sendReport:async(id,data)=>writes.push({id,data})}};
+ for(const bank of [0x80,0x81,0x82]){
+  const led=jam.led_tests.find(t=>t.bank===bank);
+  await showLed(jam,[d],led);
+  const {id,data}=writes.at(-1);
+  assert.equal(id,bank);
+  assert.equal(data[led.offset-1],led.value);
+  assert.equal(data.filter(Boolean).length,1);
+ }
+ assert.deepEqual([...new Set(writes.map(w=>w.id))],[0x80,0x81,0x82]);
+ assert.ok(writes.every(w=>w.data.length===88));
+});
