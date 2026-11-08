@@ -40,11 +40,13 @@ class MidiPerformance:
             self.panic();self.generation=self.app.project_generation
         self.timing.tick(now)
 
-    def release_binding(self,binding):
-        self.timing.cancel(binding.token)
+    def finish_recording(self,binding):
         if binding.generation==self.app.project_generation:
             elapsed=(getattr(self.app,'input_timestamp',None) or time.monotonic())-binding.started
             for reference,delay in binding.recorded:self.app.finish_chord_recording(reference,elapsed,delay)
+
+    def release_binding(self,binding):
+        self.timing.cancel(binding.token)
         for target in binding.targets:
             self.audio.note_off(target.group,target.slot,target.note,binding.token)
             if target.external:self.midi.note_off(target.note,target.channel,binding.token)
@@ -54,6 +56,7 @@ class MidiPerformance:
         key=(channel,note);queue=self.bindings.get(key)
         if not queue:return
         binding=queue.popleft()
+        self.finish_recording(binding)
         if not queue:self.bindings.pop(key,None)
         if channel in self.sustain:self.sustained.setdefault(key,[]).append(binding)
         else:self.release_binding(binding)
@@ -61,7 +64,9 @@ class MidiPerformance:
     def panic(self):
         for bindings in (self.bindings,self.sustained):
             for queue in bindings.values():
-                for binding in queue:self.release_binding(binding)
+                for binding in queue:
+                    if bindings is self.bindings:self.finish_recording(binding)
+                    self.release_binding(binding)
             bindings.clear()
         self.sustain.clear();self.held=0;self.timing.clear()
 
@@ -101,7 +106,7 @@ class MidiPerformance:
             planned=app.chord_plan(notes,velocity) if custom else [(0,note,velocity)]
             for delay,pitch,level in planned:
                 app.last_recorded=None;app.record_pad_note(slot,level,pitch,delay=delay)
-                if custom and app.last_recorded:recorded.append((app.last_recorded,delay))
+                if app.last_recorded:recorded.append((app.last_recorded,delay))
                 for linked in app.linked_sounds(group,slot):
                     target=copy.deepcopy(app.project['groups'][group]['pads'][linked]);semitones=pitch-track.get('note',36+slot)
                     target_note=max(0,min(127,target.get('note',36+linked)+semitones))

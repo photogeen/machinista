@@ -22,6 +22,32 @@ class LiveBindingsTests(unittest.TestCase):
         self.app=Application(self.tmp.name);self.app.keyboard_enabled=True
         self.audio=Mock();self.midi=Mock();self.live=MidiPerformance(self.app,self.audio,self.midi)
 
+    def test_recorded_lengths_follow_each_key_release_even_with_sustain(self):
+        app=self.app
+        app.playing=app.recording=True
+        app.clock_phase=0
+        app.clock_last=10
+        app.timing()['record_quantize']=False
+        tick=app.clock_interval()
+        app.input_timestamp=10
+        self.live.event(0x90,(60,80))
+        app.input_timestamp=10+7*tick
+        self.live.event(0x90,(64,105))
+        self.live.event(0xb0,(64,127))
+        app.input_timestamp=10+17*tick
+        self.live.event(0x80,(60,0))
+        app.input_timestamp=10+70*tick
+        self.live.event(0x90,(64,0))
+        self.audio.note_off.assert_not_called()
+        events={event['note']:(key[1],event['length'],event['velocity'])
+                for key,event in app.event_notes().items()}
+        self.assertEqual(events,{60:(0,17,80),64:(7,63,105)})
+        app.input_timestamp=10+80*tick
+        self.live.event(0xb0,(64,0))
+        self.assertEqual(self.audio.note_off.call_count,2)
+        self.assertEqual({event['note']:event['length'] for event in app.event_notes().values()},
+                         {60:17,64:63})
+
     def test_overlapping_same_pitch_releases_individual_attacks_fifo(self):
         p=self.live;p.event(0x90,(60,40));p.event(0x90,(60,100))
         first,second=[c.args[-1] for c in self.audio.hit.call_args_list]
