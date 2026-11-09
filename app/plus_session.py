@@ -7,4 +7,5 @@ class PlusSurface(Mk3Surface):
 
 class PlusSession(Mk3Session):
     source='plus';surface_type=PlusSurface
+    pad_trigger_baseline=20
     product=0x1820;display_interface=6;device_name='Maschine+'

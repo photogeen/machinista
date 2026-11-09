@@ -51,7 +51,7 @@ def led_reports(values):
  return bytes([0x80]+list(values[:62])),bytes([0x81]+list(values[62:]))
 
 class Decoder:
- def __init__(self):self.buttons=0;self.counters=None;self.strip=0;self.pedal=None;self.active=set();self.contacts=set()
+ def __init__(self, idle_pressure=False):self.idle_pressure=idle_pressure;self.buttons=0;self.counters=None;self.strip=0;self.pedal=None;self.active=set();self.contacts=set()
  def decode(self,data):
   if len(data)==42 and data[0]==1:
    current=int.from_bytes(data[1:11],'little');counters=[data[11]&15]+list(struct.unpack_from('<8H',data,12))
@@ -86,5 +86,6 @@ class Decoder:
      if slot in self.active:self.active.remove(slot);events.append(dict(kind='pad_off',name=name,value=0))
      if slot in self.contacts:self.contacts.remove(slot);events.append(dict(kind='pad_contact_off',name=name,value=0))
     elif kind==0x40 and (slot in self.active or slot in self.contacts):events.append(dict(kind='pad_pressure',name=name,value=min(127,round((value/4095)**.55*127)),raw_value=value))
+    elif kind==0x40 and self.idle_pressure:events.append(dict(kind='pad_idle_pressure',name=name,value=max(1,min(127,round(value*127/2000))),raw_value=value))
    return events
   return []

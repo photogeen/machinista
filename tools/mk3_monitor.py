@@ -11,7 +11,7 @@ def run(path,product=0x1600):
   nonlocal stopped
   stopped=True
  for sig in (signal.SIGTERM,signal.SIGINT):signal.signal(sig,stop)
- decoder=Decoder();fd=open_device(path,read_only=True,product=product);last=last_pad=reports=rejected=pads=0;health=0
+ decoder=Decoder(idle_pressure=product==0x1600);fd=open_device(path,read_only=True,product=product);last=last_pad=reports=rejected=pads=0;health=0
  try:
   while not stopped:
    readable=select.select([fd],[],[],.05)[0]

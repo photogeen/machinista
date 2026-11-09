@@ -26,8 +26,9 @@ def strip_leds(app,surface):
 
 class Mk3Session(Mk2Session):
     source='mk3';surface_type=Mk3Surface;product=0x1600;display_interface=5;device_name='Maschine MK3'
+    pad_trigger_baseline=14
     def __init__(self,*args):
-        super().__init__(*args);self.reader_watch=ReaderWatch();self.palette=[];self.pad_trigger=Mk3PadTrigger()
+        super().__init__(*args);self.reader_watch=ReaderWatch();self.palette=[];self.pad_trigger=Mk3PadTrigger(self.pad_trigger_baseline)
     def connect(self,now):
         self.next_scan=now+2;self.cleanup=[t for t in self.cleanup if t.is_alive()]
         if self.cleanup:return
@@ -39,7 +40,7 @@ class Mk3Session(Mk2Session):
                 self.palette=[tuple(palette[1+i*12+6:1+i*12+9]) for i in range(17)]
                 self.renderer=ProcessRenderer(kind='mk3')
                 self.output=Mk3Output(self.fd,self.renderer,self.app.settings['controllers'][self.source],self.product,self.display_interface)
-                self.pad_trigger=Mk3PadTrigger()
+                self.pad_trigger=Mk3PadTrigger(self.pad_trigger_baseline)
                 self.process=subprocess.Popen([sys.executable,str(self.root/'tools/mk3_monitor.py'),path,str(self.product)],stdout=subprocess.PIPE)
                 os.set_blocking(self.process.stdout.fileno(),False);self.reader_watch.start(now)
                 self.next_frame=self.next_led=0

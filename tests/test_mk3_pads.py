@@ -51,6 +51,23 @@ class Mk3PadTests(unittest.TestCase):
         self.assertEqual([e['kind'] for e in self.play(0,50,raw=13)],['pad_on'])
         self.assertEqual(len(self.trigger.sounding),2)
         self.play(0x30);self.play(0x20,raw=13);self.assertEqual(self.trigger.sounding,set())
+    def test_mk3_pressure_only_gesture_releases_without_note_off(self):
+        self.decoder=Decoder(idle_pressure=True)
+        self.assertEqual(self.play(0x40,17),[])
+        self.assertEqual([e['kind'] for e in self.play(0x40,21)],['pad_on'])
+        self.assertEqual(self.play(0x40,31),[])
+        self.assertEqual([e['kind'] for e in self.play(0x40)],['pad_off'])
+
+    def test_mk3_pressure_fallback_does_not_duplicate_note_or_trigger_neighbor(self):
+        self.decoder=Decoder(idle_pressure=True)
+        self.assertEqual([e['kind'] for e in self.play(0x40,22)],['pad_on'])
+        self.assertEqual(self.play(0x10,148),[])
+        self.assertEqual(self.play(0x40,38,raw=13),[])
+        self.assertEqual([e['kind'] for e in self.play(0x30)],['pad_off'])
+        self.assertEqual(self.play(0x40,38,raw=13),[])
+        self.assertEqual(self.play(0x40,raw=13),[])
+        self.assertEqual([e['kind'] for e in self.play(0x10,148,raw=13)],['pad_on'])
+
     def test_session_dispatches_contacts_with_device_local_threshold(self):
         with tempfile.TemporaryDirectory() as d:
             a=Application(d);a.input_timestamp=None;s=Mk3Session.__new__(Mk3Session)
