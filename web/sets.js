@@ -56,7 +56,7 @@ function setCatalog(){
   details.append(heading,remove);list.append(details);folders.set(folder,details);
   if(!contents.length)details.append(element('p','No kits in this folder.','muted small'));
  }
- for(const row of matches){
+ for(const row of matches.sort((a,b)=>a.name.localeCompare(b.name))){
   const parent=folders.get(row.expansion)||list;
   const button=element('button',undefined,'set-card');
   button.type='button';button.disabled=setBusy;
@@ -318,8 +318,8 @@ async function setImport(drop){if(setBusy||!setCanLeave())return;if(setStorageRe
  if(rows.length===1&&/\.mxgrp$/i.test(rows[0].file.name)){await setImportKit(rows[0].file);return}
  const kits=rows.filter(row=>/\.mxgrp$/i.test(row.file.name));
  if(kits.length){kits.sort((a,b)=>a.path.localeCompare(b.path));await setImportExpansionKits(rows,kits);return}
- if(rows.length===1&&/\.(zip|xpn)$/i.test(rows[0].file.name)){const file=rows[0].file;if(file.size>1024**3)throw new Error('Maximum 1 GiB per archive.');result=await setRawUpload('/api/sets/import?'+new URLSearchParams({name:file.name,storage:setStorage}),file,f=>{$('set-progress').value=100*f;if(f===1)setMessage('Converting samples and building pad banks…')})}
- else{const filtered=rows.filter(row=>setImportExtensions.test(row.file.name));if(!filtered.some(row=>setAudioExtensions.test(row.file.name)))throw new Error('No readable audio found. Choose an installed expansion folder; installers and protected content cannot be converted.');if(filtered.reduce((sum,r)=>sum+r.file.size,0)>1024**3)throw new Error('Maximum 1 GiB per folder.');const upload=(await setPost('/api/sets/stage/start',{storage:setStorage})).id;for(let i=0;i<filtered.length;i++){const row=filtered[i];setMessage('Uploading '+(i+1)+' / '+filtered.length+' · '+row.file.name);await setRawUpload('/api/sets/stage/file?'+new URLSearchParams({upload,path:row.path}),row.file,f=>{$('set-progress').value=100*(i+f)/filtered.length})}setMessage('Converting samples and building pad banks…');const name=rows[0].path.includes('/')?rows[0].path.split('/')[0]:'Sample Kit';result=await setPost('/api/sets/import-folder',{upload,name,storage:setStorage})}
+ if(rows.length===1&&/\.(zip|xpn)$/i.test(rows[0].file.name)){const file=rows[0].file;result=await setRawUpload('/api/sets/import?'+new URLSearchParams({name:file.name,storage:setStorage}),file,f=>{$('set-progress').value=100*f;if(f===1)setMessage('Converting samples and building pad banks…')})}
+ else{const filtered=rows.filter(row=>setImportExtensions.test(row.file.name));if(!filtered.some(row=>setAudioExtensions.test(row.file.name)))throw new Error('No readable audio found. Choose an installed expansion folder; installers and protected content cannot be converted.');const upload=(await setPost('/api/sets/stage/start',{storage:setStorage})).id;for(let i=0;i<filtered.length;i++){const row=filtered[i];setMessage('Uploading '+(i+1)+' / '+filtered.length+' · '+row.file.name);await setRawUpload('/api/sets/stage/file?'+new URLSearchParams({upload,path:row.path}),row.file,f=>{$('set-progress').value=100*(i+f)/filtered.length})}setMessage('Converting samples and building pad banks…');const name=rows[0].path.includes('/')?rows[0].path.split('/')[0]:'Sample Kit';result=await setPost('/api/sets/import-folder',{upload,name,storage:setStorage})}
  if(result.previews!==undefined){
   if(result.id)setEdit(await api('/api/sets/item?'+new URLSearchParams({id:result.id})));
   else if(setDraft.id)setEdit(await api('/api/sets/item?'+new URLSearchParams({id:setDraft.id})));

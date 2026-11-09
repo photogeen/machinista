@@ -74,7 +74,7 @@ The converter reads sample metadata directly; it does not contain vendor code.
 For a batch, each kit is saved individually. If the expansion includes a matching
 `.previews/Kit.mxgrp.ogg` file, use **Preview** next to the kit in the WebUI or **PREH**
 while highlighting the kit in the controller browser. **Locate expansion folder** also adds the preview and images to an individually imported kit. If the browser omits the hidden preview folder, use **Attach preview** to choose the OGG directly. The MK3 right display shows the imported artwork and logo while highlighting the kit. Only WAVs referenced by the kit
-are uploaded, and the 1 GiB transfer limit applies per kit. An import that
+are uploaded in the browser folder workflow. An import that
 fails for one kit leaves other successfully imported kits available.
 
 Use **New folder** in Sample Kits to organize your own kits. Select the
@@ -111,8 +111,9 @@ SD kits are stored in `presets/Groups`. New sets have stable internal IDs, a
 single-Group presets remain compatible. Editing uses revision checks and a
 staged replacement to prevent stale browser tabs from overwriting newer edits.
 
-Limits: 128 banks / 2,048 pads per set, 1 GiB per archive/folder and expanded or
-saved bundle, 8,192 archive entries. Symbolic links, path traversal, duplicate
+Limits: 128 banks / 2,048 pads per set and 8,192 archive entries. Expansion ZIP
+and folder uploads are limited by available storage. Individual staged files
+and individual edited kits have a 1 GiB limit. Symbolic links, path traversal, duplicate
 archive paths and encrypted archives are rejected. Transfers reserve free disk
 space; interrupted imports do not publish partial sets. Unfinished browser
 uploads are temporary and expire after 24 hours. Plug-in binaries are never

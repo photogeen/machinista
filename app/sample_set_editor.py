@@ -122,11 +122,11 @@ class SetEditor:
         if any(p.startswith('.') or p=='__MACOSX' for p in components):raise ValueError('Hidden files are not imported.')
         suffix=Path(name).suffix.lower()
         if suffix not in AUDIO|METADATA:raise ValueError('Use an installed expansion folder or audio files, not an installer.')
-        if not 0<length<=MAX_PACKAGE:raise ValueError('Maximum 1 GiB per transfer.')
+        if not 0<length<=MAX_PACKAGE:raise ValueError('Maximum 1 GiB per file.')
         if not self.library.upload_lock.acquire(False):raise BlockingIOError('Another transfer is in progress.')
         try:
             base=self.stage(identity);files=[p for p in base.rglob('*') if p.is_file()]
-            if len(files)>=MAX_FILES or sum(p.stat().st_size for p in files)+length>MAX_PACKAGE:raise ValueError('Folder exceeds 1 GiB or 8,192 files.')
+            if len(files)>=MAX_FILES:raise ValueError('Folder exceeds 8,192 files.')
             if shutil.disk_usage(base).free<length+RESERVE:raise ValueError('Not enough free storage.')
             target=base.joinpath(*components)
             if any(str(p.relative_to(base)).casefold()==str(target.relative_to(base)).casefold() for p in files):raise ValueError('Duplicate upload path.')
@@ -378,15 +378,16 @@ class SetEditor:
             return self.import_native(base,manifests,presets,storage)
         draft=plan(base,name)
         with tempfile.TemporaryDirectory(prefix='.decode-',dir=root) as tmp:
-            cache={};used=0
+            cache={}
             for bank in draft['banks']:
                 for pad in bank['pads']:
                     if not pad:continue
                     for layer in pad['layers']:
                         p=layer['path']
                         if p not in cache:
-                            dest=Path(tmp)/(uuid.uuid4().hex+'.wav');info=convert(p,dest);used+=dest.stat().st_size
-                            if used>MAX_PACKAGE:raise ValueError('Decoded expansion exceeds 1 GiB.')
+                            if shutil.disk_usage(root).free<p.stat().st_size+RESERVE:
+                                raise ValueError('Not enough free storage to prepare samples.')
+                            dest=Path(tmp)/(uuid.uuid4().hex+'.wav');info=convert(p,dest)
                             cache[p]=(dest,info)
             # Build bank presets with velocity zones, then use the same atomic publisher.
             from app.model import new_project,validate_project
@@ -438,7 +439,6 @@ class SetEditor:
                     if p.suffix.lower()=='.wav':
                         from app.wav_validation import validate_pcm
                         with p.open('r+b') as stream:validate_pcm(stream,{})
-            if size>MAX_PACKAGE:raise ValueError('Sample kit exceeds 1 GiB.')
             root=self.sets.root(storage,write=True)
             if shutil.disk_usage(root).free<size+RESERVE:raise ValueError('Not enough free storage.')
             identity='set-'+uuid.uuid4().hex
@@ -486,6 +486,13 @@ class SetEditor:
     def import_maschine_archive(self,base,upload,kits,storage,name):
         from app.maschine_kit import MAX_KIT_BYTES,read_kit
         files={p.relative_to(base).as_posix().casefold():p for p in base.rglob('*') if p.is_file()}
+        # Some expansion archives use NBSP in WAV names but ASCII spaces
+        # in Group references. Preserve exact matches and reject collisions.
+        space_aliases={}
+        for key,path in files.items():
+            if path.suffix.lower()=='.wav':
+                alias=key.replace('\u00a0',' ')
+                space_aliases[alias]=None if alias in space_aliases else path
         saved=[];failures=[];preview_count=0
         for kit in kits:
             try:
@@ -499,7 +506,14 @@ class SetEditor:
                 def asset(path):
                     return dict(upload=upload,path=path.relative_to(base).as_posix())
                 for pad in pads:
-                    sample=files.get(prefix+pad['path'].casefold())
+                    key=prefix+pad['path'].casefold()
+                    sample=files.get(key)
+                    if sample is None:
+                        alias=key.replace('\u00a0',' ')
+                        if alias in space_aliases:
+                            sample=space_aliases[alias]
+                            if sample is None:
+                                raise ValueError('Ambiguous sample: '+pad['path'])
                     if sample is None:raise ValueError('Missing sample: '+pad['path'])
                     pad['asset']=asset(sample)
                 preview=files.get((kit.parent/'.previews'/(kit.name+'.ogg')).relative_to(base).as_posix().casefold())
@@ -522,16 +536,19 @@ class SetEditor:
 
     @one_import
     def import_archive(self,name,stream,length,storage='sd'):
-        if Path(name).suffix.lower() not in ('.zip','.xpn') or not 0<length<=MAX_PACKAGE:raise ValueError('Upload a ZIP or MPC XPN up to 1 GiB. For Maschine, use its installed audio folder.')
+        if Path(name).suffix.lower() not in ('.zip','.xpn') or length<=0:
+            raise ValueError('Choose a non-empty ZIP or MPC XPN.')
         identity=self.start(dict(storage=storage))['id'];base=self.stage(identity)
         try:
             with tempfile.TemporaryFile(dir=base.parent) as archive:
+                if shutil.disk_usage(base).free<length+RESERVE:
+                    raise ValueError('Not enough free storage for the archive upload.')
                 remaining=length
                 while remaining:
                     block=stream.read(min(65536,remaining))
                     if not block:raise ValueError('Incomplete expansion upload.')
                     archive.write(block);remaining-=len(block)
-                archive.seek(0);seen=set();total=0
+                archive.seek(0);seen=set()
                 with zipfile.ZipFile(archive) as z:
                     if len(z.infolist())>MAX_FILES:raise ValueError('Archive exceeds 8,192 entries.')
                     for info in z.infolist():
@@ -540,8 +557,7 @@ class SetEditor:
                         if any((p.startswith('.') and p not in (KIT_PREVIEW,*KIT_ARTWORK.values(),'.previews')) or p=='__MACOSX' for p in components):continue
                         key='/'.join(components).casefold()
                         if key in seen:raise ValueError('Duplicate archive path.')
-                        seen.add(key);total+=info.file_size
-                        if total>MAX_PACKAGE:raise ValueError('Expanded archive exceeds 1 GiB.')
+                        seen.add(key)
                         if info.is_dir():continue
                         if Path(info.filename).suffix.lower() not in AUDIO|METADATA:continue
                         if shutil.disk_usage(base).free<info.file_size+RESERVE:raise ValueError('Not enough free storage.')
