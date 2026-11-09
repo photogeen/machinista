@@ -1,0 +1,2 @@
+# Maschine JAM companion controller, USB 17cc:1500.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1500", GROUP="plugdev", MODE="0660"

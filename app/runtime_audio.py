@@ -11,7 +11,7 @@ class RuntimeAudio:
         self.latency_bus = None
         self.mixer_context = None
 
-    def update(self, app, audio, now, next_tick):
+    def update(self, app, audio, now, next_tick, master_meter=False):
         running = bool(app.playing and not app.count_remaining)
         phase = max(0, app.clock_phase)
         key = (app.project_generation, app.project['tempo'], running)
@@ -27,7 +27,8 @@ class RuntimeAudio:
         if reset:
             app.mixer_peaks={}
             self.mixer_context=context
-        watch = app.mixer_watch() if app.page == 'MIXER' else None
+        from app.layout import MASTER
+        watch = app.mixer_watch() if app.page == 'MIXER' else (MASTER,1) if master_meter else None
         bus = app.plugin_bus() if app.page == 'PLUGIN' else None
         if watch != self.watch or reset:
             self.watch = watch

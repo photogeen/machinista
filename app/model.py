@@ -729,21 +729,7 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
                     self.actions.append(('hit',(self.group,slot,velocity)))
                     return
         if self.page == 'STEP':
-            cell=self.bank*16+slot
-            if cell<self.step_cell_count():
-                notes=self.notes_in_cell(self.pad,cell);self.remember_recording_note()
-                meta=self.recording_history.setdefault(id(self.recording_undo),{'changes':[],'position':0});first=meta['position']
-                if notes:
-                    for (row,tick),event in notes.items():
-                        self.remove_note(row,tick);self.recording_change((self.group,self.pattern,row,tick),event,None)
-                else:
-                    tick=cell*self.grid_ticks();event={'velocity':velocity,'probability':100,'length':self.grid_ticks()}
-                    note=self.step_input_note()
-                    if note is not None:event['note']=note
-                    self.put_note(self.pad,tick,event);self.recording_change((self.group,self.pattern,self.pad,tick),None,event)
-                added=meta['changes'][first:]
-                if len(added)>1:meta['changes'][first:]=[{'bundle':added}];meta['position']=len(meta['changes'])
-                self.event_step=min(len(self.lane())-1,cell*self.grid_ticks()//24)
+            self.toggle_step_cell(self.bank*16+slot,velocity)
         elif self.page == 'CHOP':
             if slot < self.slice_count:
                 self.slice_index = slot
@@ -764,16 +750,7 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
                 self.group = self.group_bank*8+slots.index(slot);self.keyboard_root=0 if self.slice_keyboard() else self.performance()['root']
                 self.pattern = self.active_patterns[self.group]
         elif self.page == 'PATTERN':
-            self.arranger_stop_mode()
-            slot+=self.pattern_bank*16
-            self.pattern = slot
-            created=self.project['groups'][self.group]['pattern_created']
-            if slot not in created:created.append(slot)
-            self.active_patterns[self.group] = slot
-            self.remember()
-            self.project['scenes'][self.scene][self.group] = slot
-            self.active_clips[self.group]=True
-            self.message = 'SCENE PATTERN SET'
+            self.select_scene_pattern(self.pattern_bank*16+slot)
         elif self.page == 'SCENE':
             self.select_scene(slot)
         elif self.page in ('MUTE', 'SOLO'):
@@ -786,6 +763,33 @@ class Application(ClipArranger,MultiSelection,MidiRemote,AudioExport,Mixer,Relin
             if self.page in ('PAD', 'MIXER')+PARAMETER_PLAY_PAGES:
                 self.record_pad_note(slot,velocity)
                 self.actions.append(('hit', (self.group, slot, velocity)))
+
+    def toggle_step_cell(self,cell,velocity):
+        if cell<self.step_cell_count():
+            notes=self.notes_in_cell(self.pad,cell);self.remember_recording_note()
+            meta=self.recording_history.setdefault(id(self.recording_undo),{'changes':[],'position':0});first=meta['position']
+            if notes:
+                for (row,tick),event in notes.items():
+                    self.remove_note(row,tick);self.recording_change((self.group,self.pattern,row,tick),event,None)
+            else:
+                tick=cell*self.grid_ticks();event={'velocity':velocity,'probability':100,'length':self.grid_ticks()}
+                note=self.step_input_note()
+                if note is not None:event['note']=note
+                self.put_note(self.pad,tick,event);self.recording_change((self.group,self.pattern,self.pad,tick),None,event)
+            added=meta['changes'][first:]
+            if len(added)>1:meta['changes'][first:]=[{'bundle':added}];meta['position']=len(meta['changes'])
+            self.event_step=min(len(self.lane())-1,cell*self.grid_ticks()//24)
+
+    def select_scene_pattern(self,slot):
+        self.arranger_stop_mode()
+        self.pattern = slot
+        created=self.project['groups'][self.group]['pattern_created']
+        if slot not in created:created.append(slot)
+        self.active_patterns[self.group] = slot
+        self.remember()
+        self.project['scenes'][self.scene][self.group] = slot
+        self.active_clips[self.group]=True
+        self.message = 'SCENE PATTERN SET'
 
     def tick(self,emit=True):
         if not self.playing:

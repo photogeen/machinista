@@ -63,6 +63,7 @@ from app.mk2_session import Mk2Session
 from app.mk1_session import Mk1Session
 from app.mk3_session import Mk3Session
 from app.plus_session import PlusSession
+from app.jam_session import JamSession
 from app.mikro_session import MikroSession
 from app.device_monitor import DeviceMonitor
 from app.display_budget import DisplayBudget
@@ -117,7 +118,7 @@ def main():
     signal.signal(signal.SIGINT, stop)
     with (ROOT/'build/surface.lock').open('w') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        input_process = audio = output = step_display = mk2 = mk1 = mk3 = plus = None
+        input_process = audio = output = step_display = mk2 = mk1 = mk3 = plus = jam = None
         controller_inputs=ControllerInputs(app)
         midi = MidiBackend();midi_clock=MidiClock()
         waveforms = Waveforms();wave_playback=WavePlayback()
@@ -149,6 +150,7 @@ def main():
             mk1=Mk1Session(ROOT,app,controller_inputs,channels)
             mk3=Mk3Session(ROOT,app,controller_inputs,channels)
             plus=PlusSession(ROOT,app,controller_inputs,channels)
+            jam=JamSession(app,controller_inputs)
             step_display=StepDisplay()
             audio = AudioBackend(ROOT, lambda message: setattr(app, 'message', message),app.settings['sample_rate'],app.settings['audio_buffer'])
             midi_performance=MidiPerformance(app,audio,midi)
@@ -383,6 +385,7 @@ def main():
                 mk1.poll(time.monotonic())
                 mk3.poll(time.monotonic())
                 plus.poll(time.monotonic())
+                jam.poll(time.monotonic())
                 if now>=next_health:
                     next_health=now+1
                     loop_watch.publish(dict(page=app.page,group=app.group,pad=app.pad,
@@ -495,7 +498,7 @@ def main():
                 midi_performance.tick(now)
                 app.repeat_tick(now)
                 app.browser_preview_tick(now)
-                runtime_audio.update(app,audio,now,None if sync_mode=='IN' else next_step)
+                runtime_audio.update(app,audio,now,None if sync_mode=='IN' else next_step,master_meter=jam.fd is not None)
                 if audio.native_capture and audio.native_capture.get('stop_requested') is not None and (not app.playing or app.clock_phase!=audio.native_capture['stop_requested'] and app.clock_phase%384<4):
                     audio.native_capture.pop('stop_requested');audio.stop_capture();app.capture_started=None
                 wave_playback.update(app,audio,now)
@@ -780,6 +783,7 @@ def main():
                 mk1.update(frame_now)
                 mk3.update(frame_now)
                 plus.update(frame_now)
+                jam.update(frame_now)
                 step_pixels=step_display.poll()
                 if output.process and step_pixels is not None and app.page in ASYNC_PAGES:
                     output.submit(step_pixels,leds);last_frame=(step_pixels,bytes(leds))
@@ -815,6 +819,7 @@ def main():
                     app.save()
                     if audio:audio.save_plugin_state(app.project)
             finally:
+                if jam:jam.close()
                 if plus:plus.close()
                 if mk3:mk3.close()
                 if mk1:mk1.close()
