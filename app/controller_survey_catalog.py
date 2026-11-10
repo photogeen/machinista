@@ -52,7 +52,7 @@ add('kk_m32','Komplete Kontrol M32',[],AM_BUTTONS,(*KNOBS,'4D'),KNOBS,strips=('P
 
 # Keep historical inventories importable, but do not ask testers to re-map
 # controllers already supported by Machinista.
-SUPPORTED_PROFILES={'maschine_mk1','maschine_mk2','maschine_mk3','maschine_plus','maschine_mikro_mk1','maschine_mikro_mk2'}
+SUPPORTED_PROFILES={'maschine_jam','maschine_mk1','maschine_mk2','maschine_mk3','maschine_plus','maschine_mikro_mk1','maschine_mikro_mk2'}
 for identity,profile in PROFILES.items():profile['survey_required']=identity not in SUPPORTED_PROFILES
 
 
