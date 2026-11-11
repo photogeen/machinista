@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "beta",
-  "version": "0.1.0-beta.19",
+  "version": "0.1.0-beta.21",
   "minimum_version": "0.1.0-beta.8",
   "os_codename": "trixie",
   "architecture": "arm64",
   "hardware_profile": "standard",
-  "notes": "Browse single WAVs from expansion kits, import additional MXGRP layouts and reuse MK2 waveforms across pads.",
+  "notes": "MK3 and Maschine+ display refinement, group-colored pads and waveforms, white waveform playheads, audio and WAV fixes, refreshed manuals.",
   "artifact": {
-    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.19/machinista-0.1.0-beta.19-arm64.tar.gz",
-    "size": 48174294,
-    "sha256": "930527b7da1d6dbbf1cbe41cd80ffa1d2357a49b1fd49699edbb01a3fe659f28"
+    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.21/machinista-0.1.0-beta.21-arm64.tar.gz",
+    "size": 47113092,
+    "sha256": "f4e7b912bec90286b43d8bac962431b9be11faf326f7bca93a608a92059aacb1"
   }
 }
