@@ -39,12 +39,12 @@ class ThemeTests(unittest.TestCase):
         self.assertEqual(a.settings['controllers']['plus']['color_scheme'],'voltage')
     def test_saved_color_scheme_survives_upgrade(self):
         from app.storage import save_json
-        for device, scheme in (('mk3','current'),('plus','amber')):
+        for device, scheme in (('mk3','current'),('plus','original')):
             self.a.settings['controllers'][device]['color_scheme']=scheme
         save_json(self.a.settings_path,self.a.settings)
         reopened=Application(self.tmp.name)
         self.assertEqual(reopened.settings['controllers']['mk3']['color_scheme'],'current')
-        self.assertEqual(reopened.settings['controllers']['plus']['color_scheme'],'amber')
+        self.assertEqual(reopened.settings['controllers']['plus']['color_scheme'],'original')
 
     def test_snapshot_uses_origin_device_and_no_global_theme_leak(self):
         self.a.page='CHANNEL';self.a.settings['controllers']['mk3']['color_scheme']='polar'
@@ -58,6 +58,15 @@ class ThemeTests(unittest.TestCase):
         # Same renderer switches schemes through its real cache, then returns byte-identically.
         current=dict(s,color_scheme='current');base=self.r.images(current)[0].tobytes()
         self.r.images(s);self.assertEqual(self.r.images(current)[0].tobytes(),base)
+    def test_original_scheme_can_be_selected_and_seen_at_end_of_menu(self):
+        self.a.page='COLOR SCHEME'
+        self.plus.rotate(0,len(SCHEMES))
+        self.assertEqual(self.plus.fields()[0].value,'Original')
+        state=snapshot(self.plus)
+        self.assertEqual(state['color_scheme'],'original')
+        left,_=self.r.images(state)
+        self.assertEqual(left.getpixel((450,192)),ImageColor.getrgb(PALETTES['original'][5]))
+
     def test_every_palette_renders_all_existing_workspaces_and_inverts(self):
         for scheme in SCHEMES:
             self.a.settings['controllers']['mk3']['color_scheme']=scheme
@@ -80,6 +89,12 @@ class ThemeTests(unittest.TestCase):
             im=self.r.images(s)
             for i in range(8):
                 self.assertEqual(im[i//4].getpixel((23+(i%4)*118,185)),ImageColor.getrgb(GROUPS[i]))
+            if scheme=='original':
+                self.assertEqual(im[0].getpixel((110+118,100)),ImageColor.getrgb('#070501'))
+                self.assertEqual(im[0].getpixel((110,100)),ImageColor.getrgb('#201e1a'))
+                for i in range(8):
+                    self.assertEqual(im[i//4].getpixel((110+(i%4)*118,96)),ImageColor.getrgb(GROUPS[i]))
+                self.assertEqual(im[1].getpixel((20,262)),ImageColor.getrgb('#070501'))
             # Fader heads reflect gain; they are not invented input controls.
             self.assertEqual(im[0].getpixel((80,159)),ImageColor.getrgb(PALETTES[scheme][3]))
             self.assertEqual(im[1].getpixel((80,173)),ImageColor.getrgb(PALETTES[scheme][3]))

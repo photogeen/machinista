@@ -2,8 +2,8 @@
 from contextvars import ContextVar
 from functools import wraps
 
-SCHEMES=('current','furnace','polar','voltage','amber','daylight')
-LABELS=dict(zip(SCHEMES,('Current','Furnace','Polar','Voltage','Amber','Daylight')))
+SCHEMES=('current','furnace','polar','voltage','amber','daylight','original')
+LABELS=dict(zip(SCHEMES,('Current','Furnace','Polar','Voltage','Amber','Daylight','Original')))
 # bg, panel, line, text, muted, accent, position, envelope, filter, level, error
 BASE=('#11161e','#202b3a','#344151','#f1f4f7','#a7b2c0','#ff8000','#00dcff','#bc63ff','#ffda00','#25ee77','#ff304f')
 PALETTES={
@@ -12,6 +12,8 @@ PALETTES={
  'polar':('#071722','#122f40','#285269','#f2fcff','#9bbdce','#12e1f1','#ff765e','#c4a0ff','#ffe467','#46e6ab','#ff5267'),
  'voltage':('#100e19','#282039','#4a3c62','#f9f4ff','#b7a9ce','#b17aff','#c7ff45','#ed9dff','#ffcf40','#50edac','#ff5267'),
  'amber':('#17130d','#30281b','#50432e','#fff2d4','#c1b08f','#ffbe3b','#f3e2b5','#e7b66d','#ffffff','#e5d59b','#ff6970'),
+ # Sampled from the Maschine+ Sampling and Settings manual screenshots.
+ 'original':('#101010','#1a1a1a','#474747','#ffffff','#b2b2b2','#ff3c14','#b2b2b2','#dedede','#fff000','#ff3c14','#ff304f'),
  'daylight':('#eeeae2','#ffffff','#c5c1b8','#242628','#61676b','#cb4b00','#006c8a','#8546ac','#806000','#007a45','#ba253d'),
 }
 _active=ContextVar('mk3_color_scheme',default='current')

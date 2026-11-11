@@ -97,6 +97,30 @@ class BrandingTests(unittest.TestCase):
                 self.assertEqual(state,snapshot(s))
             finally:renderer.close()
 
+    def test_mk3_boot_uses_logo_on_both_displays_then_returns_to_normal(self):
+        from app.mk3_display import Mk3Renderer
+        from app.mk3_state import snapshot as color_snapshot
+        from app.mk3_surface import Mk3Surface
+
+        with tempfile.TemporaryDirectory() as root:
+            app=Application(root)
+            state=color_snapshot(Mk3Surface(app,ControllerInputs(app)))
+            renderer=Mk3Renderer(startup=True)
+            self.addCleanup(renderer.close)
+            with patch('app.branding.time.monotonic',return_value=10):
+                left,right=renderer.images(state)
+                self.assertEqual(left.size,(480,272))
+                self.assertEqual(left.tobytes(),right.tobytes())
+                logo=left.crop((48,80,432,136))
+                self.assertGreater(len(logo.getcolors(384*56)),2)
+                self.assertTrue(renderer.needs_refresh)
+            with patch('app.branding.time.monotonic',return_value=12.1):
+                self.assertNotEqual(renderer.images(state)[0].tobytes(),left.tobytes())
+                self.assertFalse(renderer.needs_refresh)
+            renderer.boot.start()
+            renderer.dismiss_boot()
+            self.assertNotEqual(renderer.images(state)[0].tobytes(),left.tobytes())
+
     def test_about_and_resource_pages_keep_all_storage_and_project_data(self):
         with tempfile.TemporaryDirectory() as root:
             a=Application(root);a.page='SYSTEM'

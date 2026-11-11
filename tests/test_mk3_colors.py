@@ -74,9 +74,65 @@ class ColorEventsTests(unittest.TestCase):
   self.a.page='SAMPLER'
   for section in range(6):
    self.a.sampler_page=section;self.assertEqual(len(r(snapshot(self.s))[0]),261120)
- def test_display_group_chips_match_identity_and_keep_black_pixel_margin(self):
+ def test_group_led_order_and_pad_color_follow_focused_group(self):
+  from unittest.mock import patch
+  from app.mk3_session import Mk3Session
+  from app.mk3_protocol import LED_NAMES
+  from app.mk2_protocol import led_reports
+
+  session=Mk3Session(self.tmp.name,self.a,ControllerInputs(self.a),{})
+  self.addCleanup(session.close)
+  session.palette=[(0,0,0),(127,0,0),(127,64,0),(0,127,0)]
+  expected=(3,1,4,7,9,10,13,14)
+  for group,slot in enumerate(expected):
+   self.a.group=group
+   groups={letter:(100 if i==group else 12,0,0) for i,letter in enumerate('ABCDEFGH')}
+   reports=led_reports(pads={12:(100,0,0),13:(35,0,0),14:(12,0,0)},groups=groups)
+   with patch('app.mk3_session.leds',return_value=reports):
+    buttons,pads=session.reports(1)
+   self.assertEqual(tuple(buttons[1+LED_NAMES.index('GROUP '+letter)] for letter in 'ABCDEFGH'),
+                    tuple(color*4+(2 if i==group else 0) for i,color in enumerate(expected)))
+   self.assertEqual(pads[26:30],bytes((slot*4+3,slot*4+2,slot*4+1,0)))
+
+ def test_focused_group_colors_both_titles_without_a_group_strip(self):
   from PIL import ImageColor
-  self.a.page='CHANNEL';self.a.group=5;r=Mk3Renderer();self.addCleanup(r.close)
-  left,right=r.draw(snapshot(self.s));self.assertEqual(left.getpixel((153,38)),ImageColor.getrgb(GROUPS[5]))
+  self.a.page='CHANNEL';r=Mk3Renderer();self.addCleanup(r.close)
   from app.mk3_graphics import BG
-  self.assertEqual(left.getpixel((479,271)),ImageColor.getrgb(BG))
+  for group,color in enumerate(GROUPS):
+   self.a.group=group
+   state=snapshot(self.s)
+   for image in r.draw(state):
+    self.assertEqual(image.getpixel((11,34)),ImageColor.getrgb(color))
+    self.assertEqual(image.getpixel((479,271)),ImageColor.getrgb(BG))
+  self.assertEqual(r.draw(state)[0].getpixel((153,51)),ImageColor.getrgb(BG))
+  # B stays warm red through the display's RGB565 output, on both screens.
+  offset=(34*480+11)*2
+  self.a.group=1
+  for pixels in r(snapshot(self.s)):
+   self.assertEqual(pixels[offset:offset+2],bytes.fromhex('f800'))
+
+ def test_pad_config_uses_group_color_with_darker_selection(self):
+  from PIL import ImageColor
+  from app.mk3_style import tint
+  self.a.page='PAD CONFIG';self.a.group=2
+  renderer=Mk3Renderer();self.addCleanup(renderer.close)
+  state=snapshot(self.s)
+  state['tiles']=(('1',True,True),('2',True,False),('3',False,False))
+  _,right=renderer.draw(state)
+  self.assertEqual(right.getpixel((22,158)),tint(GROUPS[2],.77))
+  self.assertEqual(right.getpixel((138,158)),ImageColor.getrgb(GROUPS[2]))
+  self.assertNotEqual(right.getpixel((254,158)),ImageColor.getrgb(GROUPS[2]))
+
+ def test_waveform_uses_group_color_and_white_playhead(self):
+  from types import SimpleNamespace
+  from unittest.mock import patch
+  from PIL import ImageColor
+  from app.mk3_graphics import Canvas
+  renderer=Mk3Renderer();self.addCleanup(renderer.close)
+  envelope=SimpleNamespace(peaks=((-1,1),)*460,start=0,end=100)
+  with patch.object(renderer.waveforms,'envelope',return_value=envelope):
+   for group in (1,2,5):
+    canvas=Canvas()
+    renderer.wave(canvas,('sample.wav',0,100),dict(group=group,wave_cursor=50))
+    self.assertEqual(canvas.image.getpixel((100,132)),ImageColor.getrgb(GROUPS[group]))
+    self.assertEqual(canvas.image.getpixel((239,132)),(255,255,255))

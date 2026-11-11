@@ -6,6 +6,7 @@ from app.mk3_surface import Mk3Surface
 from app.mk3_state import snapshot
 from app.mk3_display import Mk3Renderer
 from app.mk3_graphics import Canvas,GROUPS,INK,BG,content_y
+from app.mk3_style import parameter_color
 
 class RightScreenLayout(unittest.TestCase):
     def setUp(self):
@@ -25,17 +26,19 @@ class RightScreenLayout(unittest.TestCase):
         color=ImageColor.getrgb(GROUPS[0])
         self.assertEqual(right.getpixel((11,34)),color)
         self.assertEqual(right.getpixel((11,80)),ImageColor.getrgb(BG))
-        self.assertEqual(right.getpixel((100,260)),ImageColor.getrgb(GROUPS[0]))
+        self.assertEqual(right.getpixel((100,260)),ImageColor.getrgb(parameter_color("TEST",0)))
         self.assertEqual(left.size,(480,272));self.assertEqual(right.size,(480,272))
     def test_pad_grid_uses_physical_order_group_color_and_selected_highlight(self):
         for group,pad in ((0,0),(1,5),(4,15)):
             c=Canvas();self.r.pad_grid(c,dict(group=group,pad=pad),10,60)
-            selected=ImageColor.getrgb(GROUPS[group])
+            from app.mk3_style import tint
+            selected=tint(GROUPS[group],.77)
+            unselected=ImageColor.getrgb(GROUPS[group])
             for i in range(16):
                 x=10+i%4*26;y=60+(3-i//4)*26
                 fill=c.image.getpixel((x+3,y+3))
                 if i==pad:self.assertEqual(fill,selected)
-                else:self.assertNotEqual(fill,selected)
+                else:self.assertEqual(fill,unselected)
     def test_body_lines_polygons_and_text_share_vertical_coordinates(self):
         c=Canvas(compact_header=True);c.line((10,104,30,104),INK)
         c.polygon(((10,100),(14,100),(12,104)),INK)

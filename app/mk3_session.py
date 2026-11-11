@@ -12,6 +12,13 @@ from app.mk3_state import snapshot
 from app.mk2_protocol import LED_BUTTONS,TRANSPORT
 from app.connection_health import ReaderWatch
 
+# Native palette slots in A–H order: orange, red, yellow, green,
+# turquoise, blue, violet, pink. Brightness is encoded separately.
+GROUP_LED_SLOTS=(3,1,4,7,9,10,13,14)
+
+def palette_led(slot,level):
+    if not level:return 0
+    return slot*4+(3 if level>=60 else 2 if level>=20 else 1)
 
 def strip_leds(app,surface):
     # Touch feedback takes priority only for the duration of contact. Otherwise
@@ -38,7 +45,7 @@ class Mk3Session(Mk2Session):
                 path='/dev/'+hid.name;self.fd=open_device(path,product=self.product)
                 palette=feature(self.fd,0xfe,208)
                 self.palette=[tuple(palette[1+i*12+6:1+i*12+9]) for i in range(17)]
-                self.renderer=ProcessRenderer(kind='mk3')
+                self.renderer=ProcessRenderer(startup=True,kind='mk3')
                 self.output=Mk3Output(self.fd,self.renderer,self.app.settings['controllers'][self.source],self.product,self.display_interface)
                 self.pad_trigger=Mk3PadTrigger(self.pad_trigger_baseline)
                 self.process=subprocess.Popen([sys.executable,str(self.root/'tools/mk3_monitor.py'),path,str(self.product)],stdout=subprocess.PIPE)
@@ -52,6 +59,7 @@ class Mk3Session(Mk2Session):
             for pad in self.pad_trigger.process(event,a.settings['controllers'][self.source]['pad_sensitivity']):
                 slot=int(pad['name'].split('_')[-1])-1;kind=pad['kind']
                 if kind=='pad_on':
+                    if getattr(self,'renderer',None):self.renderer.dismiss_boot()
                     self.inputs.pad_on(self.source,slot,a.pad_velocity(pad['value'],self.source))
                     if a.input_timestamp:self.input_lags.append(max(0,(time.monotonic()-a.input_timestamp)*1000))
                 elif kind=='pad_off':self.inputs.pad_off(self.source,slot)
@@ -68,7 +76,7 @@ class Mk3Session(Mk2Session):
         if not maximum:return 0
         normal=tuple(v*127/maximum for v in rgb)
         index=min(range(1,len(self.palette)),key=lambda i:sum((self.palette[i][c]-normal[c])**2 for c in range(3)))
-        return index*4+(3 if maximum>=60 else 2 if maximum>=20 else 1)
+        return palette_led(index,maximum)
     def reports(self,now):
         mono,groups,pads=leds(self.surface,self.channels,now);a=self.app
         values={n:mono[i+1] for i,n in enumerate(LED_BUTTONS)}
@@ -93,12 +101,18 @@ class Mk3Session(Mk2Session):
         for i,name in enumerate(LED_NAMES):
             value=127 if name in self.surface.held else values.get(name,8)
             if name.startswith('GROUP '):
-                j=ord(name[-1])-65;value=self.colour(groups[1+j*6:4+j*6])
+                j=ord(name[-1])-65
+                level=max(groups[1+j*6:4+j*6])
+                # The last hardware brightness step adds other channels and
+                # washes out the selected group. Use the first three steps.
+                value=GROUP_LED_SLOTS[j]*4+(2 if level>=60 else 1 if level>=20 else 0) if level else 0
             elif i in COLOUR_SLOTS:value=self.colour((0,value,0) if name=='PLAY' else (value,0,0) if name=='REC' else (value,value//2,0))
             if i not in COLOUR_SLOTS:value=127 if value>=60 else 48 if value else 0
             report.append(value)
         report.extend(strip_leds(a,self.surface))
-        for raw,slot in enumerate(PAD_SLOTS):report.append(self.colour(pads[1+raw*3:4+raw*3]))
+        pad_color=GROUP_LED_SLOTS[a.group%8]
+        for raw in range(len(PAD_SLOTS)):
+            report.append(palette_led(pad_color,max(pads[1+raw*3:4+raw*3])))
         return led_reports(report)
     def update(self,now):
         if not self.output:return

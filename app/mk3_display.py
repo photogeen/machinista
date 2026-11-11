@@ -2,9 +2,28 @@
 import math
 import time
 from app.mk3_theme import themed,resolve,foreground,GroupColor
+from functools import lru_cache
 from pathlib import Path
+from app.branding import BootSplash,logo_mask
 from app.mk3_graphics import Canvas,BG,PANEL,LINE,INK,MUTED,ACCENT,GROUPS,font,content_y
 from app.mk3_style import CYAN,PURPLE,YELLOW,GREEN,RED,tint,parameter_color
+
+@lru_cache(maxsize=1)
+def boot_logo():
+    from PIL import Image
+    path=Path(__file__).resolve().parents[1]/'assets/branding/machinista-logo.png'
+    try:
+        with Image.open(path) as image:
+            mask=image.getchannel('A')
+        bounds=mask.point(lambda alpha: 255 if alpha>=16 else 0).getbbox()
+        if bounds:
+            mask=mask.crop(bounds)
+            return mask.resize((384,round(mask.height*384/mask.width)),Image.Resampling.LANCZOS)
+    except (OSError,ValueError):
+        pass
+    height,pixels=logo_mask(236)
+    return Image.frombytes('L',(236,height),pixels).point(lambda pixel: pixel*255)
+
 
 class Mk3Renderer:
     def __init__(self,startup=False):
@@ -12,7 +31,19 @@ class Mk3Renderer:
         self.waveforms=Mk3Waveforms();self.cached_wave_revision=-1;self.needs_refresh=False;self.cached_state=None;self.cached_images=None;self.scene_renders=0;self.encoder=None;self.encoder_tried=False;self.wire_images={}
         from app.text_marquee import Marquee
         self.marquee=Marquee();self.chain_key=None;self.chain_previous=None;self.chain_transition=None
-    def dismiss_boot(self):pass
+        self.boot=BootSplash()
+        self.boot_requested=startup
+
+    def dismiss_boot(self):
+        self.boot_requested=False
+        self.boot.dismiss()
+
+    def boot_images(self):
+        canvas=Canvas()
+        logo=boot_logo()
+        canvas.image.paste(resolve(INK),((480-logo.width)//2,108-logo.height//2),logo)
+        canvas.text(240,154,'STARTING',13,True,MUTED,center=True)
+        return canvas.image,canvas.image
     def close(self):
         self.waveforms.close()
         if self.encoder:self.encoder.close()
@@ -94,17 +125,19 @@ class Mk3Renderer:
         if not env.peaks:c.text(240,128,'No sample',16,color=MUTED,center=True);return
         start,end=env.start,env.end;span=max(1,end-start)
         marks=state.get('markers',());selected=state.get('slice_index',0)
+        selection_fill=tint(MUTED,.28) if c.scheme=='original' else tint(getattr(self,'accent',ACCENT),.48)
         for i,(lo,hi) in enumerate(marks):
             if hi<=start or lo>=end:continue
             x=10+round(458*max(0,lo-start)/span);right=10+round(458*min(span,hi-start)/span)
-            if i==selected:c.rect(x,84,max(1,right-x),116,tint(getattr(self,'accent',ACCENT),.48))
+            if i==selected:c.rect(x,84,max(1,right-x),116,selection_fill)
             if start<=lo<=end:c.line((x,84,x,199),CYAN,2)
             if start<=hi<=end:c.line((right,84,right,199),PURPLE,2)
+        waveform_color=GROUPS[state.get('group',0)%8]
         for i,(lo,hi) in enumerate(env.peaks):
-            x=10+round(i*458/max(1,len(env.peaks)-1));c.line((x,142-round(hi*53),x,142-round(lo*53)),INK,2)
+            x=10+round(i*458/max(1,len(env.peaks)-1));c.line((x,142-round(hi*53),x,142-round(lo*53)),waveform_color,2)
         cursor=state.get('wave_cursor')
         if cursor is not None and start<=cursor<=end:
-            x=10+round((cursor-start)*458/span);c.line((x,84,x,200),YELLOW,2)
+            x=10+round((cursor-start)*458/span);c.line((x,84,x,200),'#ffffff',2)
     def grid(self,c,g):
         rows=g['rows'];cols=g['columns'];h=120/max(1,len(rows));w=420/max(1,cols)
         for r,(caption,focus,cells) in enumerate(rows):
@@ -174,9 +207,14 @@ class Mk3Renderer:
             x=18+(phase-start)*444/span;q.line((x,176,x,203),YELLOW,2)
         q.text(12,204,'EVENT VELOCITIES',9,color=MUTED,width=450)
 
-    def tiles(self,c,items,offset=0,empty_selection_outline=False):
+    def tiles(self,c,items,offset=0,empty_selection_outline=False,group_color=None):
         for slot,(label,present,selected) in enumerate(items[:16]):
             x=12+slot%4*116;y=89+(3-slot//4)*30
+            if group_color is not None:
+                fill=tint(group_color,.77) if selected else group_color if present else tint(group_color,.22,PANEL)
+                c.rect(x,y,108,27,fill,INK if selected else None,3)
+                c.text(x+54,y+4,label,12,selected,foreground(fill) if present or selected else MUTED,width=100,center=True)
+                continue
             empty_selected=empty_selection_outline and selected and not present
             c.rect(x,y,108,27,PANEL if empty_selected else ACCENT if selected else getattr(self,'accent',ACCENT) if present else PANEL,ACCENT if empty_selected else INK if selected else None,3)
             c.text(x+54,y+4,label,12,selected,ACCENT if empty_selected else BG if selected or present else MUTED,width=100,center=True)
@@ -206,8 +244,9 @@ class Mk3Renderer:
         color=GROUPS[state.get('group',0)%8];selected=state.get('pad',0)
         for pad in range(16):
             xx=x+(pad%4)*(cell+4);yy=y+(3-pad//4)*(cell+4);active=pad==selected
-            c.rect(xx,yy,cell,cell,color if active else tint(color,.28),INK if active else color,3)
-            c.text(xx+cell/2,yy+(cell-14)/2,str(pad+1),10,active,BG if active else color,width=cell-2,center=True)
+            fill=tint(color,.77) if active else color
+            c.rect(xx,yy,cell,cell,fill,INK if active else None,3)
+            c.text(xx+cell/2,yy+(cell-14)/2,str(pad+1),10,active,foreground(fill),width=cell-2,center=True)
 
     def navigate(self,p,q,s):
         from app.navigation_art import image
@@ -265,6 +304,10 @@ class Mk3Renderer:
     def mixer(self,p,q,s):
         """Eight physical encoder strips, continuous group-colored stereo meters."""
         m=s['mixer'];master=m.get('master_mixer');field=m.get('mixer_field',0)
+        original=p.scheme=='original'
+        strip_bg='#070501'
+        selected_bg='#201e1a'
+        track_color='#151515'
         for side,c in enumerate((p,q)):
             for i in range(4):
                 index=side*4+i
@@ -273,16 +316,23 @@ class Mk3Renderer:
                     slot=0;pair=(m['levels'][0][i],);caption=('L','R')[i];color=self.accent
                 elif index<len(m['levels']):
                     slot=index;pair=m['levels'][slot][:2];caption=m['names'][slot]
-                    color=GROUPS[m.get('colors',(s.get('group',0)%8,)*len(m['levels']))[slot]]
+                    group=m.get('colors',(s.get('group',0)%8,)*len(m['levels']))[slot]
+                    color=GROUPS[group]
                 else:continue
                 x=11+i*118;selected=master or m['first']+index==m['selected']
                 mute,solo=m.get('status',((False,False),)*len(m['levels']))[slot]
-                c.rect(x,94,104,107,PANEL,radius=3)
-                header=color if selected else tint(color,.35)
-                c.rect(x,94,104,23,header,radius=2)
-                c.text(x+7,98,caption,11,True,foreground(header),width=88)
+                if original:
+                    c.rect(x,94,104,107,selected_bg if selected else strip_bg)
+                    c.rect(x,94,104,4,color)
+                    caption_color=INK if selected else MUTED
+                else:
+                    c.rect(x,94,104,107,PANEL,radius=3)
+                    header=color if selected else tint(color,.35)
+                    c.rect(x,94,104,23,header,radius=2)
+                    caption_color=foreground(header)
+                c.text(x+7,101 if original else 98,caption,11,True,caption_color,width=88)
                 for channel,value in enumerate(pair):
-                    xx=x+12+channel*18;c.rect(xx,124,12,67,LINE)
+                    xx=x+12+channel*18;c.rect(xx,124,12,67,track_color if original else LINE)
                     db=20*math.log10(max(value,1e-9));h=round(max(0,min(1,(db+60)/60))*67)
                     if h:c.rect(xx,191-h,12,h,color)
                     peak=m['peaks'][slot][i if master else channel]
@@ -291,7 +341,7 @@ class Mk3Renderer:
                         c.rect(xx,191-held,12,2,RED if peak>=1 else INK)
                     if value>=1:c.rect(xx,123,12,3,RED)
                 gain=m.get('gains',(1,)*len(m['levels']))[slot]
-                c.line((x+77,127,x+77,189),LINE,3)
+                c.line((x+77,127,x+77,189),MUTED if original else LINE,1 if original else 3)
                 fy=186-round(gain*56);c.rect(x+66,fy,23,7,INK,radius=1)
                 if mute or solo:
                     c.rect(x+48,177,15,19,RED if mute else YELLOW,radius=2)
@@ -299,12 +349,13 @@ class Mk3Renderer:
                 # The physical encoder footer keeps LEVEL/PAN/ROUTE bindings.
                 f=s.get('fields',())[index] if index<len(s.get('fields',())) else None
                 if f:
-                    fx=i*120+5;c.rect(fx,222,110,44,PANEL,radius=3)
+                    fx=i*120+5
+                    c.rect(fx,222,110,44,strip_bg if original else PANEL,radius=0 if original else 3)
                     c.text(fx+7,225,f[0],10,color=MUTED,width=98)
                     c.text(fx+7,241,f[1],16,True,width=98)
-                    c.rect(fx+7,261,96,3,LINE)
-                    if field==0:c.rect(fx+7,261,round(96*gain),3,color)
-                    else:c.rect(fx+7,261,96,3,color)
+                    if not original:
+                        c.rect(fx+7,261,96,3,LINE)
+                        c.rect(fx+7,261,round(96*gain) if field==0 else 96,3,color)
         if master:
             q.text(20,106,'MASTER OUTPUT',22,True,width=440)
             q.text(20,143,'L / R  ·  −60 TO 0 dBFS',13,color=MUTED,width=440)
@@ -315,23 +366,17 @@ class Mk3Renderer:
         # Mixer strips span both displays and share one vertical baseline.
         p,q=Canvas(),Canvas(compact_header='mixer' not in s and 'view_origin' not in s);accent=GROUPS[s.get('group',0)%8]
         self.accent=accent
+        original=p.scheme=='original'
+        selected_key=MUTED if original else ACCENT
         keys=s.get('keys',('',)*8)
         for side,c in enumerate((p,q)):
             active=s.get('active_left' if side==0 else 'active_right',())
             for i,key in enumerate(keys[side*4:side*4+4]):
                 chosen=i in active
-                c.rect(i*120+3,3,114,24,ACCENT if chosen else PANEL,radius=3)
-                if chosen:c.rect(i*120+7,26,106,2,ACCENT)
+                c.rect(i*120+3,3,114,24,selected_key if chosen else PANEL,radius=0 if original else 3)
+                if chosen and not original:c.rect(i*120+7,26,106,2,ACCENT)
                 c.text(i*120+60,6,key,12,True,BG if chosen else RED if key in ('DELETE','DEL ALL','REMOVE') else INK,width=106,center=True)
             if side==0:
-                statuses=s.get('group_status',())
-                for i,color in enumerate(GROUPS):
-                    x=10+i*28;status=statuses[i] if i<len(statuses) else None
-                    selected=i==s.get('group',0)%8
-                    c.rect(x,35,22,17,color,INK if selected else None,radius=3)
-                    c.text(x+11,35,chr(65+i),11,selected,foreground(color) if s.get('color_scheme')=='daylight' else BG,width=20,center=True)
-                    if status and status[1]:c.line((x+3,49,x+18,38),RED,1)
-                    elif status and status[2]:c.rect(x+16,36,3,3,YELLOW)
                 running=s.get('recording') or s.get('capture_status')=='RECORDING'
                 status='REC' if running else 'PLAY' if s.get('playing') else 'STOP'
                 color=RED if running else GREEN if s.get('playing') else MUTED
@@ -341,7 +386,7 @@ class Mk3Renderer:
             title=(s.get('group_label',chr(65+s.get('group',0)%8))+' / '+s.get('title','Machinista')) if side==0 else s.get('choice',s.get('page',''))
             if s['page'] in ('CLIP ARRANGER','CLIP MENU'):title='CLIP ARRANGER' if side==0 else 'CLIP ACTIONS' if s['page']=='CLIP MENU' else 'SELECTED CLIP'
             if 'mixer' in s:
-                m=s['mixer'];title=('MASTER MIXER' if m.get('master_mixer') else 'GROUP MIXER' if s.get('scope')==1 else 'SOUND MIXER')
+                m=s['mixer'];title=('MASTER MIXER' if m.get('master_mixer') else 'GROUP MIXER' if s.get('scope')==1 else 'SOUND MIXER / '+s.get('group_label',chr(65+s.get('group',0)%8)))
             if side==0 and 'project_list' in s:title='MANAGE PROJECTS' if s['page']=='PROJECT MANAGE' else 'PROJECTS'
             if side==0 and 'updater' in s:title='SOFTWARE UPDATE'
             if side==0 and 'settings_menu' in s:title='SETTINGS / '+s['settings_menu'][0]
@@ -349,29 +394,34 @@ class Mk3Renderer:
                 if side==1:title='PATTERN EDITOR'
                 else:
                     detail=s['events_native']['detail'];title='EVENT / '+detail['pitch'] if detail else 'EMPTY CELL'
-            c.rect(10,59,4,25,accent)
-            c.text(21,61,title,17,True,width=367)
-            if s.get('page_total',1)>1:c.text(444,64,f'{s.get("page_index",0)+1}/{s["page_total"]}',11,color=MUTED,width=48,center=True)
+            # Both titles sit below the soft keys. Transport shares the left
+            # title row and the page counter sits at the far right.
+            title_y=59 if c.compact_header else 33
+            c.rect(10,title_y,4,25,accent)
+            c.text(21,title_y+2,title,17,True,width=222 if side==0 else 367)
+            if side==1 and s.get('page_total',1)>1:
+                c.text(444,title_y+5,f'{s.get("page_index",0)+1}/{s["page_total"]}',11,color=MUTED,width=48,center=True)
             c.line((10,216,470,216),LINE)
             for i,f in enumerate(s.get('fields',())[side*4:side*4+4]):
                 if f:
                     label,value=f;color=parameter_color(label,s.get('group',0))
                     if 'mixer' in s and side*4+i<len(s['mixer'].get('colors',())):color=GROUPS[s['mixer']['colors'][side*4+i]]
                     if 'mixer' in s:continue
-                    c.rect(i*120+5,222,110,44,color,radius=4)
-                    c.text(i*120+10,224,label.replace('_',' ').upper(),11,color=foreground(color) if isinstance(color,GroupColor) and s.get('color_scheme')=='daylight' else BG,width=102)
+                    field_text=foreground(color) if isinstance(color,GroupColor) and p.scheme=='daylight' else BG
+                    c.rect(i*120+5,222,110,44,PANEL if original else color,radius=0 if original else 4)
+                    c.text(i*120+10,224,label.replace('_',' ').upper(),11,color=MUTED if original else field_text,width=102)
                     size=17
                     while size>12 and c.draw.textlength(str(value),font=font(size,True))>104:size-=1
-                    c.text(i*120+10,242,value,size,True,color=foreground(color) if isinstance(color,GroupColor) and s.get('color_scheme')=='daylight' else BG,width=104)
+                    c.text(i*120+10,242,value,size,True,color=INK if original else field_text,width=104)
                     if f'KNOB {side*4+i+1} TOUCH' in s.get('touches',()):c.rect(i*120+7,219,105,2,ACCENT)
         if s['page']=='CLIP ARRANGER':self.clip_arranger(p,q,s['clip_arranger'])
         elif s['page']=='CLIP MENU':
             from app.clip_arranger import MENU
             self.list(p,MENU,s['clip_arranger']['menu']);q.text(20,105,MENU[s['clip_arranger']['menu']],24,True,width=440)
         elif s['page']=='COLOR SCHEME':
-            from app.mk3_theme import SCHEMES,LABELS,PALETTES
+            from app.mk3_theme import SCHEMES,LABELS
             scheme=s.get('color_scheme','current');index=SCHEMES.index(scheme) if scheme in SCHEMES else 0
-            self.list(p,[LABELS[v] for v in SCHEMES],index,y=86,first=0)
+            self.list(p,[LABELS[v] for v in SCHEMES],index,y=86,first=max(0,index-5))
             q.rect(18,92,444,48,ACCENT,radius=3)
             q.text(31,101,LABELS[SCHEMES[index]],25,True,BG,width=414)
             q.text(20,152,'THIS CONTROLLER ONLY',12,color=MUTED,width=440)
@@ -382,7 +432,8 @@ class Mk3Renderer:
             target=s['target_group'];bank=s['target_bank']
             for i in range(min(8,s['groups']-bank*8)):
                 x=12+(i%4)*116;y=94+(i//4)*50;chosen=bank*8+i==target
-                p.rect(x,y,108,42,ACCENT if chosen else PANEL,radius=4);p.text(x+54,y+10,chr(65+i),18,True,BG if chosen else GROUPS[i],center=True)
+                color=GROUPS[i]
+                p.rect(x,y,108,42,color if chosen else PANEL,radius=4);p.text(x+54,y+10,chr(65+i),18,True,foreground(color) if chosen else color,center=True)
             self.tiles(q,tuple((str(i+1),True,i==s['target_sound']) for i in range(16)))
             p.text(15,199,f'{s["target_count"]} SLICES / GROUP '+chr(65+target%8),11,color=MUTED,width=450)
         elif 'group_cards' in s:
@@ -450,7 +501,9 @@ class Mk3Renderer:
             caption=s.get('chord_name','KEYBOARD') if s.get('keyboard_custom') else f'{note_name(first)} – {note_name(last-1)}'
             q.text(15,194,caption,12,color=MUTED,width=450)
         elif 'tiles' in s:
-            self.tiles(q,s['tiles'],empty_selection_outline=s['page']=='PATTERN');p.text(20,105,s['page'],24,True,width=440)
+            pad_page=s['page'] in ('PAD CONFIG','SELECT','MUTE','SOLO')
+            self.tiles(q,s['tiles'],empty_selection_outline=s['page']=='PATTERN',group_color=accent if pad_page else None)
+            p.text(20,105,s['page'],24,True,width=440)
             for i,status in enumerate(s.get('pad_status',())):
                 if status[0]:q.text(12+i%4*116+90,93+(3-i//4)*30,'M' if s['page']=='MUTE' else 'S' if s['page']=='SOLO' else '+',11,True,RED if s['page']=='MUTE' else YELLOW,width=16)
             p.text(20,150,s.get('focus_detail',''),16,color=MUTED,width=440)
@@ -667,15 +720,21 @@ class Mk3Renderer:
             if envelope and envelope.peaks and envelope.start<=cursor<=envelope.end:
                 ratio=(cursor-envelope.start)/max(1,envelope.end-envelope.start)
                 if state.get('chain_cards'):
-                    x=36+round(ratio*406);target.line((x,113,x,198),YELLOW,2)
+                    x=36+round(ratio*406);target.line((x,113,x,198),'#ffffff',2)
                 else:
-                    x=10+round(ratio*458);target.line((x,84,x,200),YELLOW,2)
+                    x=10+round(ratio*458);target.line((x,84,x,200),'#ffffff',2)
         if state.get('message'):
             q.rect(8,179,464,33,PANEL,LINE,3);q.text(18,184,state['message'],15,True,width=444)
         return p.image,q.image
 
     @themed
     def images(self,state):
+        if self.boot_requested:
+            self.boot.start()
+            self.boot_requested=False
+        if self.boot.active():
+            self.needs_refresh=True
+            return self.boot_images()
         self.waveforms.collect()
         if not any(state.get(k) for k in ('wave','browser','sound_wave')):
             self.waveforms.prefetch(state.get('wave_preload'))

@@ -113,6 +113,6 @@ These bindings also apply to Maschine+ in controller mode.
 
 ## Display color presets
 
-Open SETTINGS > SYSTEM > DISPLAY > COLOR SCHEME. Turn encoder 1 or the 4D encoder to choose Current, Furnace, Polar, Voltage, Amber or Daylight. The choice is saved automatically for this controller; MK3 and Maschine+ retain independent choices. RESET restores Current. Current keeps the existing palette; the remaining screen layouts and encoder assignments are unchanged. Group and pad LED identities remain unchanged.
+Open SETTINGS > SYSTEM > DISPLAY > COLOR SCHEME. Turn encoder 1 or the 4D encoder to choose Current, Furnace, Polar, Voltage, Amber, Daylight or Original. Original uses colors sampled from the Maschine+ screens, including neutral encoder fields. The choice is saved automatically for this controller; MK3 and Maschine+ retain independent choices. RESET restores Current. Current restores the original Machinista palette. The group and pad LED colors follow the A–H order orange, red, yellow, green, turquoise, blue, violet, and pink, matching MK2. The displays use the same group color order across all schemes. Sample waveforms use the selected group color and show the playback position in white.
 
 The mixer uses continuous stereo meters in each group's color, peak-hold markers, red clipping warnings and a fader indicator reflecting the actual channel gain. Its eight encoder strips remain aligned across both displays; LEVEL, PAN, ROUTE, mute/solo and peak reset keep their existing behavior.

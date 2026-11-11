@@ -6,7 +6,11 @@ from app.mk3_theme import GroupColor,resolve,active
 from PIL import Image,ImageDraw,ImageFont,ImageChops
 WIDTH,HEIGHT=480,272
 BG='#11161e';PANEL='#202b3a';LINE='#344151';INK='#f1f4f7';MUTED='#a7b2c0';ACCENT='#ff8000'
-GROUPS=tuple(GroupColor(v) for v in ('#ff8000','#ff3048','#ffd000','#73e52b','#00dfaa','#1599ff','#a84fff','#ff36bb'))
+# LCD colors in A–H order. Give red and violet distinct RGB565 channel
+# balances from orange and pink, even on bright LCD panels.
+GROUPS=tuple(GroupColor(v) for v in (
+ '#ff3c14','#ff0000','#f6c400','#70d522','#00c7a2','#0088ff','#862cff','#f028ba',
+))
 @lru_cache(maxsize=48)
 def font(size=16,bold=False):
  name='DejaVuSans'+('-Bold' if bold else '')+'.ttf'
