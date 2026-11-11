@@ -31,9 +31,23 @@ from app.ui_inventory import WORKFLOWS
 
 OUT=ROOT/'output/pdf'; ASSETS=ROOT/'tmp/pdfs/manual-assets'
 OUT.mkdir(parents=True,exist_ok=True);ASSETS.mkdir(parents=True,exist_ok=True)
-FONT='/System/Library/Fonts/Supplemental/'
-for name,file in [('Manual','Arial.ttf'),('ManualBold','Arial Bold.ttf'),('ManualItalic','Arial Italic.ttf')]:
-    pdfmetrics.registerFont(TTFont(name,FONT+file))
+FONT_SETS=(
+    ('Arial.ttf','Arial Bold.ttf','Arial Italic.ttf'),
+    ('LiberationSans-Regular.ttf','LiberationSans-Bold.ttf','LiberationSans-Italic.ttf'),
+)
+configured_font_dir=os.environ.get('MACHINISTA_MANUAL_FONT_DIR')
+font_dirs=[Path(configured_font_dir).expanduser()] if configured_font_dir else [
+    Path('/System/Library/Fonts/Supplemental'),
+    Path('/usr/share/fonts/truetype/liberation2'),
+    Path('/usr/share/fonts/truetype/liberation'),
+    Path('/usr/share/fonts/liberation-sans'),
+]
+fonts=next((tuple(folder/name for name in names) for folder in font_dirs for names in FONT_SETS
+            if all((folder/name).is_file() for name in names)),None)
+if fonts is None:
+    raise SystemExit('Install Arial or Liberation Sans, or set MACHINISTA_MANUAL_FONT_DIR to their font folder.')
+for name,file in zip(('Manual','ManualBold','ManualItalic'),fonts):
+    pdfmetrics.registerFont(TTFont(name,str(file)))
 pdfmetrics.registerFontFamily('Manual',normal='Manual',bold='ManualBold',italic='ManualItalic',boldItalic='ManualBold')
 W,H=595.276,841.89; M=44; CW=W-2*M
 INK=HexColor('#29231e');ACCENT=HexColor('#b84b00');MUTED=HexColor('#6b5a4e');PALE=HexColor('#fff2e6');LINE=HexColor('#e4cdb9')

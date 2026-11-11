@@ -23,6 +23,15 @@ int main(){
  Plan poly;poly.lanes.push_back({96,{{0,24,1,100,{4,5}},{0,12,0,0,{99}}}});poly.lanes.push_back({48,{{0,1,0,100,{6}}}});
  clock->seek(0);clock->running=true;clock->replace(&poly);out.clear();offset=0;render(24001,120);
  unsigned fours=0,sixes=0;for(auto [h,off,t,f]:out){assert(h!=99);if(!off&&h==4)++fours;if(!off&&h==6)++sixes;}assert(fours==1&&sixes==3);
+ // Equal-tick chord releases keep their enqueue order, even after reheapifying.
+ Plan chord;chord.lanes.push_back({96,{{0,24,0,100,{48,55,60}}}});
+ clock->seek(0);clock->running=true;clock->replace(&chord);out.clear();offset=0;render(1,120);
+ Plan same_chord=chord;clock->replace(&same_chord);render(6000,120);
+ assert(out.size()==6);
+ for(unsigned i=0;i<3;++i){
+  assert(std::get<0>(out[i+3])==std::get<0>(out[i]));
+  assert(std::get<1>(out[i+3])&&std::get<3>(out[i+3])==6000);
+ }
  // Capacity exhaustion never starts an unreleasable note.
  auto tiny=std::make_unique<maschine::SequenceClock<int,3>>();tiny->running=true;Plan dense;dense.lanes.push_back({96,{{0,24,0,100,{1,2,3}}}});tiny->replace(&dense);unsigned starts=0;tiny->render(1,48000,120,[&](int,bool,std::uint64_t,unsigned){++starts;});assert(!starts&&tiny->overflow);
  // A finite clip repeats its Pattern only inside its independent window.

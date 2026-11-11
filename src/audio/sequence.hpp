@@ -21,11 +21,18 @@ template<class Payload> struct SequencePlan {
 };
 template<class Payload,std::size_t Capacity=32768> class SequenceClock {
     using Plan=SequencePlan<Payload>;
-    struct Pending {double tick;unsigned lane=0,event=0;bool gate=false;Payload payload{};std::uint64_t token=0;};
-    struct Later {bool operator()(const Pending& a,const Pending& b)const{return a.tick!=b.tick?a.tick>b.tick:a.gate!=b.gate?!a.gate:a.lane>b.lane;}};
+    struct Pending {double tick;unsigned lane=0,event=0;bool gate=false;Payload payload{};std::uint64_t token=0,order=0;};
+    struct Later {
+        bool operator()(const Pending& a,const Pending& b)const{
+            if(a.tick!=b.tick)return a.tick>b.tick;
+            if(a.gate!=b.gate)return !a.gate;
+            if(a.lane!=b.lane)return a.lane>b.lane;
+            return a.order>b.order;
+        }
+    };
     std::array<Pending,Capacity> pending{};std::size_t count=0;
-    const Plan* plan=nullptr;std::uint64_t serial=0;std::uint32_t random=0x842371ab;
-    bool push(Pending p){if(count==Capacity){++overflow;return false;}pending[count++]=p;std::push_heap(pending.begin(),pending.begin()+count,Later{});return true;}
+    const Plan* plan=nullptr;std::uint64_t serial=0,enqueue_order=0;std::uint32_t random=0x842371ab;
+    bool push(Pending p){if(count==Capacity){++overflow;return false;}p.order=++enqueue_order;pending[count++]=p;std::push_heap(pending.begin(),pending.begin()+count,Later{});return true;}
     Pending pop(){std::pop_heap(pending.begin(),pending.begin()+count,Later{});return pending[--count];}
     void lane_start(unsigned lane){const auto& l=plan->lanes[lane];if(l.events.empty())return;
         const double target=std::max(tick,l.start);if(target>=l.end-1e-8)return;

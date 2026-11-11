@@ -4,6 +4,8 @@
 #include <atomic>
 #include <thread>
 #ifdef __linux__
+#include <fstream>
+#include <string>
 #include <pthread.h>
 #include <sched.h>
 #endif
@@ -23,6 +25,28 @@ private:
     std::array<std::atomic<unsigned>,3> epochs_{};
     std::atomic<unsigned> next_{0},remaining_{0},realtime_workers_{0};
     std::atomic<bool> stopping_{false};
+#ifdef __linux__
+    static unsigned preferred_cpus(std::array<unsigned,CPU_SETSIZE>& cpus,unsigned count){
+        // Read topology once at startup. Missing or incomplete data leaves the
+        // original affinity policy in place for all CPUs allowed by the OS.
+        std::array<unsigned,CPU_SETSIZE> scores{};
+        for(const char* metric: {"cpu_capacity","cpufreq/cpuinfo_max_freq"}){
+            unsigned highest=0;
+            bool complete=true;
+            for(unsigned i=0;i<count;++i){
+                std::ifstream file("/sys/devices/system/cpu/cpu"+std::to_string(cpus[i])+"/"+metric);
+                if(!(file>>scores[i])||!scores[i]){complete=false;break;}
+                highest=std::max(highest,scores[i]);
+            }
+            if(!complete)continue;
+            unsigned preferred=0;
+            for(unsigned i=0;i<count;++i)
+                if(scores[i]==highest)cpus[preferred++]=cpus[i];
+            return preferred;
+        }
+        return count;
+    }
+#endif
     void consume(){
         for(unsigned index=next_.fetch_add(1,std::memory_order_relaxed);index<count_;
             index=next_.fetch_add(1,std::memory_order_relaxed))function_(context_,index);
@@ -47,10 +71,10 @@ public:
             if(pthread_getaffinity_np(pthread_self(),sizeof(allowed),&allowed)==0){
                 std::array<unsigned,CPU_SETSIZE> cpus{};unsigned count=0;
                 for(unsigned cpu=0;cpu<CPU_SETSIZE;++cpu)if(CPU_ISSET(cpu,&allowed))cpus[count++]=cpu;
-                cores=count;
-                if(count>1){cpu_set_t main;CPU_ZERO(&main);CPU_SET(cpus[count-1],&main);
+                cores=preferred_cpus(cpus,count);
+                if(count>1){cpu_set_t main;CPU_ZERO(&main);CPU_SET(cpus[cores-1],&main);
                     pin=pthread_setaffinity_np(pthread_self(),sizeof(main),&main)==0;
-                    for(unsigned i=0;i<std::min(3u,count-1);++i)worker_cpus[i]=cpus[i];
+                    for(unsigned i=0;i<std::min(3u,cores-1);++i)worker_cpus[i]=cpus[i];
                 }
             }
         }

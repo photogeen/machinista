@@ -2,11 +2,35 @@
 import array,json,math,os,subprocess,sys,wave
 from pathlib import Path
 engine=Path(sys.argv[1]).resolve();root=Path(sys.argv[2]).resolve();out=Path(sys.argv[3]);out.mkdir(parents=True,exist_ok=True)
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from app.audio import AudioBackend
+from app.synth_library import preset_waves
+from app.synth_patch_fx import URI,effects
+
 env=dict(os.environ,LV2_PATH='/nonexistent')
-meta=next(p for p in json.loads(subprocess.check_output([str(engine),'--plugins'],text=True,env=env)) if p['uri']=='urn:machinista:instrument:synth');assert meta['builtin'] and meta['kind']=='INSTRUMENT' and len(meta['ports'])==588
+metadata=json.loads(subprocess.check_output([str(engine),'--plugins'],text=True,env=env))
+meta=next(p for p in metadata if p['uri']==URI);assert meta['builtin'] and meta['kind']=='INSTRUMENT' and len(meta['ports'])==588
 indices={p['symbol']:p['index'] for p in meta['ports']};bank=json.loads((root/'presets/plugin-banks/machinista-synth/factory.json').read_text());results=[]
-def run(name,rate,controls,notes=(48,55,60),extra=(),duration=3):
- path=out/(name+'-'+str(rate)+'.wav');cmd=[f'offline_rate {rate}','plugins 0 '+json.dumps(meta['uri'])]+[f'plugin_param 0 0 {indices[k]} {v}' for k,v in controls.items()]+list(extra)
+class OfflinePluginCommands(AudioBackend):
+ def __init__(self,rate):
+  self.root=root
+  self.sample_rate=rate
+  self.plugin_metadata=metadata
+  self.plugin_chains={}
+  self.commands=[]
+ def command(self,text):
+  self.commands.append(text)
+
+def run(name,rate,controls,notes=(48,55,60),extra=(),duration=3,preset=None):
+ path=out/(name+'-'+str(rate)+'.wav')
+ instrument=dict(uri=URI,controls=controls)
+ chain=[instrument]
+ if preset is not None:
+  instrument['synth_waves']=preset_waves(root,preset)
+  chain.extend(effects(preset))
+ backend=OfflinePluginCommands(rate)
+ backend.plugins(0,chain)
+ cmd=[f'offline_rate {rate}',*backend.commands,*extra]
  cmd+=['sequence_begin','sequence_lane 768','sequence_event 24 240 100 0']+[f'plugin_note 0 {note} 100' for note in notes]+['sequence_commit','sequence_seek 0 1','sequence_transport 120 1 0 0','render_start '+json.dumps(str(path))+f' {rate*duration} 0 16 WAV 0 0','dsp_status','quit','']
  p=subprocess.run([str(engine),'--offline-render'],input='\n'.join(cmd),text=True,capture_output=True,env=env,timeout=120);assert p.returncode==0,p.stderr
  rows=[json.loads(v) for v in p.stdout.splitlines() if v.startswith('{')];assert not any(r.get('status')=='error' for r in rows),(name,rows,p.stderr)
@@ -17,7 +41,7 @@ def run(name,rate,controls,notes=(48,55,60),extra=(),duration=3):
  results.append(dict(name=name,rate=rate,peak=peak,dsp=dsp))
  return data
 for rate in (44100,48000):
- for patch in bank['patches']:run(patch['name'].replace(' ','-'),rate,patch['controls'])
+ for patch in bank['patches']:run(patch['name'].replace(' ','-'),rate,patch['controls'],preset=patch)
  # Four imported morph frames, project state saved and reloaded by a fresh instance.
  asset=out/'user.mwave';frames=4;size=512;a=array.array('f')
  for frame in range(frames):

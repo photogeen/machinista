@@ -2,11 +2,16 @@
 
 Legacy samplers sometimes omit metadata bytes from the RIFF size while keeping
 complete fmt/data chunks. Never infer or extend missing audio, change data sizes,
-remove metadata, or convert sample data.
+or remove metadata. Supported IEEE float audio is normalized to PCM32.
 """
 import struct
 import wave
 import math
+import uuid
+
+
+PCM_SUBTYPE = uuid.UUID("00000001-0000-0010-8000-00aa00389b71").bytes_le
+FLOAT_SUBTYPE = uuid.UUID("00000003-0000-0010-8000-00aa00389b71").bytes_le
 
 
 def _convert_float32(stream,details):
@@ -26,13 +31,22 @@ def _convert_float32(stream,details):
         if kind==b'fmt ':
             if fmt is not None:raise ValueError('Multiple WAV format chunks.')
             if length<16:raise ValueError('Invalid WAV format chunk.')
-            fmt=(pos+8,struct.unpack('<HHIIHH',stream.read(16)))
+            fields=struct.unpack('<HHIIHH',stream.read(16))
+            subtype=None
+            if fields[0]==0xfffe:
+                if length<40:raise ValueError('Incomplete extensible WAV format.')
+                extension,valid_bits,_=struct.unpack('<HHI',stream.read(8))
+                if extension<22 or extension>length-18:raise ValueError('Invalid extensible WAV format.')
+                subtype=stream.read(16)
+                if subtype==FLOAT_SUBTYPE and valid_bits!=32:
+                    raise ValueError('Only 32-bit floating-point WAV is supported.')
+            fmt=(pos+8,fields,subtype)
         if kind==b'data':
             if audio is not None:raise ValueError('Multiple WAV audio chunks.')
             audio=(pos+8,length)
         pos=end if end==size else end+(length&1)
-    if fmt is None or fmt[1][0]!=3:return False
-    encoding,channels,rate,byte_rate,alignment,bits=fmt[1]
+    if fmt is None or (fmt[1][0]!=3 and fmt[2]!=FLOAT_SUBTYPE):return False
+    _,channels,rate,byte_rate,alignment,bits=fmt[1]
     if bits!=32:raise ValueError('Only 32-bit floating-point WAV is supported.')
     if not 1<=channels<=32 or not 8000<=rate<=384000 or alignment!=channels*4 or byte_rate!=rate*alignment:
         raise ValueError('Invalid floating-point WAV format.')
@@ -52,7 +66,10 @@ def _convert_float32(stream,details):
             if not math.isfinite(value):raise ValueError('WAV contains non-finite audio samples.')
             values.append(max(-2147483648,min(2147483647,round(value*gain*2147483648))))
         stream.seek(offset);stream.write(struct.pack('<'+'i'*len(values),*values))
-    stream.seek(fmt[0]);stream.write(struct.pack('<H',1))
+    if fmt[2]==FLOAT_SUBTYPE:
+        stream.seek(fmt[0]+24);stream.write(PCM_SUBTYPE)
+    else:
+        stream.seek(fmt[0]);stream.write(struct.pack('<H',1))
     stream.seek(4);stream.write(struct.pack('<I',size-8));stream.flush()
     details.update(converted='32-bit PCM',gain_db=20*math.log10(gain))
     return True

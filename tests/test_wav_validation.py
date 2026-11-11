@@ -2,7 +2,7 @@ import io
 import struct
 import unittest
 import wave
-from app.wav_validation import validate_pcm
+from app.wav_validation import FLOAT_SUBTYPE, PCM_SUBTYPE, validate_pcm
 
 
 def sample(metadata=True):
@@ -22,6 +22,20 @@ class WavValidationTests(unittest.TestCase):
         data=struct.pack('<'+'f'*len(values),*values)
         chunks=b'fmt '+struct.pack('<IHHIIHH',16,3,1,48000,192000,4,32)+b'fact'+struct.pack('<II',4,len(values))+b'data'+struct.pack('<I',len(data))+data+b'smpl'+struct.pack('<I',36)+bytes(36)
         return b'RIFF'+struct.pack('<I',len(chunks)+4)+b'WAVE'+chunks
+    def test_extensible_float_keeps_channel_mask_and_metadata(self):
+        original=self.floating([-.5,.25])
+        fmt=struct.pack('<HHIIHHHHI',0xfffe,1,48000,192000,4,32,22,32,4)
+        chunks=b'fmt '+struct.pack('<I',40)+fmt+FLOAT_SUBTYPE+original[36:]
+        stream=io.BytesIO(b'RIFF'+struct.pack('<I',len(chunks)+4)+b'WAVE'+chunks)
+        self.assertTrue(validate_pcm(stream))
+        converted=stream.getvalue()
+        self.assertEqual(converted[20:44],fmt)
+        self.assertEqual(converted[44:60],PCM_SUBTYPE)
+        self.assertEqual(converted[-44:],original[-44:])
+        with wave.open(io.BytesIO(converted)) as wav:
+            self.assertEqual(struct.unpack('<ii',wav.readframes(2)),(-1073741824,536870912))
+        self.assertFalse(validate_pcm(stream))
+
     def test_float32_converts_for_sampler_without_dropping_metadata(self):
         b=self.floating([-1,-.5,0,.5,1]);s=io.BytesIO(b)
         self.assertTrue(validate_pcm(s));converted=s.getvalue()

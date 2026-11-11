@@ -69,5 +69,7 @@ root; it is not an installer for the running system. Full disk partitioning,
 firmware provenance, sanitization and cold-boot checks are separate steps.
 
 Manual generation currently also requires ReportLab, PDF tooling, browser
-capture dependencies and the configured document fonts. They are not runtime
-requirements. Generated PDFs are distributed as release assets.
+capture dependencies, and Arial or Liberation Sans. Set
+`MACHINISTA_MANUAL_FONT_DIR` to a directory containing the regular, bold, and
+italic files when they are installed outside the default font directories.
+These are build-only dependencies. Generated PDFs are distributed as release assets.
