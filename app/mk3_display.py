@@ -419,8 +419,8 @@ class Mk3Renderer:
             from app.clip_arranger import MENU
             self.list(p,MENU,s['clip_arranger']['menu']);q.text(20,105,MENU[s['clip_arranger']['menu']],24,True,width=440)
         elif s['page']=='COLOR SCHEME':
-            from app.mk3_theme import SCHEMES,LABELS
-            scheme=s.get('color_scheme','current');index=SCHEMES.index(scheme) if scheme in SCHEMES else 0
+            from app.mk3_theme import SCHEMES,LABELS,DEFAULT_SCHEME
+            scheme=s.get('color_scheme',DEFAULT_SCHEME);index=SCHEMES.index(scheme) if scheme in SCHEMES else 0
             self.list(p,[LABELS[v] for v in SCHEMES],index,y=86,first=max(0,index-5))
             q.rect(18,92,444,48,ACCENT,radius=3)
             q.text(31,101,LABELS[SCHEMES[index]],25,True,BG,width=414)

@@ -2,8 +2,10 @@
 from contextvars import ContextVar
 from functools import wraps
 
-SCHEMES=('current','furnace','polar','voltage','amber','daylight','original')
-LABELS=dict(zip(SCHEMES,('Current','Furnace','Polar','Voltage','Amber','Daylight','Original')))
+DEFAULT_SCHEME='original'
+# Stored identifiers stay compatible with existing controller preferences.
+SCHEMES=('original','current','furnace','polar','voltage','amber','daylight')
+LABELS=dict(zip(SCHEMES,('Plus','Classic','Furnace','Polar','Voltage','Amber','Daylight')))
 # bg, panel, line, text, muted, accent, position, envelope, filter, level, error
 BASE=('#11161e','#202b3a','#344151','#f1f4f7','#a7b2c0','#ff8000','#00dcff','#bc63ff','#ffda00','#25ee77','#ff304f')
 PALETTES={
@@ -31,8 +33,8 @@ def themed(function):
     @wraps(function)
     def wrapped(self,*args,**kwargs):
         state=kwargs.get('state',args[-1] if args else {})
-        scheme=state.get('color_scheme','current')
-        token=_active.set(scheme if scheme in SCHEMES else 'current')
+        scheme=state.get('color_scheme',DEFAULT_SCHEME)
+        token=_active.set(scheme if scheme in SCHEMES else DEFAULT_SCHEME)
         try:return function(self,*args,**kwargs)
         finally:_active.reset(token)
     return wrapped
@@ -43,7 +45,7 @@ def rotate(app,delta):
     if app.controller_source not in ('mk3','plus'):return
     from app.controller_settings import save_display
     values=app.settings['controllers'][app.controller_source]
-    current=values.get('color_scheme','current')
+    current=values.get('color_scheme',DEFAULT_SCHEME)
     index=SCHEMES.index(current) if current in SCHEMES else 0
     save_display(app,'color_scheme',SCHEMES[max(0,min(len(SCHEMES)-1,index+delta))])
 

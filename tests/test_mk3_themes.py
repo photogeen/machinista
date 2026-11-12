@@ -24,9 +24,11 @@ class ThemeTests(unittest.TestCase):
         for source in ('mikro','mikro_mk2','mk1','mk2','mk3','plus'):
             with controller_context(a,source):self.assertEqual('COLOR SCHEME' in a.setting_entries(),source in ('mk3','plus'))
         a.page='COLOR SCHEME';f=self.s.fields()[0]
-        self.assertEqual(f.value,'Furnace');self.assertTrue(choice_binding(self.s,f))
+        self.assertEqual(f.value,'Plus');self.assertTrue(choice_binding(self.s,f))
     def test_choice_save_restart_reset_and_device_isolation(self):
         a=self.a;a.page='COLOR SCHEME';before=copy.deepcopy(a.settings)
+        a.settings['controllers']['mk3']['color_scheme']='furnace'
+        a.settings['controllers']['plus']['color_scheme']='furnace'
         self.s.rotate(1,1);self.assertEqual(a.settings['controllers']['mk3']['color_scheme'],'polar')
         self.plus.rotate(0,2);self.assertEqual(a.settings['controllers']['plus']['color_scheme'],'voltage')
         self.assertEqual(a.controller_source,'mikro')
@@ -35,7 +37,7 @@ class ThemeTests(unittest.TestCase):
         self.assertEqual(reopened.settings['controllers']['mk3']['color_scheme'],'polar')
         self.assertEqual(reopened.settings['controllers']['plus']['color_scheme'],'voltage')
         self.s.softkey(1)
-        self.assertEqual(a.settings['controllers']['mk3']['color_scheme'],'current')
+        self.assertEqual(a.settings['controllers']['mk3']['color_scheme'],'original')
         self.assertEqual(a.settings['controllers']['plus']['color_scheme'],'voltage')
     def test_saved_color_scheme_survives_upgrade(self):
         from app.storage import save_json
@@ -58,14 +60,14 @@ class ThemeTests(unittest.TestCase):
         # Same renderer switches schemes through its real cache, then returns byte-identically.
         current=dict(s,color_scheme='current');base=self.r.images(current)[0].tobytes()
         self.r.images(s);self.assertEqual(self.r.images(current)[0].tobytes(),base)
-    def test_original_scheme_can_be_selected_and_seen_at_end_of_menu(self):
+    def test_plus_scheme_is_default_and_seen_at_start_of_menu(self):
         self.a.page='COLOR SCHEME'
-        self.plus.rotate(0,len(SCHEMES))
-        self.assertEqual(self.plus.fields()[0].value,'Original')
+        self.plus.rotate(0,-len(SCHEMES))
+        self.assertEqual(self.plus.fields()[0].value,'Plus')
         state=snapshot(self.plus)
         self.assertEqual(state['color_scheme'],'original')
         left,_=self.r.images(state)
-        self.assertEqual(left.getpixel((450,192)),ImageColor.getrgb(PALETTES['original'][5]))
+        self.assertEqual(left.getpixel((450,92)),ImageColor.getrgb(PALETTES['original'][5]))
 
     def test_every_palette_renders_all_existing_workspaces_and_inverts(self):
         for scheme in SCHEMES:

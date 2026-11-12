@@ -150,7 +150,7 @@ chapter('Automatisch oder nach Raster slicen',
  steps=['Öffne SAMPLING > SLICE. Wähle MODE und stelle seine Parameter ein. Wellenform und Slice-Anzahl werden entsprechend aktualisiert.',
  'Wähle bei BPM AUTO, wenn das erkannte Tempo passt, oder MANUAL, wenn du das Quelltempo kennst. ADJUST mit halbem/doppeltem Tempo korrigiert eine Erkennung im falschen musikalischen Vielfachen.',
  'Höre die Slices über die Pads an. Öffne EDIT zur Korrektur einer Schnittstelle vor dem Anwenden. Mit APPL.TO wählst du eine andere Group oder einen bestimmten Sound als Ziel.'],
- notes=[('Ein umkehrbarer Schnittplan','Während der Bearbeitung sind Schnitte Metadaten für Bereiche. APPLY macht daraus spielbare Zuordnungen. Änderungen an automatischen Aufteilungen können den Plan neu erzeugen. Sichere wichtige Arbeit vor einem Wechsel der Schnittstrategie.'),
+ notes=[('Ein umkehrbarer Schnittplan','Während der Bearbeitung sind Schnitte Metadaten für Bereiche. APPLY macht daraus spielbare Zuordnungen. Sind Slices innerhalb eines Sounds zugewiesen, aktualisieren manuelle Slice-Änderungen die spielbaren Zonen sofort. Änderungen an automatischen Aufteilungen können den Plan neu erzeugen. Sichere wichtige Arbeit vor einem Wechsel der Schnittstrategie.'),
  ('Tempo der Quelle','Slice-BPM beschreibt den Quell-Loop und die Interpretation des erzeugten Patterns. Es bedeutet nicht, dass die Quelle mit dem Project-Tempo aufgenommen wurde.')])
 
 chapter('Manuell choppen und Slices bearbeiten',

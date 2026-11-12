@@ -2,6 +2,7 @@
 from contextlib import contextmanager
 from functools import wraps
 from app.storage import save_json
+from app.mk3_theme import DEFAULT_SCHEME
 
 DISPLAY_PAGES=('BRIGHTNESS','CONTRAST','CONTRAST L','CONTRAST R','INVERT','COLOR SCHEME')
 DEVICE_PAGES=DISPLAY_PAGES+('PAD SENS','PAD CURVE')
@@ -17,7 +18,7 @@ def init_controller_settings(app):
         if not isinstance(values,dict):raise ValueError('invalid '+device+' settings')
         defaults=dict(MK2_DEFAULTS)
         if device=='mikro_mk2':defaults.update(display_brightness=100,display_contrast=42,display_invert=False)
-        if device in ('mk3','plus'):defaults['color_scheme']='furnace'
+        if device in ('mk3','plus'):defaults['color_scheme']=DEFAULT_SCHEME
         if device=='mk1':defaults.update(brightness=72,contrast_left=29,contrast_right=29)
         for key,default in defaults.items():
             value=values.setdefault(key,default)
@@ -64,7 +65,7 @@ def mikro_display_settings(app):
     values=app.settings['controllers']['mikro_mk2'] if mikro_device(app)=='mikro_mk2' else app.settings
     return values['display_brightness'],values['display_contrast'],values.get('display_invert',False)
 def display_value(app):
-    key=display_key(app);value=display_values(app).get(key,'current' if key=='color_scheme' else None)
+    key=display_key(app);value=display_values(app).get(key,DEFAULT_SCHEME if key=='color_scheme' else None)
     return value if value is not None else 100 if key=='brightness' else 42
 
 def save_display(app,key,value):
@@ -79,7 +80,7 @@ def change_display(app,delta):
 def reset_display(app):
     key=display_key(app)
     if app.page=='COLOR SCHEME':
-        if app.controller_source in ('mk3','plus'):save_display(app,key,'current')
+        if app.controller_source in ('mk3','plus'):save_display(app,key,DEFAULT_SCHEME)
         return
     if app.page=='INVERT':save_display(app,key,False);return
     default=(72 if 'brightness' in key else 29) if getattr(app,'controller_source','mikro')=='mk1' else (100 if 'brightness' in key else 42)

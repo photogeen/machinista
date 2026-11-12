@@ -120,6 +120,7 @@ if __name__=='__main__':
     # The same source labels choose the same chapter-specific screenshots.
     catalog=json.loads((base.ASSETS/'catalog.json').read_text()) if (base.ASSETS/'catalog.json').exists() else base.render_assets()
     required={label for ch in base.CH for supplement in ch.get('supplements',[]) for label in supplement.get('figures',[])}
+    required.update(label for ch in base.CH for supplement in ch.get('supplements',[]) for labels in supplement.get('figures_by_device',{}).values() for label in labels)
     if not required.issubset({item['label'] for item in catalog}):catalog=base.render_assets()
     report=[base.build(GermanManual,device,catalog) for device in ('mikro','mk1','mk2','mk3')]
     (base.ASSETS/'build-report-de.json').write_text(json.dumps(report,indent=2))

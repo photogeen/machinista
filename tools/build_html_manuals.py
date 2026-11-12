@@ -74,6 +74,7 @@ def build(device, language, chapters, catalog):
     choose = lambda value: escape(base.choose(value, device))
     resolver = object.__new__(base.Manual)
     resolver.catalog = catalog
+    resolver.device = device
     def figure(item):
         return f'<figure class="{"micro" if device == "mikro" else "wide"}"><img class="display" src="{asset(item["paths"][device])}" alt="{escape(item["label"], quote=True)}" loading="lazy"><figcaption>{escape(item["label"])}</figcaption></figure>'
     def prose(ch):
@@ -103,7 +104,7 @@ def build(device, language, chapters, catalog):
             text += figure(resolver.workflow_figure(ch.get('source_title',ch['title']), name))
         for sup in ch.get('supplements', []):
             text += f'<h3>{escape(sup["title"])}</h3>' + prose(sup)
-            for label in sup.get('figures', []):
+            for label in sup.get('figures_by_device',{}).get(device,sup.get('figures', [])):
                 text += figure(next(x for x in catalog if x['label'] == label))
             for image in sup.get('images', []):
                 text += f'<figure><img src="{asset(base.ROOT / "assets/manual-web" / (image + ".png"))}" alt="WebUI: {escape(image)}" loading="lazy"><figcaption>WebUI · {escape(image)}</figcaption></figure>'
@@ -111,6 +112,7 @@ def build(device, language, chapters, catalog):
     text += f'<section id="screens"><h2>{atlas_title}</h2>'
     seen = set(); count = 0
     for item in catalog:
+        if device != 'mk3' and item['page'] == 'COLOR SCHEME':continue
         if device == 'mikro' and item['page'] in ('CONTRAST L','CONTRAST R'):continue
         if device != 'mikro' and item['page'] in ('CONTRAST','PARAM NAV','SAMPLING NAV'):continue
         digest = item['hashes'][device]

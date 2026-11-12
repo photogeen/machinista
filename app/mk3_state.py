@@ -90,7 +90,8 @@ def chain_state(surface):
 
 def snapshot(surface):
     state=shared_snapshot(surface);a=surface.app
-    state['color_scheme']=a.settings['controllers'][surface.source].get('color_scheme','current')
+    from app.mk3_theme import DEFAULT_SCHEME
+    state['color_scheme']=a.settings['controllers'][surface.source].get('color_scheme',DEFAULT_SCHEME)
     state['group_label']=a.group_name();state['group_bank']=a.group_bank
     state['wave_preload']=a.track().get('sample')
     if a.page in ('PAD','CHANNEL'):state['output_art']=output_art(a)

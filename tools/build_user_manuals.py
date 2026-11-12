@@ -206,7 +206,7 @@ chapter('Slice automatically or on a grid',['CHOP'],
  steps=['Open SAMPLING > SLICE. Choose the required MODE and set its parameters. The waveform and slice count update for that choice.',
  'Set BPM to AUTO when the inferred tempo is useful, or MANUAL when you know the source tempo. Use ADJUST half/double for a tempo that is interpreted at the wrong musical multiple.',
  'Audition the slices with the pads. Enter EDIT to refine a cut before applying it. Use APPL.TO when you want to choose another Group or a specific Sound target.'],
- notes=[('A reversible plan','Cuts are range metadata while you work. APPLY turns the plan into playable assignments. Changing an automatic split configuration can regenerate the cut plan, so save important work before trying a different slicing strategy.'),
+ notes=[('A reversible plan','Cuts are range metadata while you work. APPLY turns the plan into playable assignments. After mapping slices inside a Sound, manual slice edits update the playable zones immediately. Changing an automatic split configuration can regenerate the cut plan, so save important work before trying a different slicing strategy.'),
  ('Tempo is source information','The slice BPM describes the source loop and generated Pattern interpretation. It does not mean the source recording was made at the project tempo.')])
 
 chapter('Manual live chopping and Slice Edit',['CHOP'],
@@ -424,6 +424,7 @@ def render_assets():
             selected=[c for c in cases() if not c[0].startswith(('Notice /','SHIFT /','Group mute /','BLE /','Projects / EMPTY','Projects / LONG','Projects / BUSY','Automation /'))]
             selected=[c for c in selected if not c[0].startswith(('Compatibility /','Input / scope 0')) and not (c[2].get('capture_source')=='INTERNAL' and c[2].get('capture_section')==1)]
             selected += [('Grid / '+label,'OPTIONS',dict(grid_tab=tab)) for tab,label in ((0,'QUANT'),(1,'SWING'),(2,'STEP'))]
+            selected += [('Display / Plus','COLOR SCHEME',{})]
             selected += [('System / CPU cores','SYSTEM',dict(system_index=1,cpu_core_example=True))]
             selected += [('System / CPU','SYSTEM',dict(system_index=1)),('System / Storage 3','SYSTEM',dict(storage_bank=3)),('System / Storage 4','SYSTEM',dict(storage_bank=4))]
             selected += [('Tutorial / Custom chords','PAD CONFIG',dict(keyboard_enabled=True,pad_page=0,custom_chords=True)),('Tutorial / Chord edit','PAD CONFIG',dict(keyboard_enabled=True,pad_page=2,custom_chords=True)),('Tutorial / Chord variations','PAD CONFIG',dict(keyboard_enabled=True,pad_page=1,custom_chords=True))]
@@ -546,6 +547,7 @@ class Manual:
         self.page=0;self.links=[];self.overflow=[];self.atlas=[];self.chapter_pages={};self.atlas_start=None;self.flow_title=""
         seen=set()
         for item in catalog:
+            if device!='mk3' and item['page']=='COLOR SCHEME':continue
             if device=='mikro' and item['page'] in ('CONTRAST L','CONTRAST R'):continue
             if device!='mikro' and item['page'] in ('CONTRAST','PARAM NAV','SAMPLING NAV'):continue
             h=item['hashes'][device]
@@ -721,7 +723,7 @@ class Manual:
         self.flow_title=f'{i+1:02}  '+ch['title']
         self.begin(self.flow_title,'Workflow / reference')
         self.y=self.text(escape(choose(ch['intro'],self.device)),M,self.y)
-        for label in ch.get('figures',[]):
+        for label in ch.get('figures_by_device',{}).get(self.device,ch.get('figures',[])):
             item=next(x for x in self.catalog if x['label']==label)
             self.y=self.shot(item,self.y)
         images=ch.get('images',[])
@@ -757,6 +759,7 @@ class Manual:
         hash_page={item['hashes'][self.device]:i//per for i,item in enumerate(self.atlas)}
         for item in self.catalog:
             h=item['hashes'][self.device]
+            if self.device!='mk3' and item['page']=='COLOR SCHEME':continue
             if self.device=='mikro' and item['page'] in ('CONTRAST L','CONTRAST R'):continue
             if self.device!='mikro' and item['page'] in ('CONTRAST','PARAM NAV','SAMPLING NAV'):continue
             if h in hash_page:bypage.setdefault(item['page'],hash_page[h])

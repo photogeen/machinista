@@ -80,6 +80,42 @@ class SliceEditWorkflowTests(unittest.TestCase):
         a.slice_index=1;a.button('F3',True)
         self.assertEqual(a.slice_count,3);self.assertEqual(a.slice_index,0)
         a.undo_action();self.assertEqual(len(a.track()['slices']),4)
+    def test_boundary_edits_update_assigned_zones_and_audio_without_apply(self):
+        a=self.a;a.open_sampling_page('CHOP');a.slice_edit=True;a.slice_index=1;a.slice_field=1
+        a.track()['zones'][1].update(gain=75,pan=-20)
+        other=copy.deepcopy(a.track()['zones'][2]);events=copy.deepcopy(a.project['groups'][0]['events'])
+        a.actions=[];a.rotate(1)
+        self.assertEqual(a.track()['zones'][1]['start'],a.slice_ranges()[1][0])
+        self.assertEqual(a.track()['zones'][0]['end'],a.slice_ranges()[0][1])
+        self.assertEqual((a.track()['zones'][1]['gain'],a.track()['zones'][1]['pan']),(75,-20))
+        self.assertEqual(a.track()['zones'][2],other)
+        self.assertEqual(a.track()['slice_committed'],a.slice_ranges())
+        kind,(group,pad,loaded)=a.actions[-1]
+        self.assertEqual((kind,group,pad),('load',0,0))
+        self.assertEqual(loaded['zones'],a.track()['zones'])
+        self.assertEqual(a.project['groups'][0]['events'],events)
+        a.undo_action();self.assertEqual(a.track()['slices'],self.ranges)
+        self.assertEqual(a.track()['zones'][1]['start'],250)
+        a.undo_action(redo=True);a.save();restored=Application(self.root)
+        self.assertEqual(restored.track()['zones'],a.track()['zones']);validate_project(restored.project)
+    def test_split_remove_and_clear_refresh_assigned_zones(self):
+        a=self.a;a.open_sampling_page('CHOP');a.slice_edit=True;a.slice_index=1
+        a.button('F2',True)
+        self.assertEqual(len(a.track()['zones']),5)
+        a.button('F3',True)
+        self.assertEqual(len(a.track()['zones']),4)
+        a.button('SHIFT',True);a.button('F3',True);a.button('SHIFT',False)
+        self.assertEqual(len(a.track()['zones']),1)
+        self.assertEqual((a.track()['zones'][0]['start'],a.track()['zones'][0]['end']),(0,1000))
+        validate_project(a.project)
+    def test_unassigned_slice_edits_keep_the_initial_apply_step(self):
+        a=self.a
+        for key in ('slice_source','slice_committed'):a.track().pop(key,None)
+        a.track()['zones']=[]
+        a.open_sampling_page('CHOP');a.slice_edit=True;a.slice_index=1;a.slice_field=1
+        original=copy.deepcopy(a.track()['zones']);a.actions=[];a.rotate(1)
+        self.assertEqual(a.track()['zones'],original)
+        self.assertFalse(any(kind=='load' for kind,value in a.actions))
     def test_processing_one_zone_preserves_other_zones_and_reapply_and_portability(self):
         a=self.a;a.zone_index=1;a.open_sampling_page('SAMPLE EDIT')
         before=copy.deepcopy(a.track()['zones']);old=copy.deepcopy(a.track());old['_zone_index']=1

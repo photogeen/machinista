@@ -245,8 +245,8 @@ class Mk2Surface:
                 if label:field(col,label,value,_auto=base+col)
             return tuple(result)
         if a.page=='COLOR SCHEME' and self.source in ('mk3','plus'):
-            from app.mk3_theme import LABELS
-            field(0,'PRESET',LABELS[a.settings['controllers'][self.source].get('color_scheme','current')],_controller_key='color_scheme')
+            from app.mk3_theme import LABELS,DEFAULT_SCHEME
+            field(0,'PRESET',LABELS[a.settings['controllers'][self.source].get('color_scheme',DEFAULT_SCHEME)],_controller_key='color_scheme')
             return tuple(result)
         if a.page in DEVICE_PAGES:
             values=a.settings['controllers'][self.source]

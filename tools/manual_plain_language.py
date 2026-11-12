@@ -245,5 +245,5 @@ def enrich(chapters, language='en'):
       title=('Display, pads and hardware levels','Display, Pads und Hardware-Pegel')[idx],
       intro=('Display and pad settings apply to the controller you are using. Hardware mixer settings affect your audio device. Keep playing a pad while adjusting its listening level so you can hear the change.',
              'Display- und Pad-Einstellungen gelten für den Controller, den du gerade bedienst. Der Hardware-Mixer gehört dagegen zum Audiogerät. Spiele beim Einstellen der Abhörlautstärke ein Pad, damit du die Änderung hören kannst.')[idx],
-      steps=[],notes=settings['notes']))
+      steps=[],notes=settings['notes'],figures_by_device={'mk3':['Display / Plus']}))
     settings['notes']=[]

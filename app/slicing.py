@@ -171,6 +171,28 @@ class Slicing:
 
     def save_manual_slices(self):
         if self.slice_mode=='MANUAL':self.track()['slice_manual']=copy.deepcopy(self.track().get('slices',[]))
+        self.sync_applied_slices()
+
+    def sync_applied_slices(self):
+        track=self.track();previous=track.get('slice_committed',[])
+        ranges=track.get('slices',[]);source=track.get('slice_source')
+        if not source or not previous or not ranges or ranges==previous:return
+        from app.sampler import default_zone
+        old_zones=track.get('zones',[]);mapped=[]
+        for index,(first,last) in enumerate(ranges):
+            old_index=next((i for i,bounds in enumerate(previous) if bounds==[first,last]),index)
+            zone=copy.deepcopy(old_zones[old_index]) if old_index<len(old_zones) else default_zone(dict(source,start=first,end=last,note=index))
+            if old_index>=len(previous) or previous[old_index]!=[first,last]:
+                zone.update(sample=source['sample'],start=first,end=last)
+                zone['loop_start']=max(first,min(last-1,zone['loop_start']))
+                zone['loop_end']=max(zone['loop_start']+1,min(last,zone['loop_end']))
+                zone['xfade']=min(zone.get('xfade',0),last-first)
+            if old_index!=index or old_index>=len(previous) or previous[old_index]!=[first,last]:
+                zone.update(key_lo=index,key_hi=index,root=index)
+            mapped.append(zone)
+        track['zones']=mapped;track['slice_committed']=copy.deepcopy(ranges)
+        self.zone_index=min(self.zone_index,len(mapped)-1)
+        self.actions.append(('load',(self.group,self.pad,copy.deepcopy(track))))
 
     def slicing_button(self,name,pressed):
         if not pressed:return False
@@ -211,7 +233,8 @@ class Slicing:
                     if not self.track()['sample'] or self.track()['start']>=self.track()['end']:self.message='NO SAMPLE';return True
                     self.remember();self.stop_live_chop();self.track()['slices']=[[self.track()['start'],self.track()['end']]]
                     self.track()['slice_manual']=copy.deepcopy(self.track()['slices'])
-                    self.slice_mode='MANUAL';self.track()['slice_mode']='MANUAL';self.slice_count=1;self.slice_index=self.slice_bank=0;return True
+                    self.slice_mode='MANUAL';self.track()['slice_mode']='MANUAL';self.slice_count=1;self.slice_index=self.slice_bank=0
+                    self.sync_applied_slices();return True
                 if len(ranges)>1 and self.slice_index:
                     self.remember();idx=self.slice_index
                     ranges[idx-1][1]=ranges[idx][1];ranges.pop(idx)
