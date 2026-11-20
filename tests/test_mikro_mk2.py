@@ -59,7 +59,7 @@ class MikroMk2Tests(unittest.TestCase):
         a.page='INVERT';a.rotate(1);self.assertEqual(mikro_display_settings(a),(100,49,True))
         a.page='PAD SENS';a.rotate(50)
         self.assertEqual(a.settings['controllers']['mikro_mk2']['pad_sensitivity'],150)
-        v=a.pad_velocity(500);a.mikro_model='mikro';self.assertGreater(v,a.pad_velocity(500))
+        v=a.pad_velocity(500);a.mikro_model='mikro';self.assertEqual(v,a.pad_velocity(500))
         self.assertEqual(a.settings['controllers']['mk2'],before['controllers']['mk2'])
         reopened=Application(self.tmp.name);reopened.mikro_model='mikro_mk2'
         self.assertEqual(mikro_display_settings(reopened),(100,49,True))

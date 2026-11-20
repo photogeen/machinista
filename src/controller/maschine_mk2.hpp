@@ -4,6 +4,7 @@ namespace maschineos {
 const char* mk2_button_name(unsigned bit);
 class MaschineMk2Decoder {
 public:
+    void set_pad_sensitivity(int value){pads_.set_pad_sensitivity(value);}
     bool decode(std::span<const std::uint8_t> data,std::vector<InputEvent>& events,std::int64_t timestamp_ns=-1);
     void flush(std::vector<InputEvent>& events,std::int64_t timestamp_ns=-1){pads_.flush(events,timestamp_ns);}
 private:

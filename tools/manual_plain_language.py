@@ -236,7 +236,7 @@ def enrich(chapters, language='en'):
       ('Optional timing correction for delayed effects. Off by default; change only with playback stopped.', 'Optionaler Ausgleich für verzögernde Effekte. Standardmäßig aus; nur bei gestoppter Wiedergabe ändern.'),
       ('Headphone, speaker and input levels on supported audio boards (HATs).', 'Kopfhörer-, Lautsprecher- und Eingangspegel unterstützter Audioplatinen (HATs).'),
       ('Brightness and contrast for the controller you are using.', 'Helligkeit und Kontrast für den gerade bedienten Controller.'),
-      ('Pad sensitivity and how playing strength changes the volume.', 'Pad-Empfindlichkeit und Umsetzung der Anschlagstärke in Lautstärke.'),
+      ('PAD SENS changes the trigger threshold: lower values reject more accidental contacts; higher values detect lighter hits. 100 is the default. PAD CURVE changes the response to playing strength. Saved separately per controller.', 'PAD SENS verändert die Auslöseschwelle: kleinere Werte unterdrücken mehr ungewollte Kontakte, größere erkennen leichtere Anschläge. 100 ist der Standard. PAD CURVE verändert die Umsetzung der Anschlagstärke. Separat pro Controller gespeichert.'),
       ('Version, processing load, memory and storage space.', 'Version, Rechenlast, Arbeitsspeicher und Platz auf Datenträgern.'),
     ]
     assert len(settings['table'])==len(audio_rows)+1

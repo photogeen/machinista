@@ -139,11 +139,11 @@ def hardware(p,q,values,device='mk2'):
     for i,(key,label) in enumerate((('brightness','LIGHT'),('contrast_left','LEFT'),('contrast_right','RIGHT'))):
         gauge(p,5+i*83,26,77,label,values[key])
     curve=values['pad_curve'];sensitivity=values['pad_sensitivity']
-    q.text(5,27,curve,90,font='bold5');q.text(5,38,f'SENS {sensitivity}%',90)
+    q.text(5,27,curve,90,font='bold5');q.text(5,38,f'SENS {sensitivity}',90)
     q.line(101,43,249,43);q.line(101,25,101,43)
     previous=None
     for i in range(148):
-        level=min(1,i/147*sensitivity/100)
+        level=i/147
         level=level**.6 if curve=='SOFT' else level**1.6 if curve=='HARD' else 1 if curve=='FIXED' else level
         point=(102+i,43-round(level*18))
         if previous:q.line(*previous,*point)

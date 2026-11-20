@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import threading
 import time
+from app.pad_sensitivity import PadSensitivitySender
 from app.mk2_protocol import open_device
 from app.mk2_output import Mk2Output
 from app.connection_health import output_stalled,ReaderWatch,surface_status
@@ -23,6 +24,7 @@ class Mk2Session:
     def __init__(self,root,app,inputs,channels):
         self.root,self.app,self.inputs,self.channels=Path(root),app,inputs,channels
         self.surface=self.surface_type(app,inputs)
+        self.pad_settings=PadSensitivitySender()
         self.process=self.output=self.renderer=None;self.fd=None
         self.buffer=b'';self.next_scan=self.next_frame=self.next_led=0
         self.cleanup=[]
@@ -67,7 +69,9 @@ class Mk2Session:
                 path=str(Path('/dev')/hid.name)
                 self.fd=open_device(path);self.renderer=Mk2Renderer(startup=True)
                 self.output=Mk2Output(self.fd,self.renderer,configure=configure_displays,settings=self.app.settings['controllers']['mk2'])
-                self.process=subprocess.Popen([str(self.root/'build/mk2_monitor'),'--live',path,'0'],stdout=subprocess.PIPE)
+                self.process=subprocess.Popen([str(self.root/'build/mk2_monitor'),'--live',path,'0'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+                os.set_blocking(self.process.stdin.fileno(),False)
+                self.pad_settings.update(self.process,self.app,self.source)
                 self.reader_watch.start(now)
                 os.set_blocking(self.process.stdout.fileno(),False)
                 self.next_frame=self.next_led=0
@@ -80,6 +84,7 @@ class Mk2Session:
             if now>=self.next_scan:self.connect(now)
             return
         try:
+            self.pad_settings.update(self.process,self.app,self.source)
             if output_stalled(self.output,now):raise OSError('MK2 output timeout; reconnecting')
             if self.process.poll() is not None or self.output.error:
                 raise OSError('MK2 disconnected' if not self.output.error else str(self.output.error))

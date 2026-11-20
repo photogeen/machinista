@@ -154,6 +154,8 @@ class Mk1Session(Mk2Session):
             self.renderer=Mk2Renderer(startup=True)
             self.process=subprocess.Popen([str(self.root/'build/mk1_monitor'),'--midi-manifest',str(self.root/'samples/.mk1-midi.json')],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
             os.set_blocking(self.process.stdout.fileno(),False)
+            os.set_blocking(self.process.stdin.fileno(),False)
+            self.pad_settings.update(self.process,self.app,self.source)
             self.output=Mk1Output(self.process,self.renderer,self.app.settings['controllers']['mk1'])
             self.reader_watch.start(now);self.next_frame=self.next_led=0
             print('Maschine MK1 connected',flush=True)

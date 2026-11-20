@@ -1,11 +1,24 @@
 #include "mikro_mk1.hpp"
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 
 namespace maschineos {
 namespace {
 constexpr std::int64_t release_ns=8000000, retrigger_ns=25000000;
 std::int64_t now_ns() { return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count(); }
+}
+void MikroMk1Decoder::set_pad_sensitivity(int value) {
+    value=std::clamp(value,25,200);
+    if(value==sensitivity_)return;
+    sensitivity_=value;
+    // MK2 capture: light hits peak at766..1360, normal hits at2511..2881.
+    // At25 the previous283-count floor still admitted every light hit.
+    // Keep100 unchanged; span1600..61 counts across the full setting range.
+    sensitivity_scale_=std::pow(2.,(100-value)/(value<100?18.75:50.));
+}
+int MikroMk1Decoder::threshold(int baseline) const {
+    return std::max(61,int(std::lround(baseline*sensitivity_scale_)));
 }
 void MikroMk1Decoder::flush(std::vector<InputEvent>& events, std::int64_t timestamp_ns) {
     if(timestamp_ns<0)timestamp_ns=now_ns();
@@ -74,7 +87,7 @@ bool MikroMk1Decoder::decode(std::span<const std::uint8_t> data,
                     for(unsigned c=0;c<16;++c)if(c!=channel && scan_peaks_[c]>other) {
                         other=scan_peaks_[c];other_sources[channel]=c;
                     }
-                    if(other>=1000)cross_floor[channel]=(other*35+99)/100;
+                    if(other>=1000)cross_floor[channel]=int(std::ceil(other*std::clamp(.35*sensitivity_scale_,.15,.70)));
                 }
             }
             for (unsigned index = 0; index < 16; ++index) {
@@ -104,7 +117,7 @@ bool MikroMk1Decoder::decode(std::span<const std::uint8_t> data,
                             age>=4000000 && age<80000000 && pressure*100<scan_peaks_[source]*70;
                         const bool ambiguous=pressure<1000 || coupled;
                         if(ambiguous) {
-                            if(pressure<160 || pressure*4<attack_peak_[channel]*3) {
+                            if(pressure<threshold(160) || pressure*4<attack_peak_[channel]*3) {
                                 attack_at_[channel]=timestamp_ns;attack_peak_[channel]=pressure;continue;
                             }
                             if(timestamp_ns-attack_at_[channel]<3000000)continue;
@@ -118,7 +131,7 @@ bool MikroMk1Decoder::decode(std::span<const std::uint8_t> data,
                         // Latch until stable low: expiry must never fire a
                         // weak contact later merely because time has passed.
                         const bool recent=release_rebound_guard_ && last_release_[channel]>=0 && timestamp_ns-last_release_[channel]<80000000;
-                        contact_floor_[channel]=recent?150:100;
+                        contact_floor_[channel]=threshold(recent?150:100);
                     }
                     if(!held_[channel] && !blocked_[channel] && pressure>=contact_floor_[channel]) {
                         if(last_on_[channel]>=0 && timestamp_ns-last_on_[channel]<retrigger_ns) {

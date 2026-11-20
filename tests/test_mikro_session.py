@@ -39,7 +39,7 @@ class MikroSessionTests(unittest.TestCase):
         s=self.s;s.open_device.return_value=123
         s.submit(b'frame',b'led');s.submit_leds(b'new led')
         output=Mock(frames=0,max_ms=0.,total_ms=0.);output.error=None;process=Mock();process.poll.return_value=None
-        with patch('app.mikro_session.ControllerOutput',return_value=output),patch('app.mikro_session.subprocess.Popen',return_value=process),patch('app.mikro_session.os.set_blocking'),patch('app.mikro_session.os.close'):
+        with patch('app.mikro_session.ControllerOutput',return_value=output),patch('app.mikro_session.subprocess.Popen',return_value=process),patch('app.mikro_session.os.set_blocking'),patch('app.mikro_session.os.close'),patch('app.pad_sensitivity.os.write',return_value=9):
             s.poll(10,self.streams)
             from app.branding import boot_frame
             output.submit.assert_called_once_with(boot_frame(128),b'new led')

@@ -63,7 +63,7 @@ class Mk2SessionTests(unittest.TestCase):
         s.rotate_raw=lambda i,d:calls.append(('encoder',i,d))
         s.surface.button=lambda k,v:calls.append(('button',k,v))
         s.inputs.pad_on=lambda *v:calls.append(('pad',*v))
-        with patch('app.mk2_session.os.read',side_effect=BlockingIOError),patch('app.mk2_session.time.monotonic',return_value=10):
+        with patch('app.mk2_session.os.read',side_effect=BlockingIOError),patch('app.mk2_session.time.monotonic',return_value=10),patch('app.pad_sensitivity.os.write',return_value=9):
             s.poll(10)
         self.assertFalse(s.buffer)
         self.assertEqual(calls[:4],[('encoder',2,200),('encoder',2,-8),('button','SHIFT',True),('encoder',2,8)])

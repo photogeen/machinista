@@ -35,7 +35,7 @@ class Preferences:
         # Other HID readers supply raw pressure counts; applying that scale to
         # MK3 a second time crushed even the strongest hit to velocity 6.
         level=raw/127 if source in ('mk3','plus') else (raw-60)/1500
-        normalized=max(0,min(1,level*(1 if source in ('mk3','plus') else values['pad_sensitivity']/100)))
+        normalized=max(0,min(1,level))
         curve=values['pad_curve']
         if curve=='FIXED':return self.velocity_value
         if curve=='SOFT':normalized=normalized**.6

@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <poll.h>
+#include "controller/pad_sensitivity_input.hpp"
 #include <unistd.h>
 #include <fcntl.h>
 using namespace maschineos;
@@ -76,11 +77,13 @@ int main(int argc,char** argv){
     if(detached && libusb_detach_kernel_driver(usb,0)){libusb_close(usb);libusb_exit(context);return 3;}
     if(libusb_claim_interface(usb,0)){if(detached)libusb_attach_kernel_driver(usb,0);libusb_close(usb);libusb_exit(context);return 3;}
     if(libusb_set_interface_alt_setting(usb,0,1)){libusb_release_interface(usb,0);if(detached)libusb_attach_kernel_driver(usb,0);libusb_close(usb);libusb_exit(context);return 4;}
+    std::atomic<int> pad_sensitivity{100};
     auto reader=[&](unsigned ep){
         MaschineMk1Decoder decoder;std::array<std::uint8_t,512> data{};std::vector<InputEvent> events;events.reserve(64);
         while(!stopped){
             int count=0;const int result=libusb_bulk_transfer(usb,ep,data.data(),data.size(),&count,10);const auto stamp=now_ns();events.clear();
             if(result && result!=LIBUSB_ERROR_TIMEOUT){stopped=true;break;}
+            decoder.set_pad_sensitivity(pad_sensitivity.load());
             if(count){bool valid=decoder.decode(ep,{data.data(),std::size_t(count)},events,stamp);++reports;last_report=stamp;if(!valid)++rejected;if(ep==0x84 && valid){++pad_reports;last_pad=stamp;}}
             else decoder.flush(events,stamp);
             print_events(events,stamp);
@@ -130,6 +133,8 @@ int main(int argc,char** argv){
         for(unsigned budget=0;budget<64;++budget){
             auto end=buffer.find('\n');if(end==std::string::npos)break;
             auto line=buffer.substr(0,end);buffer.erase(0,end+1);
+            int sensitivity=100;
+            if(parse_pad_sensitivity(line,sensitivity)){pad_sensitivity=sensitivity;std::lock_guard lock(output_mutex);acknowledge_pad_sensitivity(sensitivity);continue;}
             if(line.size()<4 || line[1]!=' ' || (line[0]!='1' && line[0]!='8') || (line.size()-2)%2 || line.size()>1026){stopped=true;break;}
             std::vector<unsigned char> bytes;bool valid=true;
             for(std::size_t i=2;i<line.size();i+=2){auto digit=[](char c)->int{return c>='0'&&c<='9'?c-'0':c>='a'&&c<='f'?c-'a'+10:-1;};int a=digit(line[i]),b=digit(line[i+1]);if(a<0||b<0){valid=false;break;}bytes.push_back((a<<4)|b);}

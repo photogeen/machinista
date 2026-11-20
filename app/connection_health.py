@@ -54,9 +54,13 @@ class LoopWatch:
 class ReaderWatch:
     """Watch reader progress and, for known NI devices, their continuous pad scan."""
     def __init__(self,limit=5,report_limit=None):self.limit=limit;self.report_limit=report_limit;self.stop()
-    def stop(self):self.started=self.received=self.produced=None;self.reports=self.rejected=0;self.last_report=None;self.pad_reports=0;self.last_pad_report=None
+    def stop(self):self.started=self.received=self.produced=None;self.reports=self.rejected=0;self.last_report=None;self.pad_reports=0;self.last_pad_report=None;self.pad_sensitivity=None
     def start(self,now):self.stop();self.started=now
     def receive(self,event,now):
+        if event.get('kind')=='reader_pad_sensitivity':
+            value=event.get('value')
+            if type(value) is not int or not 25<=value<=200:raise ValueError('invalid pad sensitivity acknowledgement')
+            self.pad_sensitivity=value;return True
         if event.get('kind')!='reader_health':return False
         if any(type(event.get(k)) is not int or event[k]<0 for k in ('reports','rejected','monotonic_ns','last_report_ns','pad_reports','last_pad_report_ns')):raise ValueError('invalid reader heartbeat')
         self.received=now;self.produced=event['monotonic_ns']/1e9
@@ -70,7 +74,7 @@ class ReaderWatch:
     def summary(self,now):
         return dict(heartbeat_age=None if self.received is None else round(max(0,now-self.received),3),
                     report_age=None if self.last_report is None else round(max(0,now-self.last_report),3),
-                    reports=self.reports,rejected=self.rejected,pad_reports=self.pad_reports,
+                    reports=self.reports,rejected=self.rejected,pad_reports=self.pad_reports,pad_sensitivity=self.pad_sensitivity,
                     pad_report_age=None if self.last_pad_report is None else round(max(0,now-self.last_pad_report),3))
 
 

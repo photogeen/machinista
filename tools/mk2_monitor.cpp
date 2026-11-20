@@ -1,6 +1,7 @@
 #include "controller/maschine_mk2.hpp"
 #include <hidapi/hidapi.h>
 #include "controller/reader_health.hpp"
+#include "controller/pad_sensitivity_input.hpp"
 #include <array>
 #include <chrono>
 #include <cstdio>
@@ -92,8 +93,9 @@ int main(int argc, char** argv) {
     if (!handle) { hid_exit(); return 2; }
     std::array<unsigned char, 4096> report{};
     const auto start = std::chrono::steady_clock::now();
-    int status = 0;ReaderHealth health;
+    int status = 0;ReaderHealth health;PadSensitivityInput pad_settings;
     while (seconds == 0 || std::chrono::steady_clock::now() < start + std::chrono::seconds(seconds)) {
+        pad_settings.poll(decoder);
         const int length = hid_read_timeout(handle, report.data(), report.size(), 5);
         if (length < 0) { status = 5; break; }
         events.clear();

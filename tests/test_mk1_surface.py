@@ -51,7 +51,7 @@ class Mk1SurfaceTests(unittest.TestCase):
   self.assertGreater(count,200)
  def test_sensitivity_is_source_local(self):
   a=self.a;a.settings['controllers']['mk1']['pad_sensitivity']=50;a.settings['controllers']['mk2']['pad_sensitivity']=150
-  self.assertLess(a.pad_velocity(1000,'mk1'),a.pad_velocity(1000,'mk2'))
+  self.assertEqual(a.pad_velocity(1000,'mk1'),a.pad_velocity(1000,'mk2'))
  def test_settings_open_back_and_device_local_edit_without_enter(self):
   a=self.a;self.s.button('SHIFT',True);self.s.button('CONTROL',True);self.s.button('CONTROL',False);self.s.button('SHIFT',False)
   self.assertEqual(a.page,'SETTINGS');self.assertEqual(self.s.softkeys()[7],'OPEN')

@@ -20,9 +20,13 @@ const char* button_name(unsigned bit);
 class MikroMk1Decoder {
 public:
     explicit MikroMk1Decoder(bool release_rebound_guard = true, bool mikro_mk2 = false): release_rebound_guard_(release_rebound_guard), mikro_mk2_(mikro_mk2) {}
+    void set_pad_sensitivity(int value);
     bool decode(std::span<const std::uint8_t> data, std::vector<InputEvent>& events, std::int64_t timestamp_ns = -1);
     void flush(std::vector<InputEvent>& events, std::int64_t timestamp_ns = -1);
 private:
+    int sensitivity_=100;
+    double sensitivity_scale_=1.;
+    int threshold(int baseline) const;
     bool release_rebound_guard_;
     bool mikro_mk2_;
     std::array<int,16> scan_peaks_{};

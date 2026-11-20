@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import subprocess
 import threading
+from app.pad_sensitivity import PadSensitivitySender
 from app.branding import BootSplash,boot_frame
 from app.controller_output import ControllerOutput
 from app.connection_health import output_stalled,ReaderWatch,surface_status
@@ -16,7 +17,7 @@ def model_for_path(path):
 class MikroSession:
     def __init__(self,root,app,inputs,open_device,pack,send,configure,path=None):
         self.root,self.app,self.inputs=Path(root),app,inputs
-        self.model='mikro';self.channels=None
+        self.model='mikro';self.channels=None;self.pad_settings=PadSensitivitySender()
         self.open_device,self.pack,self.send,self.configure=open_device,pack,send,configure
         self.path=path;self.process=self.output=None;self.fd=None;self.next_scan=0
         self.cleanup=[];self.frames=0;self.max_ms=0.;self.total_ms=0.
@@ -33,6 +34,7 @@ class MikroSession:
         def cleanup():
             try:
                 if process:
+                    if process.stdin:process.stdin.close()
                     if process.poll() is None:process.terminate()
                     try:process.wait(timeout=.5)
                     except subprocess.TimeoutExpired:process.kill();process.wait(timeout=.5)
@@ -50,7 +52,11 @@ class MikroSession:
         if self.boot.expired(now):self.dismiss_boot()
         if self.process and (self.process.poll() is not None or self.output.error or output_stalled(self.output,now) or self.reader_watch.expired(now)):
             print('Mikro disconnected; audio continues '+str(surface_status(self,now)),flush=True);self.lost(streams);self.next_scan=now+2
-        if self.process or now<self.next_scan:return
+        if self.process:
+            try:self.pad_settings.update(self.process,self.app,self.model)
+            except OSError:self.lost(streams);self.next_scan=now+2
+            return
+        if now<self.next_scan:return
         self.next_scan=now+2
         self.cleanup=[t for t in self.cleanup if t.is_alive()]
         if self.cleanup:return
@@ -76,7 +82,9 @@ class MikroSession:
                 if self.last_leds or self.last_frame:
                     self.output.submit(boot_frame(128),self.encode_leds(self.last_leds or self.last_frame[1]))
                 if self.last_leds:self.output.submit_leds(self.encode_leds(self.last_leds))
-                self.process=subprocess.Popen([str(self.root/'build/mikro_monitor'),'--live',path,'0'],stdout=subprocess.PIPE)
+                self.process=subprocess.Popen([str(self.root/'build/mikro_monitor'),'--live',path,'0'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+                os.set_blocking(self.process.stdin.fileno(),False)
+                self.pad_settings.update(self.process,self.app,self.model)
                 self.reader_watch.start(now)
                 os.set_blocking(self.process.stdout.fileno(),False);streams[self.process.stdout]=b''
                 print(('Mikro MK2' if mk2 else 'Mikro MK1')+' connected: '+path,flush=True);return

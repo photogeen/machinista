@@ -11,6 +11,7 @@ class MaschineMk1Decoder {
     std::array<int,11> anchors{};
     bool initialized=false;
 public:
+    void set_pad_sensitivity(int value){pads.set_pad_sensitivity(value);}
     bool decode(unsigned endpoint,std::span<const std::uint8_t> data,std::vector<InputEvent>& events,std::int64_t timestamp) {
         if(endpoint==0x84) {
             if(data.size()!=64)return false;
