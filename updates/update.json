@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "beta",
-  "version": "0.1.0-beta.21",
+  "version": "0.1.0-beta.22",
   "minimum_version": "0.1.0-beta.8",
   "os_codename": "trixie",
   "architecture": "arm64",
   "hardware_profile": "standard",
-  "notes": "MK3 and Maschine+ display refinement, group-colored pads and waveforms, white waveform playheads, audio and WAV fixes, refreshed manuals.",
+  "notes": "Calibrated pad trigger sensitivity, reader acknowledgement, Plus color scheme default, immediate assigned-slice edits and refreshed manuals.",
   "artifact": {
-    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.21/machinista-0.1.0-beta.21-arm64.tar.gz",
-    "size": 47113092,
-    "sha256": "f4e7b912bec90286b43d8bac962431b9be11faf326f7bca93a608a92059aacb1"
+    "url": "https://github.com/photogeen/machinista/releases/download/v0.1.0-beta.22/machinista-0.1.0-beta.22-arm64.tar.gz",
+    "size": 45253854,
+    "sha256": "01520421cc97a2a8fbe2d0113a5f8c606f781ec63174a49e54d9201c1f32fba5"
   }
 }
