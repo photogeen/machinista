@@ -235,9 +235,15 @@ class Workspaces:
                 if len(song) >= 1024:
                     self.message = 'SONG FULL'
                     return True
+                # Follow the inserted scene so repeated INSERT builds forward.
+                # SHIFT retains insertion before the selected scene.
+                index = max(0, min(len(song), self.song_index + (0 if self.shift else 1)))
                 self.remember()
-                self.song_automation_remap(self.song_index)
-                song.insert(self.song_index, self.scene)
+                self.song_automation_remap(index)
+                if song and self.song_playing and index <= self.song_bar:
+                    self.song_bar += 1
+                song.insert(index, self.scene)
+                self.song_index = index
             elif name == 'F2':
                 if song:
                     self.song_playing = not self.song_playing

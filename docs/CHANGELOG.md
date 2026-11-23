@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Song Arranger (2026-11-23)
+
+- INSERT places the current scene after the selected song entry and selects the new entry. SHIFT + INSERT inserts before the selection.
+
 ## 0.1.0-beta.22 — 20 November 2026
 
 - PAD SENS now adjusts actual pad trigger thresholds on Maschine MK1/MK2 and

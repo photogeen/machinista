@@ -277,7 +277,7 @@ chapter('Scenes and Song arrangement',['SCENE','SONG'],
  steps=['Create Patterns in the relevant Groups. Select a Scene, then choose each Group Pattern that belongs in that Scene. Leave a clip empty when the Group should not play.',
  'Select another Scene and build a variation. During playback the Perform Grid determines when a requested Scene change takes effect.',
  either('Open SCENE, hold SHIFT and use the SONG action. PROJECT is the neighbouring utility action.','Hold NAVIGATE and use SONG. Release NAVIGATE after the Song destination is highlighted.'),
- 'Select a Scene before opening Song. INSERT (F1 / display button 1) inserts that Scene at the selected Song position. Turn the selection encoder to move through entries. PLAY (F2 / button 2) toggles Song playback; DELETE (F3 / button 3) removes an entry after confirmation.'],
+ 'Select a Scene before opening Song. INSERT (F1 / display button 1) inserts that Scene after the selected entry and moves the selection to the new entry. Hold SHIFT with INSERT to insert before the selected entry. Turn the selection encoder to move through entries. PLAY (F2 / button 2) toggles Song playback; DELETE (F3 / button 3) removes an entry after confirmation.'],
  notes=[('Scene length','An automatic Scene length follows its active Patterns; an explicit Scene length can override it. Patterns can have different lengths and loop within a longer Scene.'),
  ('Make a variation independent','Duplicating a Scene does not necessarily make its Patterns independent. Use the unique/copy workflow when the variation must have its own editable Patterns.'),
  ('Master automation','Pattern automation lives with the Group Pattern. Song master automation is handled separately from those per-Pattern lanes.')])

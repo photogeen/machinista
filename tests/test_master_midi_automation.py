@@ -27,9 +27,28 @@ class MasterMidiAutomationTests(unittest.TestCase):
         a=self.master();a.song_playing=False;a.rotate(-10);self.assertNotIn('master_automation',a.project)
         a.mixer_level=2;a.clock_phase=0;a.rotate(-10);self.assertTrue(a.project['groups'][0]['automation']);validate_project(a.project_for_save())
     def test_song_insert_delete_remaps_lanes_and_undo(self):
-        a=self.master();a.rotate(-10);key=next(iter(a.project['master_automation']));a.shift=False;a.page='SONG';a.song_index=0;a.button('F1',True)
+        a=self.master();a.rotate(-10);key=next(iter(a.project['master_automation']));a.page='SONG';a.song_index=0;a.button('F1',True)
         self.assertIn('1:'+key.split(':',1)[1],a.project['master_automation']);a.delete_song_entry();self.assertIn(key,a.project['master_automation'])
         a.song_index=0;a.delete_song_entry();self.assertFalse(a.project['master_automation']);validate_project(a.project)
+    def test_song_insert_builds_forward_and_keeps_master_lanes_attached(self):
+        a=self.a
+        a.page='SONG'
+        for scene in (0,1,2):
+            a.scene=scene
+            a.button('F1',True)
+            a.button('F1',False)
+        self.assertEqual(a.project['song'],[0,1,2])
+        self.assertEqual(a.song_index,2)
+        a.undo_action()
+        self.assertEqual((a.project['song'],a.song_index),([0,1],1))
+        a.undo_action(redo=True)
+        a.song_index=0
+        a.scene=3
+        key=lane_key(1,(MASTER,'value',-1,'gain'))
+        a.project['master_automation']={key:{'base':100,'points':{'0':80}}}
+        a.button('F1',True)
+        self.assertEqual((a.project['song'],a.song_index),([0,3,1,2],1))
+        self.assertEqual(set(a.project['master_automation']),{lane_key(2,(MASTER,'value',-1,'gain'))})
     def test_master_take_and_step_undo(self):
         a=self.master();a.rotate(-10);a.clock_phase=96;a.rotate(-10);self.assertEqual(len(a.undo),1)
         a.shift=False;a.undo_action(step=True);lane=next(iter(a.project['master_automation'].values()));self.assertEqual(set(lane['points']),{'0'})

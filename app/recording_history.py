@@ -83,6 +83,9 @@ class RecordingHistory:
                 transferred['changes']=transferred['changes'][:transferred['position']]
             self.recording_history[id(current)]=transferred
         self.automation_restore();self.project=saved
+        song_end=max(0,len(self.project['song'])-1)
+        self.song_index=min(self.song_index,song_end)
+        self.song_bar=min(self.song_bar,song_end)
         self.scene=min(self.scene,len(self.project['scenes'])-1);self.activate_scene(self.scene);self.pad=min(self.pad,15)
         if self.clip_transport:self.arranger_update(max(0,self.clock_phase))
         self.dirty=True;self.revision+=1;self.live_notes.clear();self.reset_recording_take()
