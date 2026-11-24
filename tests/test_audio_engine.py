@@ -1,12 +1,14 @@
 """Verify rendered audio through an ALSA file sink, without physical hardware."""
 import array
 import json
+import math
 import os
 from pathlib import Path
 import subprocess
 import tempfile
 import time
 import unittest
+import wave
 
 ENGINE = Path(__file__).resolve().parent.parent/'build/audio_engine'
 
@@ -119,6 +121,35 @@ class RenderTests(unittest.TestCase):
                 self.assertTrue(all(v==0 for v in values[-512:]))
             finally:
                 if p.poll() is None:p.kill();p.communicate()
+
+    def test_monophonic_retrigger_crossfades_the_stolen_voice(self):
+        from app.audio import AudioBackend
+        rate, frames = 48000, 6000
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            values = array.array('f',(0.5*math.sin(2*math.pi*100*i/rate) for i in range(8192)))
+            sample = root/'sine.f32'; sample.write_bytes(values.tobytes())
+            output = root/'retrigger.wav'
+            commands = []; backend = AudioBackend.__new__(AudioBackend); backend.command = commands.append
+            backend._params(0,dict(sampler=dict(type='ONESHOT',polyphony=1)),dict(loop=False,loop_start=0,loop_end=0))
+            script = [f'load 0 {rate} {json.dumps(str(sample))}',commands[0],
+                      'sequence_begin','sequence_lane 384','sequence_event 0 384 100 0','hit 0 1',
+                      'sequence_event 12 384 100 0','hit 0 1','sequence_commit','sequence_transport 120 1',
+                      f'render_start {json.dumps(str(output))} {frames} 1088 16 WAV','quit']
+            result = subprocess.run([str(ENGINE),'--offline-render'],input='\n'.join(script)+'\n',
+                                    capture_output=True,text=True,timeout=20)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.assertIn('"status":"finished"',result.stdout)
+            with wave.open(str(output)) as wav:
+                self.assertEqual(wav.getnchannels(),2)
+                pcm = array.array('h'); pcm.frombytes(wav.readframes(wav.getnframes()))
+            left = [pcm[i]/32767 for i in range(0,len(pcm),2)]
+            # The second hit at tick 12 (~62.5 ms) must still sound after the
+            # original voice is stolen.
+            self.assertGreater(max(left[3200:5900]),.3)
+            # Cutting a 100 Hz sine at an arbitrary phase would jump by up to
+            # its 0.5 peak; a short declick keeps every sample step small.
+            self.assertLess(max(abs(b-a) for a,b in zip(left[256:],left[257:])),.03)
 
     def test_explicit_small_buffers_reach_native_alsa_configuration(self):
         for rate in (44100,48000):

@@ -227,9 +227,11 @@ int main(int argc,char** argv) {
                 snd_pcm_sframes_t queued=0;if(pcm)snd_pcm_delay(pcm,&queued);midi_block_stamp=std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count()+std::max<snd_pcm_sframes_t>(0,queued)/double(output_rate);
                 const bool silence=panic.exchange(false)||first_block;first_block=false;
                 if(silence){external_midi.panic();for(auto& row:*external_seq)row.fill(0);for(auto& row:*external_live)row.fill(false);}
-                if(silence)for(auto& voice:voices)voice.sample=nullptr;
+                // Panic/preview stop release through the same short declick as
+                // voice stealing, so an interrupted waveform never steps to zero.
+                if(silence)for(auto& voice:voices)if(voice.sample)voice.dsp.steal();
                 if (stop_preview.exchange(false))
-                    for (auto& voice : voices) if (voice.preview) voice.sample = nullptr;
+                    for (auto& voice : voices) if (voice.sample && voice.preview) voice.dsp.steal();
                 std::array<unsigned,kBuses> midi_count{};
                 std::array<bool,kBuses> signal{};
                 Graph* routing=nullptr;do{routing=graph.load();graph_reader.store(routing);}while(routing!=graph.load());
@@ -265,7 +267,7 @@ int main(int argc,char** argv) {
                         else {live=hit.midi_velocity>0;if(!live&&seq)return;}
                         external_midi.send(midi_block_stamp+frame/double(output_rate)+controls.offset,(hit.midi_velocity?0x90:0x80)|hit.channel,hit.note,hit.midi_velocity);return;
                     }
-                    if(hit.kill_bus){for(auto& voice:voices)if(voice.sample&&voice.bus==hit.slot)voice.sample=nullptr;return;}
+                    if(hit.kill_bus){for(auto& voice:voices)if(voice.sample&&voice.bus==hit.slot)voice.dsp.steal();return;}
                     if(hit.midi_bus>=0){const auto bus=static_cast<unsigned>(hit.midi_bus);const auto owner=midi_owner(bus,hit.channel);
                         if(!hit.midi_status&&hit.note>=0){auto& seq=(*seq_notes)[owner][hit.note];auto& live=(*live_notes)[owner][hit.note];
                             if(hit.voice_token>>63){if(hit.midi_velocity)++seq;else {if(seq)--seq;if(seq||live)return;}}
@@ -277,20 +279,30 @@ int main(int argc,char** argv) {
                     if(hit.off){for(auto& voice:voices)if(voice.sample&&voice.slot==hit.slot&&(hit.note<0||voice.note==hit.note)&&(!hit.token_off||voice.voice_token==hit.voice_token))voice.dsp.off();return;}
                     if(!hit.sample||hit.start>=hit.end)return;
                     if(hit.preview&&hit.slot==kPreview){
-                        for(auto& v:voices)if(v.slot==kPreview)v.sample=nullptr;
+                        for(auto& v:voices)if(v.sample&&v.slot==kPreview)v.dsp.steal();
                         preview_frame.store(hit.start);preview_running.store(true);preview_token.store(hit.preview_token);
                     }
                     const unsigned hit_bus=hit.slot>=kZoneBase?(hit.slot-kZoneBase)/128:hit.slot;
-                    if(hit.params.choke)for(auto& voice:voices)if(voice.sample&&voice.bus/16==hit_bus/16&&voice.params.choke==hit.params.choke&&(!hit.params.choke_slave||voice.bus==hit_bus))voice.sample=nullptr;
+                    if(hit.params.choke)for(auto& voice:voices)if(voice.sample&&voice.bus/16==hit_bus/16&&voice.params.choke==hit.params.choke&&(!hit.params.choke_slave||voice.bus==hit_bus))voice.dsp.steal();
+                    // Tails that are still fading out no longer count against
+                    // polyphony and cannot be chosen as legato or allocation
+                    // targets; the new hit gets a different voice immediately.
                     unsigned active_voices=0;double previous_pitch=hit.pitch;
                     Voice* legato_voice=nullptr;
-                    for(auto& voice:voices)if(voice.sample&&voice.bus==hit_bus){++active_voices;previous_pitch=voice.pitch;if(voice.sample==hit.sample)legato_voice=&voice;}
+                    for(auto& voice:voices)if(voice.sample&&!voice.dsp.declicking()&&voice.bus==hit_bus){++active_voices;previous_pitch=voice.pitch;if(voice.sample==hit.sample)legato_voice=&voice;}
                     if(hit.params.legato&&legato_voice){legato_voice->note=hit.note;legato_voice->voice_token=hit.voice_token;legato_voice->target_pitch=hit.pitch;legato_voice->glide_step=hit.params.glide>0?(hit.pitch-legato_voice->pitch)/(hit.params.glide*output_rate):0;if(hit.params.glide==0)legato_voice->pitch=hit.pitch;return;}
-                    if(active_voices>=static_cast<unsigned>(hit.params.polyphony))for(auto& voice:voices)if(voice.sample&&voice.bus==hit_bus){voice.sample=nullptr;break;}
-                    for(unsigned free=0;free<voices.size();++free){const auto candidate=(next_voice+free)%voices.size();if(!voices[candidate].sample){next_voice=candidate;break;}}
-                    auto& voice=voices[next_voice];voice={};voice.sample=hit.sample;voice.frame=hit.params.reverse?hit.end-1:hit.start;
+                    // Monophonic retriggers arrive here (polyphony 1): fade the
+                    // interrupted tail instead of dropping it at a random phase.
+                    if(active_voices>=static_cast<unsigned>(hit.params.polyphony))for(auto& voice:voices)if(voice.sample&&!voice.dsp.declicking()&&voice.bus==hit_bus){voice.dsp.steal();break;}
+                    unsigned chosen=voices.size();
+                    for(unsigned free=0;free<voices.size();++free){const auto candidate=(next_voice+free)%voices.size();if(!voices[candidate].sample){chosen=candidate;break;}}
+                    // Every slot may be held by a fading tail after an
+                    // impossible burst; reuse one rather than dropping the hit.
+                    if(chosen==voices.size())for(unsigned free=0;free<voices.size();++free){const auto candidate=(next_voice+free)%voices.size();if(voices[candidate].dsp.declicking()){chosen=candidate;break;}}
+                    if(chosen==voices.size())chosen=next_voice;
+                    next_voice=(chosen+1)%voices.size();
+                    auto& voice=voices[chosen];voice={};voice.sample=hit.sample;voice.frame=hit.params.reverse?hit.end-1:hit.start;
                     voice.display_order=++display_order;voice.gain=hit.gain;voice.pitch=hit.params.glide>0?previous_pitch:hit.pitch;voice.target_pitch=hit.pitch;voice.glide_step=hit.params.glide>0?(hit.pitch-voice.pitch)/(hit.params.glide*output_rate):0;voice.bus=hit_bus;voice.end=hit.end;voice.preview=hit.preview;voice.slot=hit.slot;voice.note=hit.note;voice.voice_token=hit.voice_token;voice.start=hit.start;voice.params=hit.params;voice.preview_token=hit.preview_token;voice.dsp.start(hit.params,output_rate);
-                    next_voice=(next_voice+1)%voices.size();
                 };
                 if(seek!=last_seek||!seq_running){
                     if(!silence)sequence_clock->release([&](Hit h,bool,std::uint64_t token,unsigned){h.voice_token=token;h.token_off=true;if(h.midi_bus>=0||h.external)h.midi_velocity=0;else h.off=true;apply_hit(h,0);});
@@ -361,7 +373,7 @@ int main(int argc,char** argv) {
                     });
                     for (auto& voice : voices) {
                         if (!voice.sample) continue;
-                        if(voice.dsp.done()){voice.sample=nullptr;continue;}
+                        if(voice.dsp.done()||voice.dsp.declick_done()){voice.sample=nullptr;continue;}
                         const auto& vp=voice.params;
                         if(vp.loop&&!voice.dsp.released()&&vp.loop_end>vp.loop_start){
                             const double span=vp.loop_end-vp.loop_start;

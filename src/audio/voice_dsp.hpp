@@ -20,9 +20,29 @@ inline float zone_envelope(double position,double length,double rate,float attac
     if(decay>0)gain*=std::clamp((length-position)/(rate*decay),0.0,1.0);
     return static_cast<float>(gain);
 }
+// A stolen voice must not stop at an arbitrary waveform amplitude. Ramp only
+// the interrupted tail to silence; the replacement voice keeps its full
+// attack, so one-shot transients are not softened by a fade-in.
+class Declick {
+    double level_=1,step_=0;unsigned remaining_=0;bool started_=false;
+public:
+    static constexpr double default_seconds=.003;
+    void reset(){level_=1;step_=0;remaining_=0;started_=false;}
+    void fade(double rate,double seconds=default_seconds){
+        started_=true;
+        const double duration=std::max(1.0,rate*(seconds>0?seconds:default_seconds));
+        remaining_=static_cast<unsigned>(duration);
+        step_=-level_/remaining_;
+    }
+    bool fading()const{return started_&&remaining_>0;}
+    bool done()const{return started_&&remaining_==0;}
+    float gain()const{return started_?static_cast<float>(std::clamp(level_,0.0,1.0)):1.f;}
+    void advance(){if(!remaining_)return;level_+=step_;if(--remaining_==0){level_=0;step_=0;}}
+};
 class VoiceDSP {
     VoiceParams p{};double rate=48000,age=0,release_age=-1,release_level=0;
     std::array<double,2> low{},band{},held{};double hold_phase=0,comp_envelope=0;
+    Declick declick_;
     double level() const {
         if(p.mode==0)return 1;
         if(release_age>=0)return release_level*std::max(0.0,1-release_age/std::max(.00001f,p.release));
@@ -32,11 +52,16 @@ class VoiceDSP {
         return t<p.decay?1-(1-p.sustain)*t/std::max(.00001f,p.decay):p.sustain;
     }
 public:
-    void start(VoiceParams params,double sample_rate){p=params;rate=sample_rate;age=0;release_age=-1;release_level=0;low={};band={};held={};hold_phase=0;comp_envelope=0;}
+    void start(VoiceParams params,double sample_rate){p=params;rate=sample_rate;age=0;release_age=-1;release_level=0;low={};band={};held={};hold_phase=0;comp_envelope=0;declick_.reset();}
     void parameters(VoiceParams params){if(params.filter!=p.filter){low={};band={};}p=params;}
     void off(){if(p.mode==2&&release_age<0){release_level=level();release_age=0;}}
     bool done() const{return p.mode!=0&&level()<=0&&age>p.attack&&(p.mode==1||release_age>=0);}
     bool released() const{return release_age>=0;}
+    // Voice stealing calls this instead of dropping the sample pointer.
+    // Keep rendering the voice until declick_done(), then release it.
+    void steal(double seconds=Declick::default_seconds){declick_.fade(rate,seconds);}
+    bool declicking() const{return declick_.fading();}
+    bool declick_done() const{return declick_.done();}
     double modulation()const{
         if(age<p.mod_attack&&p.mod_attack>0)return age/p.mod_attack;
         return std::max(0.0,1-(age-p.mod_attack)/std::max(.00001f,p.mod_decay));
@@ -66,6 +91,7 @@ public:
         }
         const double pan=std::clamp(p.pan+p.mod_pan*modulation()+p.lfo_pan*lfo()+p.wheel_pan*wheel,-1.0,1.0);
         left*=static_cast<float>(std::min(1.0,1-pan));right*=static_cast<float>(std::min(1.0,1+pan));
+        const float fade=declick_.gain();left*=fade;right*=fade;declick_.advance();
         age+=1/rate;if(release_age>=0)release_age+=1/rate;
     }
 };
